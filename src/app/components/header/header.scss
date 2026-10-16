@@ -1,0 +1,8 @@
+.header {
+  display: flex;
+  &__home {
+  }
+  &__survy {
+    justify-content: space-between;
+  }
+}

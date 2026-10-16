@@ -1,0 +1,10 @@
+.card {
+  width: 200px;
+  height: 250px;
+  background-color: #faf5fe;
+  border-radius: 0 80px 0 0;
+
+  &:hover {
+    background-color: #f4e9fb;
+  }
+}
