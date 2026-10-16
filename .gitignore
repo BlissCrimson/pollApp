@@ -45,3 +45,7 @@ Thumbs.db
 
 # Other
 /docs
+
+# Environment-Dateien mit Keys
+src/environments/environment.ts
+src/environments/environment.development.ts
