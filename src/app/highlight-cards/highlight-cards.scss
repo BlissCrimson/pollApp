@@ -1,8 +1,48 @@
 .card {
-  width: 200px;
-  height: 250px;
+  font-family: 'Mulish';
+  width: 320px;
+  height: 310px;
+  color: #35273a;
   background-color: #faf5fe;
   border-radius: 0 80px 0 0;
+  display: flex;
+  flex-direction: column;
+
+  &__details {
+    width: 230px;
+    height: 210px;
+    margin: 40px auto auto auto;
+    border: 1px solid chocolate;
+    display: flex;
+    flex-direction: column;
+
+    &--category {
+      font-size: 14px;
+      font-weight: 600;
+      margin-left: 8px;
+    }
+
+    &--title {
+      margin-top: 4px;
+      font-size: 28px;
+      font-weight: 700;
+      flex: 1;
+    }
+
+    &--endtime {
+      width: 100px;
+      height: 24px;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: center;
+      background-color: #ffcfa1;
+      border-radius: 0 14px 0 0;
+
+      .card:hover & {
+        background-color: #ffb770;
+      }
+    }
+  }
 
   &:hover {
     background-color: #f4e9fb;

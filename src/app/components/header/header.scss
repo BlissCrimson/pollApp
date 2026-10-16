@@ -1,6 +1,9 @@
 .header {
   display: flex;
   &__home {
+    &--logo{
+      width: 120px;
+    }
   }
   &__survy {
     justify-content: space-between;
