@@ -1,5 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
 
+:root {
+  --color-background: #342639;
+  --color-primary: #ffb36b;
+  --color-primary-light: #ffcfa1;
+  --color-text: #ffffff;
+}
+
+body {
+  margin: 0;
+  font-family: 'Mulish', sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
 @font-face {
   font-family: 'Mulish';
   src: url('/assets/fonts/Mulish-VariableFont_wght.ttf');

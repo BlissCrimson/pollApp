@@ -1,0 +1,5 @@
+2026-10-17 | Home page (hero + layout)
+- Added src/app/components/home/ (home.ts, home.html, home.scss, home.spec.ts): hero with title, text, "New survey" button, illustration; placeholder "Your surveys" section.
+- app.routes.ts: added route '' -> Home.
+- app.html / app.ts: removed <app-highlight-cards> and its import (to be used inside Home later); router-outlet now sits between header and footer.
+- styles.scss: added color variables and body base styles.

@@ -1,0 +1,29 @@
+.survey {
+  display: flex;
+  &__first {
+    display: flex;
+    flex-direction: row;
+    &--first {
+      flex-direction: column;
+    }
+    &__second {
+      flex-direction: row;
+
+      &--first{
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
+  &__answers {
+    display: flex;
+    flex-direction: column;
+    &--add {
+      width: 170px;
+    }
+    &--options {
+      display: flex;
+      flex-direction: row;
+    }
+  }
+}

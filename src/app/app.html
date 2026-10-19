@@ -1,4 +1,49 @@
-<app-header></app-header>
-<app-highlight-cards></app-highlight-cards>
-<app-footer></app-footer>
-<router-outlet />
+<!-- <app-header></app-header> -->
+<!-- <router-outlet /> -->
+
+<form>
+  <div class="survey__first">
+    <div class="survey__first--first">
+      <label for="name">Survey name</label>
+      <input id="name" type="text" [formControl]="survey">
+
+      <label for="endDate">Set end date (optional)</label>
+      <input id="endDate" type="date" [formControl]="survey">
+    </div>
+    <label for="description">Describing text (optional)</label>
+    <input id="description" type="text" [formControl]="survey">
+  </div>
+</form>
+<form>
+  <section class="survey__second">
+    <div class="survey__second--first">
+      <label for="question">Question</label>
+      <input id="question" type="text" [formControl]="survey">
+
+      <div class="survey__answers">
+        <h3>Answers</h3>
+        <div class="survey__answers--options">
+          <label for="name">A.</label>
+          <input id="name" type="text" [formControl]="survey">
+          <label for="name">B.</label>
+          <input id="name" type="text" [formControl]="survey">
+        </div>
+        <button class="survey__answers--add">Add answers</button>
+      </div>
+    </div>
+    <button>add next question</button>
+  </section>
+</form>
+
+
+
+
+
+<!-- <label for="name">Survey name</label>
+<input id="name" type="text" [formControl]="survey">
+
+
+<label for="name">Survey name</label>
+<input id="name" type="text" [formControl]="survey"> -->
+
+<!-- <app-footer></app-footer> -->
