@@ -13,7 +13,5 @@ import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 export class App {
   protected readonly title = signal('pollApp');
 
-  survey = new FormControl('',{
-    validators:[Validators.required]
-  })
+
 }

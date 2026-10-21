@@ -1,0 +1,96 @@
+<main class="survey">
+  <section class="survey__card">
+    <div class="survey__head">
+      <img class="survey__status" src="/assets/status/status__draft.svg" alt="Draft">
+      <h1 class="survey__title">Create new survey</h1>
+      <button class="survey__close" type="button">
+        <span class="survey__close-text">Cancel</span>
+        <span class="survey__close-icon" aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <form class="survey__form">
+      <div class="survey__panel">
+        <div class="survey__details">
+          <div class="survey__details-left">
+            <div class="survey__field">
+              <label class="survey__label" for="name">Survey name</label>
+              <input class="survey__input" id="name" type="text">
+              <button class="survey__trash" type="button" aria-label="Delete survey name"></button>
+            </div>
+
+            <div class="survey__meta">
+              <div class="survey__category">
+                <select class="survey__select" id="category" aria-label="Choose category">
+                  <option value="" disabled selected hidden>Choose category</option>
+                  <option value="events">Team events</option>
+                  <option value="culture">Workplace culture</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div class="survey__field survey__field--date">
+                <label class="survey__label" for="endDate">
+                  Set end date <span class="survey__optional">(optional)</span>
+                </label>
+                <input class="survey__input" id="endDate" type="date">
+                <button class="survey__trash" type="button" aria-label="Delete end date"></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="survey__field survey__field--description">
+            <label class="survey__label" for="description">
+              Describing text <span class="survey__optional">(optional)</span>
+            </label>
+            <textarea class="survey__input survey__input--textarea" id="description"></textarea>
+            <button class="survey__trash" type="button" aria-label="Delete description"></button>
+          </div>
+        </div>
+
+        <div class="survey__questions">
+          <div class="survey__question">
+            <div class="survey__field survey__field--question">
+              <label class="survey__label" for="question1">1. Question</label>
+              <input class="survey__input" id="question1" type="text" placeholder="Which date would work best for you?">
+              <button class="survey__trash" type="button" aria-label="Delete question"></button>
+            </div>
+
+            <div class="survey__answers-head">
+              <h2 class="survey__label survey__label--answers">Answers</h2>
+              <label class="survey__multiple">
+                <input type="checkbox">
+                Allow multiple answers.
+              </label>
+            </div>
+
+            <div class="survey__answer">
+              <label class="survey__label survey__label--answer" for="answer1A">A.</label>
+              <input class="survey__input" id="answer1A" type="text">
+              <button class="survey__trash" type="button" aria-label="Delete answer A"></button>
+            </div>
+
+            <div class="survey__answer">
+              <label class="survey__label survey__label--answer" for="answer1B">B.</label>
+              <input class="survey__input" id="answer1B" type="text">
+              <button class="survey__trash" type="button" aria-label="Delete answer B"></button>
+            </div>
+
+            <button class="survey__add-answer" type="button">
+              <img src="/assets/buttons/button__add-answer.svg" alt="Add answer">
+            </button>
+          </div>
+
+          <button class="survey__add-question" type="button">
+            <img src="/assets/buttons/button__add-option.svg" alt="Add next question">
+          </button>
+        </div>
+      </div>
+
+      <button class="survey__publish" type="submit">
+        Publish
+        <span class="survey__publish-check" aria-hidden="true">&#10003;</span>
+      </button>
+    </form>
+  </section>
+</main>

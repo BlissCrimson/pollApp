@@ -3,3 +3,16 @@
 - app.routes.ts: added route '' -> Home.
 - app.html / app.ts: removed <app-highlight-cards> and its import (to be used inside Home later); router-outlet now sits between header and footer.
 - styles.scss: added color variables and body base styles.
+
+2026-10-21 | Navigation New survey -> Create survey
+- app.routes.ts: added route 'create-survey' -> CreateSurvey.
+- home.ts: injected Router, added goToCreateSurvey().
+- home.html: replaced empty (click) on img with (click)="goToCreateSurvey()" on the button.
+
+2026-10-21 | Create survey page design
+- create-survey.html: replaced placeholder with static layout (header, panel, question block, publish) based on docs/Poll App Design.
+- create-survey.scss: added BEM styles, mobile first, centered card from 769px.
+
+2026-10-21 | Create survey desktop layout
+- create-survey.html: restructured (head grid, details/questions grids, trash inside field, Cancel button text, publish check span) per docs/Poll App Design/Create Survey*.png.
+- create-survey.scss: desktop grid layout from 769px, category select styled as plain text with arrow; mobile layout kept.
