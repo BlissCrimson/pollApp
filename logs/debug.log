@@ -16,3 +16,7 @@
 2026-10-21 | Create survey desktop layout
 - create-survey.html: restructured (head grid, details/questions grids, trash inside field, Cancel button text, publish check span) per docs/Poll App Design/Create Survey*.png.
 - create-survey.scss: desktop grid layout from 769px, category select styled as plain text with arrow; mobile layout kept.
+
+2026-10-21 | Results component design
+- results.html: replaced placeholder with static "Survey results LIVE" layout (4 questions, answer rows with letter, bar, percent) based on docs/Poll App Design/Single survey view + results.jpg. Hardcoded values, no functions yet.
+- results.scss: added BEM styles (bars, orange fill, mobile first, desktop adjustments from 769px).
