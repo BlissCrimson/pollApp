@@ -20,3 +20,10 @@
 2026-10-21 | Results component design
 - results.html: replaced placeholder with static "Survey results LIVE" layout (4 questions, answer rows with letter, bar, percent) based on docs/Poll App Design/Single survey view + results.jpg. Hardcoded values, no functions yet.
 - results.scss: added BEM styles (bars, orange fill, mobile first, desktop adjustments from 769px).
+
+2026-10-21 | Create survey: dynamic questions/answers + Supabase save
+- supabase-service.ts: added SurveyInput/QuestionInput interfaces and createSurvey() (inserts surveys -> questions -> answers; deletes the survey again if a later insert fails).
+- create-survey.ts: replaced single FormControl with reactive form (title, category, endDate, description, questions FormArray with answers FormArray); added addQuestion/removeQuestion/addAnswer/removeAnswer/publish.
+- create-survey.html: bound form controls, @for over questions/answers, click handlers, error message, publish disabled while saving.
+- create-survey.scss: added __answer-list and __error.
+- Requires Supabase tables surveys, questions (+ allow_multiple), answers with group_id foreign keys and anon RLS policies.

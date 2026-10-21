@@ -183,6 +183,17 @@ $close-color: #6e5248;
     align-content: start;
   }
 
+  &__answer-list {
+    display: grid;
+    gap: 16px;
+  }
+
+  &__error {
+    margin: 24px 0 0;
+    text-align: center;
+    color: var(--color-primary);
+  }
+
   &__answers-head {
     display: flex;
     align-items: center;

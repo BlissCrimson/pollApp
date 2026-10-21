@@ -9,20 +9,20 @@
       </button>
     </div>
 
-    <form class="survey__form">
+    <form class="survey__form" [formGroup]="survey" (ngSubmit)="publish()">
       <div class="survey__panel">
         <div class="survey__details">
           <div class="survey__details-left">
             <div class="survey__field">
               <label class="survey__label" for="name">Survey name</label>
-              <input class="survey__input" id="name" type="text">
-              <button class="survey__trash" type="button" aria-label="Delete survey name"></button>
+              <input class="survey__input" id="name" type="text" formControlName="title">
+              <button class="survey__trash" type="button" aria-label="Delete survey name" (click)="survey.controls.title.reset()"></button>
             </div>
 
             <div class="survey__meta">
               <div class="survey__category">
-                <select class="survey__select" id="category" aria-label="Choose category">
-                  <option value="" disabled selected hidden>Choose category</option>
+                <select class="survey__select" id="category" aria-label="Choose category" formControlName="category">
+                  <option value="" disabled hidden>Choose category</option>
                   <option value="events">Team events</option>
                   <option value="culture">Workplace culture</option>
                   <option value="other">Other</option>
@@ -33,8 +33,8 @@
                 <label class="survey__label" for="endDate">
                   Set end date <span class="survey__optional">(optional)</span>
                 </label>
-                <input class="survey__input" id="endDate" type="date">
-                <button class="survey__trash" type="button" aria-label="Delete end date"></button>
+                <input class="survey__input" id="endDate" type="date" formControlName="endDate">
+                <button class="survey__trash" type="button" aria-label="Delete end date" (click)="survey.controls.endDate.reset()"></button>
               </div>
             </div>
           </div>
@@ -43,51 +43,55 @@
             <label class="survey__label" for="description">
               Describing text <span class="survey__optional">(optional)</span>
             </label>
-            <textarea class="survey__input survey__input--textarea" id="description"></textarea>
-            <button class="survey__trash" type="button" aria-label="Delete description"></button>
+            <textarea class="survey__input survey__input--textarea" id="description" formControlName="description"></textarea>
+            <button class="survey__trash" type="button" aria-label="Delete description" (click)="survey.controls.description.reset()"></button>
           </div>
         </div>
 
-        <div class="survey__questions">
-          <div class="survey__question">
-            <div class="survey__field survey__field--question">
-              <label class="survey__label" for="question1">1. Question</label>
-              <input class="survey__input" id="question1" type="text" placeholder="Which date would work best for you?">
-              <button class="survey__trash" type="button" aria-label="Delete question"></button>
+        <div class="survey__questions" formArrayName="questions">
+          @for (question of questions.controls; track question; let qi = $index) {
+            <div class="survey__question" [formGroupName]="qi">
+              <div class="survey__field survey__field--question">
+                <label class="survey__label" [for]="'question' + qi">{{ qi + 1 }}. Question</label>
+                <input class="survey__input" [id]="'question' + qi" type="text" formControlName="question" placeholder="Which date would work best for you?">
+                <button class="survey__trash" type="button" aria-label="Delete question" (click)="removeQuestion(qi)"></button>
+              </div>
+
+              <div class="survey__answers-head">
+                <h2 class="survey__label survey__label--answers">Answers</h2>
+                <label class="survey__multiple">
+                  <input type="checkbox" formControlName="allowMultiple">
+                  Allow multiple answers.
+                </label>
+              </div>
+
+              <div formArrayName="answers" class="survey__answer-list">
+                @for (answer of answers(qi).controls; track answer; let ai = $index) {
+                  <div class="survey__answer">
+                    <label class="survey__label survey__label--answer" [for]="'answer' + qi + ai">{{ letter(ai) }}.</label>
+                    <input class="survey__input" [id]="'answer' + qi + ai" type="text" [formControlName]="ai">
+                    <button class="survey__trash" type="button" [attr.aria-label]="'Delete answer ' + letter(ai)" (click)="removeAnswer(qi, ai)"></button>
+                  </div>
+                }
+              </div>
+
+              <button class="survey__add-answer" type="button" (click)="addAnswer(qi)">
+                <img src="/assets/buttons/button__add-answer.svg" alt="Add answer">
+              </button>
             </div>
+          }
 
-            <div class="survey__answers-head">
-              <h2 class="survey__label survey__label--answers">Answers</h2>
-              <label class="survey__multiple">
-                <input type="checkbox">
-                Allow multiple answers.
-              </label>
-            </div>
-
-            <div class="survey__answer">
-              <label class="survey__label survey__label--answer" for="answer1A">A.</label>
-              <input class="survey__input" id="answer1A" type="text">
-              <button class="survey__trash" type="button" aria-label="Delete answer A"></button>
-            </div>
-
-            <div class="survey__answer">
-              <label class="survey__label survey__label--answer" for="answer1B">B.</label>
-              <input class="survey__input" id="answer1B" type="text">
-              <button class="survey__trash" type="button" aria-label="Delete answer B"></button>
-            </div>
-
-            <button class="survey__add-answer" type="button">
-              <img src="/assets/buttons/button__add-answer.svg" alt="Add answer">
-            </button>
-          </div>
-
-          <button class="survey__add-question" type="button">
+          <button class="survey__add-question" type="button" (click)="addQuestion()">
             <img src="/assets/buttons/button__add-option.svg" alt="Add next question">
           </button>
         </div>
       </div>
 
-      <button class="survey__publish" type="submit">
+      @if (errorMessage) {
+        <p class="survey__error">{{ errorMessage }}</p>
+      }
+
+      <button class="survey__publish" type="submit" [disabled]="isSaving">
         Publish
         <span class="survey__publish-check" aria-hidden="true">&#10003;</span>
       </button>
