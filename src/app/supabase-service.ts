@@ -27,16 +27,27 @@ export class SupabaseService {
       const questionIds = await this.insertQuestions(surveyId, survey.questions);
       await this.insertAnswers(questionIds, survey.questions);
     } catch (error) {
-      await this.supabase.from('surveys').delete().eq('id', surveyId);
+      await this.supabase.from('groups').delete().eq('id', surveyId);
       throw error;
     }
     return surveyId;
   }
 
+  // Returns the current user id; signs in anonymously if there is no session yet
+  private async getUserId() {
+    const { data: sessionData } = await this.supabase.auth.getSession();
+    if (sessionData.session) return sessionData.session.user.id;
+    const { data, error } = await this.supabase.auth.signInAnonymously();
+    if (error || !data.user) throw error ?? new Error('Anonymous sign-in failed');
+    return data.user.id;
+  }
+
   private async insertSurvey(survey: SurveyInput) {
+    const userId = await this.getUserId();
     const { data, error } = await this.supabase
-      .from('surveys')
+      .from('groups')
       .insert({
+        user_id: userId,
         title: survey.title,
         category: survey.category,
         end_date: survey.endDate,

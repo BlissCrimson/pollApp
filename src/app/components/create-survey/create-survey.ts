@@ -24,6 +24,10 @@ export class CreateSurvey {
     questions: new FormArray([this.createQuestion()]),
   });
 
+  goToHome() {
+    this.router.navigate(['/']);
+  }
+
   get questions() {
     return this.survey.controls.questions;
   }

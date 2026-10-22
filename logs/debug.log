@@ -27,3 +27,10 @@
 - create-survey.html: bound form controls, @for over questions/answers, click handlers, error message, publish disabled while saving.
 - create-survey.scss: added __answer-list and __error.
 - Requires Supabase tables surveys, questions (+ allow_multiple), answers with group_id foreign keys and anon RLS policies.
+
+2026-10-21 | Supabase schema update (groups + user_id)
+- supabase-service.ts: table 'surveys' renamed to 'groups' (insert and cleanup delete); added getUserId() with anonymous sign-in fallback; groups insert now sends user_id.
+- Requires groups.title, questions.allow_multiple, anonymous sign-ins enabled and matching RLS policies in Supabase.
+
+2026-10-22 | Create survey: Cancel button
+- create-survey.ts: goToHome() now navigates to absolute route "/" (was [""]); moved method below the form definition and fixed indentation.
