@@ -31,17 +31,6 @@
       color: var(--color-text);
     }
 
-    &--button {
-      padding: 0;
-      border: none;
-      background: none;
-      cursor: pointer;
-
-      img {
-        display: block;
-      }
-    }
-
     &--image {
       flex: 0 1 520px;
       width: 100%;
@@ -93,7 +82,8 @@
         font-size: 16px;
       }
 
-      &--button {
+      // button is a direct flex item because --content uses display: contents
+      .btn {
         order: 4;
       }
     }

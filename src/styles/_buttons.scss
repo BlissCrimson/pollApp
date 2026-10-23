@@ -1,0 +1,60 @@
+.btn {
+  &__new-survey {
+    font-family: 'Nokora';
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--color-text-btn);
+    padding: 8px 14px;
+    align-items: center;
+    display: inline-flex;
+    border: none;
+    background-color: var(--color-primary-light);
+    border-radius: 10px;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+
+    &--circle {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      display: block;
+    }
+  }
+  &__icon {
+    display: inline-flex;
+    width: 0;
+    overflow: hidden;
+    opacity: 0;
+    margin-left: 0;
+    transition:
+      width 250ms ease-out,
+      opacity 250ms ease-out,
+      margin-left 250ms ease-out;
+  }
+  @media (hover: hover) {
+    &:hover .btn__icon,
+    &:focus-visible .btn__icon {
+      width: 24px;
+      opacity: 1;
+      margin-left: 8px;
+    }
+  }
+}
+
+@media (max-width: 768px), (hover: none) {
+  .btn {
+    &__new-survey {
+      font-size: 16px;
+      padding: 8px 12px;
+    }
+
+    // Icon is always visible on touch devices (no hover available)
+    &__icon {
+      width: 24px;
+      opacity: 1;
+      margin-left: 8px;
+      transition: none;
+    }
+  }
+}
