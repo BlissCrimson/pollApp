@@ -1,5 +1,6 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { SurveyOutput } from '../../interfaces/survey';
+import { Router } from '@angular/router';
 
 @Component({
   imports: [],
@@ -8,6 +9,7 @@ import { SurveyOutput } from '../../interfaces/survey';
   templateUrl: './survey-card.html',
 })
 export class SurveyCard {
+  private router = inject(Router);
   survey = input.required<SurveyOutput>();
   variant = input<'light' | 'dark'>('dark');
 
@@ -21,4 +23,8 @@ export class SurveyCard {
     if (days === 0) return 'Ends today';
     return `Ends in ${days} ${days === 1 ? 'Day' : 'Days'}`;
   });
+
+  gotToSurvey() {
+    this.router.navigate(['/survey-display', this.survey().id]);
+  }
 }

@@ -30,6 +30,17 @@ export class SupabaseService {
     return this.mapSurveys(data);
   }
 
+  // Loads a single survey (group) by its id
+  async getSurveyById(id: number): Promise<SurveyOutput> {
+    const { data, error } = await this.supabase
+      .from('groups')
+      .select('id, title, category, end_date')
+      .eq('id', id)
+      .single();
+    if (error) throw error;
+    return this.mapSurveys([data])[0];
+  }
+
   private mapSurveys(
     rows: { id: number; title: string; category: string | null; end_date: string | null }[],
   ): SurveyOutput[] {

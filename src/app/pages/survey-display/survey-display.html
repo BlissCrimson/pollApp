@@ -1,1 +1,8 @@
-<p>survey-display works!</p>
+<div>
+  @if (survey(); as survey) {
+    <div>
+      <app-survey-card [survey]="survey"></app-survey-card>
+    </div>
+  }
+  <app-results></app-results>
+</div>

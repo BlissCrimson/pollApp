@@ -65,3 +65,12 @@
 
 2026-10-23 | Checklist update
 - docs/checklists/Poll-App Checkliste.md: checked done items (US1 both, US2 survey list + category/title/deadline, US3 button, form, required/optional distinction). Open: US2 tabs + category filter, US3 required-field marking, US4, US5, code conventions.
+
+2026-10-23 | Home: filter buttons and category dropdown (UI only)
+- survey-list.ts: added activeFilter signal + setFilter() (visual state only) and categories computed from loaded surveys.
+- survey-list.html/.scss: toolbar with "Active survey" / "Past survey" pill buttons and "Sort by categories" select above the list. No filtering logic yet.
+
+2026-10-23 | Fix survey-display routing (NG04002 / NG8008)
+- survey-card.ts: gotToSurvey() now navigates to /survey-display/:group_id (survey id).
+- supabase-service.ts: added getSurveyById(id).
+- pages/survey-display: loads survey by route param group_id into a signal; template renders app-survey-card with [survey].

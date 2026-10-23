@@ -1,4 +1,23 @@
 <section class="survey-list">
+  <div class="survey-list__toolbar">
+    <div class="survey-list__filters">
+      <button class="survey-list__filter" [class.survey-list__filter--active]="activeFilter() === 'active'"
+        type="button" [attr.aria-pressed]="activeFilter() === 'active'" (click)="setFilter('active')">
+        Active survey
+      </button>
+      <button class="survey-list__filter" [class.survey-list__filter--active]="activeFilter() === 'past'"
+        type="button" [attr.aria-pressed]="activeFilter() === 'past'" (click)="setFilter('past')">
+        Past survey
+      </button>
+    </div>
+    <select class="survey-list__select" aria-label="Sort by categories">
+      <option value="" selected>Sort by categories</option>
+      @for (category of categories(); track category) {
+        <option [value]="category">{{ category }}</option>
+      }
+    </select>
+  </div>
+
   @if (errorMessage()) {
     <p class="survey-list__message">{{ errorMessage() }}</p>
   } @else if (surveys().length === 0) {
