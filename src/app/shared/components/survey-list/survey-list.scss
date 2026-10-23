@@ -1,0 +1,21 @@
+.survey-list {
+  &__list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__message {
+    text-align: center;
+    color: var(--color-text);
+  }
+}
+
+@media (min-width: 769px) {
+  .survey-list__list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

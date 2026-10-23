@@ -1,0 +1,7 @@
+<article class="survey-card" [class.survey-card--light]="variant() === 'light'">
+  <span class="survey-card__category">{{ survey().category }}</span>
+  <h3 class="survey-card__title">{{ survey().title }}</h3>
+  @if (endLabel()) {
+    <span class="survey-card__badge">{{ endLabel() }}</span>
+  }
+</article>

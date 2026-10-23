@@ -14,7 +14,26 @@ export class SupabaseService {
       .select('id, title, category, end_date')
       .order('end_date', { ascending: true });
     if (error) throw error;
-    return data.map((row) => ({
+    return this.mapSurveys(data);
+  }
+
+  // Loads the next surveys that have not ended yet, earliest end date first
+  async getEndingSoonSurveys(limit = 3): Promise<SurveyOutput[]> {
+    const today = new Date().toISOString().slice(0, 10);
+    const { data, error } = await this.supabase
+      .from('groups')
+      .select('id, title, category, end_date')
+      .gte('end_date', today)
+      .order('end_date', { ascending: true })
+      .limit(limit);
+    if (error) throw error;
+    return this.mapSurveys(data);
+  }
+
+  private mapSurveys(
+    rows: { id: number; title: string; category: string | null; end_date: string | null }[],
+  ): SurveyOutput[] {
+    return rows.map((row) => ({
       id: row.id,
       title: row.title,
       category: row.category,

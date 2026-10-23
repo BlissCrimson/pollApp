@@ -1,4 +1,13 @@
-.surveys {
+.ending-surveys {
+  margin-bottom: 48px;
+
+  &__title {
+    margin: 0 0 24px;
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--color-text);
+  }
+
   &__list {
     display: grid;
     grid-template-columns: 1fr;
@@ -7,46 +16,11 @@
     padding: 0;
     list-style: none;
   }
-
-  &__card {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 20px 24px;
-    border-radius: 8px 48px 8px 8px;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: var(--color-text);
-  }
-
-  &__category {
-    font-size: 16px;
-    color: var(--color-primary);
-  }
-
-  &__title {
-    margin: 0;
-    font-size: 24px;
-    font-weight: 500;
-    line-height: 1.2;
-  }
-
-  &__badge {
-    align-self: flex-end;
-    padding: 2px 8px;
-    border-radius: 4px;
-    background-color: var(--color-primary);
-    font-size: 14px;
-    color: #000;
-  }
-
-  &__message {
-    text-align: center;
-    color: var(--color-text);
-  }
 }
 
 @media (min-width: 769px) {
-  .surveys__list {
-    grid-template-columns: repeat(2, 1fr);
+  .ending-surveys__list {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
   }
 }

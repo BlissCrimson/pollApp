@@ -55,3 +55,13 @@
 - ending-surveys.html/.scss: card grid (1 column mobile, 2 columns from 769px) with category, title and end badge; empty and error message.
 - home.ts/home.html: imported EndingSurveys and placed <app-ending-surveys /> under "Your surveys".
 - Requires a select RLS policy on 'groups'.
+
+2026-10-23 | Ending soon section on home
+- supabase-service.ts: added getEndingSoonSurveys(limit = 3) (end_date >= today, earliest first); row mapping moved to private mapSurveys(), used by getSurveys() too.
+- shared/components/survey-card: new reusable card (inputs survey + variant light/dark), contains the "Ends in N Days" label logic.
+- shared/components/survey-list: new, holds the full survey list (moved out of ending-surveys), uses survey-card (dark).
+- shared/components/ending-surveys: now only the "Ending soon surveys" block (3 light cards, 3 columns from 769px, hidden when empty).
+- pages/home/home.ts/home.html: added <app-survey-list /> below <app-ending-surveys />.
+
+2026-10-23 | Checklist update
+- docs/checklists/Poll-App Checkliste.md: checked done items (US1 both, US2 survey list + category/title/deadline, US3 button, form, required/optional distinction). Open: US2 tabs + category filter, US3 required-field marking, US4, US5, code conventions.
