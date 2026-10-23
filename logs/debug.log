@@ -34,3 +34,16 @@
 
 2026-10-22 | Create survey: Cancel button
 - create-survey.ts: goToHome() now navigates to absolute route "/" (was [""]); moved method below the form definition and fixed indentation.
+
+2026-10-22 | Mobile view for new survey button
+- _buttons.scss: hover animation only under @media (hover: hover); on <=768px / touch the icon is always visible, smaller font and padding.
+- home.scss: mobile order now targets .btn inside .home__hero (old .home__hero--button class no longer exists, button was rendered above the title).
+
+2026-10-22 | Create survey: show real save error
+- create-survey.ts: publish() catch now logs the error with console.error and appends the Supabase error message to errorMessage (diagnosis for failing upload).
+
+2026-10-22 | Create survey: feedback for invalid form
+- create-survey.ts: publish() now sets errorMessage when the form is invalid (title, question and answer fields are required) instead of returning silently.
+
+2026-10-22 | Fix Supabase URL
+- environments/environment.ts and environment.development.ts: supabaseUrl had a trailing /rest/v1/; createClient needs the plain project URL, so auth and table requests went to wrong paths.

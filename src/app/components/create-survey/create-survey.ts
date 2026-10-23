@@ -60,6 +60,7 @@ export class CreateSurvey {
   async publish() {
     if (this.survey.invalid) {
       this.survey.markAllAsTouched();
+      this.errorMessage = 'Please fill in the title, all questions and all answers.';
       return;
     }
     this.isSaving = true;
@@ -67,8 +68,10 @@ export class CreateSurvey {
     try {
       await this.supabaseService.createSurvey(this.buildSurveyInput());
       await this.router.navigate(['/']);
-    } catch {
-      this.errorMessage = 'Survey could not be saved. Please try again.';
+    } catch (error) {
+      console.error(error);
+      const detail = error instanceof Error ? error.message : (error as { message?: string })?.message;
+      this.errorMessage = `Survey could not be saved. ${detail ?? 'Please try again.'}`;
     } finally {
       this.isSaving = false;
     }
