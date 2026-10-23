@@ -1,24 +1,26 @@
 import { Service } from '@angular/core';
 import { createClient } from '@supabase/supabase-js';
 import { environment } from '../environments/environment';
-
-export interface QuestionInput {
-  question: string;
-  allowMultiple: boolean;
-  answers: string[];
-}
-
-export interface SurveyInput {
-  title: string;
-  category: string | null;
-  endDate: string | null;
-  description: string | null;
-  questions: QuestionInput[];
-}
+import { QuestionInput, SurveyInput, SurveyOutput } from './shared/interfaces/survey';
 
 @Service()
 export class SupabaseService {
   readonly supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
+
+  // Loads all surveys, sorted by end date
+  async getSurveys(): Promise<SurveyOutput[]> {
+    const { data, error } = await this.supabase
+      .from('groups')
+      .select('id, title, category, end_date')
+      .order('end_date', { ascending: true });
+    if (error) throw error;
+    return data.map((row) => ({
+      id: row.id,
+      title: row.title,
+      category: row.category,
+      endDate: row.end_date,
+    }));
+  }
 
   // Saves survey, questions and answers; removes the survey again if a later step fails
   async createSurvey(survey: SurveyInput) {

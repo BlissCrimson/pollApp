@@ -1,8 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { EndingSurveys } from '../../component/ending-surveys/ending-surveys';
 
 @Component({
-  imports: [],
+  imports: [EndingSurveys],
   selector: 'app-home',
   styleUrl: './home.scss',
   templateUrl: './home.html',

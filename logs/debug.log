@@ -47,3 +47,11 @@
 
 2026-10-22 | Fix Supabase URL
 - environments/environment.ts and environment.development.ts: supabaseUrl had a trailing /rest/v1/; createClient needs the plain project URL, so auth and table requests went to wrong paths.
+
+2026-10-23 | Show surveys on home
+- shared/interfaces/survey.ts: central interfaces QuestionInput, SurveyInput, SurveyOutput (created by user).
+- supabase-service.ts: interfaces moved to shared/interfaces/survey.ts and imported; added getSurveys() (id, title, category, end_date from 'groups', sorted by end_date).
+- ending-surveys.ts: fixed broken component; loads surveys in ngOnInit into a signal, error signal, getEndLabel() for "Ends in N Days".
+- ending-surveys.html/.scss: card grid (1 column mobile, 2 columns from 769px) with category, title and end badge; empty and error message.
+- home.ts/home.html: imported EndingSurveys and placed <app-ending-surveys /> under "Your surveys".
+- Requires a select RLS policy on 'groups'.
