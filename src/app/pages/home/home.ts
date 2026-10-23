@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { EndingSurveys } from '../../component/ending-surveys/ending-surveys';
+import { EndingSurveys } from '../../shared/components/ending-surveys/ending-surveys';
 
 @Component({
   imports: [EndingSurveys],

@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { SupabaseService } from '../../supabase-service';
-import { SurveyOutput } from '../../shared/interfaces/survey';
+import { SupabaseService } from '../../../supabase-service';
+import { SurveyOutput } from '../../interfaces/survey';
 
 @Component({
   imports: [],
