@@ -65,7 +65,7 @@ export class SupabaseService {
     const { data, error } = await this.supabase
       .from('votes')
       .select('answer_id, user_id')
-      .eq('group_id', groupId);
+      .eq('groups_id', groupId);
     if (error) throw error;
     return data;
   }
@@ -76,7 +76,7 @@ export class SupabaseService {
       .channel(`votes-${groupId}`)
       .on(
         'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'votes', filter: `group_id=eq.${groupId}` },
+        { event: 'INSERT', schema: 'public', table: 'votes', filter: `groups_id=eq.${groupId}` },
         onChange,
       )
       .subscribe();
@@ -89,7 +89,7 @@ export class SupabaseService {
   async insertVotes(groupId: number, answerIds: number[]) {
     const userId = await this.getUserId();
     const rows = answerIds.map((answerId) => ({
-      group_id: groupId,
+      groups_id: groupId,
       answer_id: answerId,
       user_id: userId,
     }));
@@ -149,7 +149,7 @@ export class SupabaseService {
 
   private async insertQuestions(surveyId: number, questions: QuestionInput[]) {
     const rows = questions.map((q) => ({
-      group_id: surveyId,
+      groups_id: surveyId,
       question: q.question,
       allow_multiple: q.allowMultiple,
     }));
@@ -160,7 +160,7 @@ export class SupabaseService {
 
   private async insertAnswers(questionIds: number[], questions: QuestionInput[]) {
     const rows = questions.flatMap((q, qi) =>
-      q.answers.map((text, position) => ({ question_id: questionIds[qi], position, text })),
+      q.answers.map((text, position) => ({ questions_id: questionIds[qi], position, text })),
     );
     const { error } = await this.supabase.from('answers').insert(rows);
     if (error) throw error;

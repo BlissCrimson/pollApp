@@ -1,4 +1,5 @@
 import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { getCategoryLabel } from '../../shared/constants/categories';
 import { Results } from '../../shared/components/results/results';
@@ -12,7 +13,7 @@ import {
 import { SurveyService } from '../../shared/services/survey-service';
 
 @Component({
-  imports: [Results, SurveyAnswer],
+  imports: [DatePipe, Results, SurveyAnswer],
   selector: 'app-survey-display',
   styleUrl: './survey-display.scss',
   templateUrl: './survey-display.html',
@@ -24,6 +25,7 @@ export class SurveyDisplay implements OnInit {
   private refreshTimer: ReturnType<typeof setTimeout> | undefined;
 
   getCategoryLabel = getCategoryLabel;
+  letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
   survey = signal<SurveyDetail | null>(null);
   selections = signal<Selections>({});
@@ -46,7 +48,7 @@ export class SurveyDisplay implements OnInit {
   });
 
   async ngOnInit() {
-    const groupId = Number(this.route.snapshot.paramMap.get('group_id'));
+    const groupId = Number(this.route.snapshot.paramMap.get('groups_id'));
     try {
       const survey = await this.surveyService.loadSurvey(groupId);
       this.survey.set(survey);

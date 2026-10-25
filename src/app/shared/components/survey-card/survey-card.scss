@@ -1,11 +1,17 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
 .survey-card {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 8px;
   height: 100%;
   padding: 20px 24px;
   border-radius: 8px 48px 8px 8px;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--color-card-translucent);
   color: var(--color-text);
 
   &__category {
@@ -27,19 +33,19 @@
     border-radius: 4px;
     background-color: var(--color-primary);
     font-size: 14px;
-    color: #000;
+    color: var(--color-black);
   }
 
   &--light {
     min-height: 220px;
     padding: 32px;
     border-radius: 8px 96px 8px 8px;
-    background-color: #faf6ff;
-    color: #342639;
+    background-color: var(--color-surface);
+    color: var(--color-background);
 
     .survey-card__category {
       font-size: 14px;
-      color: #342639;
+      color: var(--color-background);
     }
 
     .survey-card__title {

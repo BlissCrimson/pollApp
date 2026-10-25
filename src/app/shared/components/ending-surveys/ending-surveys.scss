@@ -1,3 +1,7 @@
+:host {
+  display: block;
+}
+
 .ending-surveys {
   margin-bottom: 48px;
 
@@ -22,5 +26,20 @@
   .ending-surveys__list {
     grid-template-columns: repeat(3, 1fr);
     gap: 32px;
+  }
+}
+
+// Mobile: horizontal carousel like in the design
+@media (max-width: 768px) {
+  .ending-surveys__list {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 80%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+
+    .ending-surveys__item {
+      scroll-snap-align: start;
+    }
   }
 }

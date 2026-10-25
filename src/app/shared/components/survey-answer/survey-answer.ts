@@ -10,6 +10,7 @@ import { AnswerDetail } from '../../interfaces/survey';
 export class SurveyAnswer {
   answer = input.required<AnswerDetail>();
   allowMultiple = input(false);
+  letter = input('');
   name = input.required<string>();
   checked = input(false);
   disabled = input(false);

@@ -4,5 +4,5 @@ import { SurveyDisplay } from './pages/survey-display/survey-display';
 
 export const routes: Routes = [
   { path: '', component: Home },
-  { path: 'survey-display/:group_id', component: SurveyDisplay },
+  { path: 'survey-display/:groups_id', component: SurveyDisplay },
 ];

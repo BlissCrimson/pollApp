@@ -2,11 +2,11 @@
 export interface Answer {
   id: number;
   created_at: string;
-  group_id: number;
+  groups_id: number;
   text: string;
   user_id: string;
   position: number;
-  question_id: number;
+  questions_id: number;
 }
 
 export interface Groups {
@@ -22,7 +22,7 @@ export interface Groups {
 export interface Question {
   id: number;
   created_at: string;
-  group_id: number;
+  groups_id: number;
   question: string;
   allow_multiple: boolean;
   user_id: string;
@@ -31,7 +31,7 @@ export interface Question {
 export interface Vote {
   id: number;
   created_at: string;
-  group_id: number;
+  groups_id: number;
   answer_id: number;
   user_id: string;
 }

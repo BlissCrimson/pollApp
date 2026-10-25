@@ -12,13 +12,13 @@
 
     &--content {
       flex: 1 1 50%;
-      max-width: 620px;
+      max-width: 760px;
     }
 
     &--title {
       margin: 0 0 32px;
       font-family: 'NerkoOne', sans-serif;
-      font-size: 96px;
+      font-size: clamp(56px, 6vw, 88px);
       font-weight: 400;
       line-height: 1;
       color: var(--color-primary);
@@ -39,10 +39,12 @@
   }
 
   &__surveys {
+    max-width: 1100px;
+    margin: 0 auto;
     padding: 32px 0;
 
     &--title {
-      margin: 0;
+      margin: 0 0 32px;
       font-family: 'NerkoOne', sans-serif;
       font-size: 64px;
       font-weight: 400;

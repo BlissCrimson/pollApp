@@ -117,3 +117,23 @@
 - create-survey.html/.scss: overlay + backdrop, role="dialog", click on backdrop closes; required fields marked with *, per-field error messages, legend.
 - survey-list.ts, ending-surveys.ts: loading extracted into public loadSurveys() so Home can reload after creating.
 - Checkliste: US3 overlay item and required-fields item checked.
+
+2026-10-25 | Colors centralized in styles.scss
+- styles.scss: added color tokens (primary-hover, accent, panel, close, surface, surface-hover, surface-tint, card-translucent, input, chip, backdrop, track-light, error, white, black).
+- All component scss files (survey-display, results, create-survey, survey-list, survey-card, highlight-cards): hardcoded colors and SCSS color variables replaced with var(--color-*). Removed leftover "border: 1px solid chocolate" in highlight-cards.
+- survey-display.scss: removed dark background of app-results; results.scss: dark text, grey track, accent percent to match docs/Poll App Design (Single survey view + results).
+
+2026-10-25 | Layout adjustments to match docs/Poll App Design
+- survey-card.scss: :host display block/height 100% (card overlapped the filter chips).
+- header.ts/html/scss: padding, light variant on /survey-display (dark logo, "Create survey" button -> /?create=1); home.ts opens the create dialog on ?create.
+- home.scss: wider hero text + clamp title, surveys section max-width; ending-surveys.scss: mobile horizontal carousel; survey-list: "Sort by categories", toolbar spacing.
+- create-survey.html/.scss: "Add next question" is a real button spanning both grid columns; nowrap date label, taller description.
+- survey-display.html/.ts/.scss: Published chip, "Ends on"/"Category:" head, 2-column questions, hint for multiple answers, right-aligned submit, page padding.
+- survey-answer: new letter input (A., B., ...).
+- survey-card.scss: box-sizing border-box (padding made the card 64px taller than its grid cell); ending-surveys/survey-list hosts display block.
+
+2026-10-25 | Supabase column rename + test surveys
+- supabase-service.ts: questions/votes use groups_id, answers use questions_id (matches the renamed DB columns); survey.ts interfaces updated accordingly.
+- Created 4 English test surveys (team activities, health & wellness, gaming, technology) via the create dialog (Playwright script in scratchpad, no project files).
+- Still needed in Supabase: foreign keys questions.groups_id -> groups.id, answers.questions_id -> questions.id, votes.groups_id -> groups.id (else PGRST200 on the single survey page). answers.group_id column still has the old name.
+- Probe results: INSERT into answers is rejected by RLS (all variants), DELETE on groups affects 0 rows -> app cannot roll back. Test rows left behind: groups 7 ('T'), 12 ('__probe') plus surveys 8-11 without answers; needs SQL cleanup + RLS policy fix in Supabase.

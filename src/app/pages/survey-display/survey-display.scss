@@ -1,20 +1,18 @@
 main {
+  box-sizing: border-box;
   width: 100%;
   margin: auto;
-  background-color: white;
-  color: #221227;
+  background-color: var(--color-white);
+  color: var(--color-text-btn);
   display: flex;
   flex-direction: column;
 }
 
-app-results {
-  background-color: var(--color-background);
-}
 
 .survey {
   padding: 24px 16px;
   border-radius: 0 80px 0 0;
-  background-color: #8e70991a;
+  background-color: var(--color-surface-tint);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -22,7 +20,10 @@ app-results {
   &__head {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-between;
+    gap: 8px;
+    font-size: 14px;
   }
 
   &__title {
@@ -30,11 +31,30 @@ app-results {
     font-family: 'NerkoOne', sans-serif;
     font-size: 40px;
     font-weight: 400;
-    color: #ee9236;
+    color: var(--color-accent);
+  }
+
+  &__status {
+    align-self: flex-start;
+  }
+
+  &__hint {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  &__submit {
+    align-self: flex-end;
   }
 
   &__description {
     margin: 0;
+  }
+
+  &__questions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
   }
 
   &__question {
@@ -57,7 +77,7 @@ app-results {
     margin: 0;
 
     &--error {
-      color: #c0392b;
+      color: var(--color-error);
     }
   }
 }
@@ -65,19 +85,30 @@ app-results {
 @media (min-width: 769px) {
   main {
     flex-direction: row;
+    padding: 0 7%;
+    gap: 48px;
   }
 
   .survey {
-    width: 60%;
-    padding: 32px 24px;
+    flex: 3;
+    width: auto;
+    box-sizing: border-box;
+    padding: 32px 24px 48px;
     border-radius: 0 160px 0 0;
 
     &__title {
       font-size: 56px;
     }
+
+    &__questions {
+      grid-template-columns: 1fr 1fr;
+      gap: 32px 48px;
+      align-items: start;
+    }
   }
 
   app-results {
-    flex: 1;
+    flex: 2;
+    padding-top: 80px;
   }
 }

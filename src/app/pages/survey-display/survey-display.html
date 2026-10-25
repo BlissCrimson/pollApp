@@ -3,20 +3,26 @@
     @if (isLoading()) {
       <p class="survey__message">Loading survey...</p>
     } @else if (survey(); as survey) {
+      <img class="survey__status" src="/assets/status/status__published.svg" alt="Published">
       <div class="survey__head">
-        <span>{{ getCategoryLabel(survey.category) }}</span>
-        <span>{{ survey.endDate }}</span>
+        <span>@if (survey.endDate) { Ends on {{ survey.endDate | date: 'dd.MM.yyyy' }} }</span>
+        <span>Category: {{ getCategoryLabel(survey.category) }}</span>
       </div>
       <h1 class="survey__title">{{ survey.title }}</h1>
       @if (survey.description) {
         <p class="survey__description">{{ survey.description }}</p>
       }
 
+      <div class="survey__questions">
       @for (question of survey.questions; track question.id; let i = $index) {
         <fieldset class="survey__question">
           <legend class="survey__question-title">{{ i + 1 }}. {{ question.question }}</legend>
-          @for (answer of question.answers; track answer.id) {
+          @if (question.allowMultiple) {
+            <p class="survey__hint">More than one answers are possible.</p>
+          }
+          @for (answer of question.answers; track answer.id; let ai = $index) {
             <app-survey-answer
+              [letter]="letters[ai]"
               [answer]="answer"
               [allowMultiple]="question.allowMultiple"
               [name]="'question-' + question.id"
@@ -27,6 +33,7 @@
           }
         </fieldset>
       }
+      </div>
 
       @if (errorMessage()) {
         <p class="survey__message survey__message--error">{{ errorMessage() }}</p>
@@ -36,7 +43,7 @@
       } @else if (isExpired()) {
         <p class="survey__message">This survey has ended.</p>
       } @else {
-        <button class="btn__new-survey" type="button" [disabled]="!canSubmit()" (click)="submit()">
+        <button class="btn__new-survey survey__submit" type="button" [disabled]="!canSubmit()" (click)="submit()">
           Complete survey
         </button>
       }

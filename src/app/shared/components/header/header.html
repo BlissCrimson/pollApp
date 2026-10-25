@@ -1,3 +1,8 @@
-<div class="header__home">
-  <img class="header__home--logo" src="/assets/logo/logo__orange.svg" alt="">
-</div>
+<header class="header" [class.header--light]="isLight()">
+  <div class="header__home">
+    <img class="header__home--logo" [src]="isLight() ? '/assets/logo/logo__black.svg' : '/assets/logo/logo__orange.svg'" alt="">
+  </div>
+  @if (isLight()) {
+    <button class="btn btn__new-survey" type="button" (click)="goToCreateSurvey()">Create survey</button>
+  }
+</header>

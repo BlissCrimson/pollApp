@@ -1,11 +1,23 @@
 .header {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 16px;
+
+  &--light {
+    background-color: var(--color-white);
+  }
+
   &__home {
-    &--logo{
+    &--logo {
+      display: block;
       width: 120px;
     }
   }
-  &__survy {
-    justify-content: space-between;
+}
+
+@media (min-width: 769px) {
+  .header {
+    padding: 32px max(40px, calc((100vw - 1200px) / 2 + 24px));
   }
 }
