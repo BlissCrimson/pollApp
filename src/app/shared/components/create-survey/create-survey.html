@@ -1,27 +1,34 @@
-<main class="survey">
-  <section class="survey__card">
+<div class="overlay" (click)="close()">
+  <section class="survey__card" role="dialog" aria-modal="true" aria-labelledby="survey-title" (click)="$event.stopPropagation()">
     <div class="survey__head">
       <img class="survey__status" src="/assets/status/status__draft.svg" alt="Draft">
-      <h1 class="survey__title">Create new survey</h1>
-      <button (click)="goToHome()" class="survey__close" type="button">
+      <h1 class="survey__title" id="survey-title">Create new survey</h1>
+      <button (click)="close()" class="survey__close" type="button">
         <span class="survey__close-text">Cancel</span>
         <span class="survey__close-icon" aria-hidden="true">&times;</span>
       </button>
     </div>
 
-    <form class="survey__form" [formGroup]="survey" (ngSubmit)="publish()">
+    <form class="survey__form" [formGroup]="survey" (ngSubmit)="publish()" novalidate>
+      <p class="survey__legend"><span class="survey__required">*</span> Required field</p>
+
       <div class="survey__panel">
         <div class="survey__details">
           <div class="survey__details-left">
             <div class="survey__field">
-              <label class="survey__label" for="name">Survey name</label>
-              <input class="survey__input" id="name" type="text" formControlName="title">
+              <label class="survey__label" for="name">
+                Survey name <span class="survey__required" aria-hidden="true">*</span>
+              </label>
+              <input class="survey__input" id="name" type="text" formControlName="title" required aria-required="true" [class.survey__input--invalid]="showError(survey.controls.title)">
               <button class="survey__trash" type="button" aria-label="Delete survey name" (click)="survey.controls.title.reset()"></button>
+              @if (showError(survey.controls.title)) {
+                <p class="survey__field-error">Please enter a survey name.</p>
+              }
             </div>
 
             <div class="survey__meta">
               <div class="survey__category">
-                <select class="survey__select" id="category" aria-label="Choose category" formControlName="category">
+                <select class="survey__select" id="category" aria-label="Choose category (optional)" formControlName="category">
                   <option value="" disabled hidden>Choose category</option>
                   @for (category of categories; track category.value) {
                     <option [value]="category.value">{{ category.label }}</option>
@@ -52,13 +59,20 @@
           @for (question of questions.controls; track question; let qi = $index) {
             <div class="survey__question" [formGroupName]="qi">
               <div class="survey__field survey__field--question">
-                <label class="survey__label" [for]="'question' + qi">{{ qi + 1 }}. Question</label>
-                <input class="survey__input" [id]="'question' + qi" type="text" formControlName="question" placeholder="Which date would work best for you?">
+                <label class="survey__label" [for]="'question' + qi">
+                  {{ qi + 1 }}. Question <span class="survey__required" aria-hidden="true">*</span>
+                </label>
+                <input class="survey__input" [id]="'question' + qi" type="text" formControlName="question" required aria-required="true" placeholder="Which date would work best for you?" [class.survey__input--invalid]="showError(question.controls.question)">
                 <button class="survey__trash" type="button" aria-label="Delete question" (click)="removeQuestion(qi)"></button>
+                @if (showError(question.controls.question)) {
+                  <p class="survey__field-error">Please enter a question.</p>
+                }
               </div>
 
               <div class="survey__answers-head">
-                <h2 class="survey__label survey__label--answers">Answers</h2>
+                <h2 class="survey__label survey__label--answers">
+                  Answers <span class="survey__required" aria-hidden="true">*</span>
+                </h2>
                 <label class="survey__multiple">
                   <input type="checkbox" formControlName="allowMultiple">
                   Allow multiple answers.
@@ -69,8 +83,11 @@
                 @for (answer of answers(qi).controls; track answer; let ai = $index) {
                   <div class="survey__answer">
                     <label class="survey__label survey__label--answer" [for]="'answer' + qi + ai">{{ letter(ai) }}.</label>
-                    <input class="survey__input" [id]="'answer' + qi + ai" type="text" [formControlName]="ai">
+                    <input class="survey__input" [id]="'answer' + qi + ai" type="text" [formControlName]="ai" required aria-required="true" [class.survey__input--invalid]="showError(answer)">
                     <button class="survey__trash" type="button" [attr.aria-label]="'Delete answer ' + letter(ai)" (click)="removeAnswer(qi, ai)"></button>
+                    @if (showError(answer)) {
+                      <p class="survey__field-error">Please enter an answer.</p>
+                    }
                   </div>
                 }
               </div>
@@ -88,7 +105,7 @@
       </div>
 
       @if (errorMessage) {
-        <p class="survey__error">{{ errorMessage }}</p>
+        <p class="survey__error" role="alert">{{ errorMessage }}</p>
       }
 
       <button class="survey__publish" type="submit" [disabled]="isSaving">
@@ -97,4 +114,4 @@
       </button>
     </form>
   </section>
-</main>
+</div>

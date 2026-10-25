@@ -6,7 +6,7 @@
         Create and share surveys in minutes – from team events to workplace culture.
         Collect opinions, engage your audience, and turn feedback into action.
       </p>
-      <button class="btn btn__new-survey" type="button" (click)="goToCreateSurvey()">
+      <button class="btn btn__new-survey" type="button" (click)="openCreateSurvey()">
         <span class="btn__new-survey--text">New survey</span>
         <span class="btn__icon" aria-hidden="true">
           <img class="btn__new-survey--circle" aria-hidden="true" src="/assets/icons/add_circle.svg" alt="">
@@ -21,4 +21,8 @@
     <app-ending-surveys />
     <app-survey-list />
   </section>
+
+  @if (isCreateOpen()) {
+    <app-create-survey (closed)="closeCreateSurvey()" (created)="reloadSurveys()" />
+  }
 </main>

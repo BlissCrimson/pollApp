@@ -108,3 +108,12 @@
 - survey-service.ts: added watchVotes() wrapping the subscription.
 - survey-display.ts: listenForVotes() reloads votes on every new vote (300 ms debounce) and stops listening on destroy.
 - docs/checklists/Poll-App Checkliste.md: checked US2 tabs and category filter; reset the overlay item of US3 (still a route).
+
+2026-10-25 | Create survey as overlay dialog
+- Moved src/app/pages/create-survey to src/app/shared/components/create-survey (no longer a page); fixed import paths.
+- app.routes.ts: removed the create-survey route.
+- home.ts/.html: "New survey" opens <app-create-survey> as overlay (isCreateOpen signal); lists reload after (created).
+- create-survey.ts: Router removed; added closed/created outputs, close() (also on Escape), showError().
+- create-survey.html/.scss: overlay + backdrop, role="dialog", click on backdrop closes; required fields marked with *, per-field error messages, legend.
+- survey-list.ts, ending-surveys.ts: loading extracted into public loadSurveys() so Home can reload after creating.
+- Checkliste: US3 overlay item and required-fields item checked.

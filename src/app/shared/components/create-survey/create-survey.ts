@@ -1,9 +1,15 @@
-import { Component, inject } from '@angular/core';
-import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { SupabaseService } from '../../supabase-service';
-import { Router } from '@angular/router';
-import { SurveyInput } from '../../shared/interfaces/survey';
-import { SURVEY_CATEGORIES } from '../../shared/constants/categories';
+import { Component, HostListener, inject, output } from '@angular/core';
+import {
+  AbstractControl,
+  FormArray,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { SupabaseService } from '../../../supabase-service';
+import { SurveyInput } from '../../interfaces/survey';
+import { SURVEY_CATEGORIES } from '../../constants/categories';
 
 @Component({
   imports: [ReactiveFormsModule],
@@ -13,7 +19,9 @@ import { SURVEY_CATEGORIES } from '../../shared/constants/categories';
 })
 export class CreateSurvey {
   private supabaseService = inject(SupabaseService);
-  private router = inject(Router);
+
+  closed = output<void>();
+  created = output<void>();
 
   categories = SURVEY_CATEGORIES;
   isSaving = false;
@@ -63,8 +71,15 @@ export class CreateSurvey {
     if (this.answers(questionIndex).length > 2) this.answers(questionIndex).removeAt(answerIndex);
   }
 
-  goToHome() {
-    this.router.navigate(['/']);
+  // Closes the dialog (also on Escape)
+  @HostListener('document:keydown.escape')
+  close() {
+    this.closed.emit();
+  }
+
+  // True if a required control was touched and is still invalid
+  showError(control: AbstractControl) {
+    return control.invalid && control.touched;
   }
 
   letter(index: number) {
@@ -89,14 +104,15 @@ export class CreateSurvey {
   async publish() {
     if (this.survey.invalid) {
       this.survey.markAllAsTouched();
-      this.errorMessage = 'Please fill in the survey name, every question and every answer.';
+      this.errorMessage = 'Please fill in all fields marked with *.';
       return;
     }
     this.isSaving = true;
     this.errorMessage = '';
     try {
       await this.supabaseService.createSurvey(this.buildSurveyInput());
-      this.goToHome();
+      this.created.emit();
+      this.close();
     } catch (error) {
       this.errorMessage = 'The survey could not be saved. Please try again.';
       console.error(error);

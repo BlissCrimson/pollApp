@@ -2,12 +2,25 @@ $panel-color: #44324a;
 $card-color: #342639;
 $close-color: #6e5248;
 
-.survey {
-  max-width: 1050px;
-  margin: 0 auto;
-  padding: 0 16px 48px;
+// Full-screen backdrop; scrolls if the dialog is taller than the viewport
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 16px;
+  overflow-y: auto;
+  background-color: rgba(0, 0, 0, 0.7);
+}
 
+.survey {
   &__card {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 1050px;
+    margin: auto;
     padding: 32px 16px 40px;
     border-radius: 0 96px 0 0;
     background-color: $card-color;
@@ -122,6 +135,23 @@ $close-color: #6e5248;
     font-weight: 400;
   }
 
+  &__required {
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+
+  &__legend {
+    margin: 0 0 16px;
+    font-size: 16px;
+  }
+
+  &__field-error {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-size: 14px;
+    color: var(--color-primary);
+  }
+
   &__input,
   &__select {
     box-sizing: border-box;
@@ -134,6 +164,10 @@ $close-color: #6e5248;
     font-family: inherit;
     font-size: 18px;
     line-height: 24px;
+
+    &--invalid {
+      outline: 2px solid var(--color-primary);
+    }
 
     &--textarea {
       min-height: 120px;

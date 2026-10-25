@@ -43,7 +43,11 @@ export class SurveyList implements OnInit {
     this.activeFilter.set(this.activeFilter() === filter ? null : filter);
   }
 
-  async ngOnInit() {
+  ngOnInit() {
+    this.loadSurveys();
+  }
+
+  async loadSurveys() {
     try {
       this.surveys.set(await this.supabaseService.getSurveys());
     } catch (error) {
