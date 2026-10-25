@@ -74,3 +74,12 @@
 - survey-card.ts: gotToSurvey() now navigates to /survey-display/:group_id (survey id).
 - supabase-service.ts: added getSurveyById(id).
 - pages/survey-display: loads survey by route param group_id into a signal; template renders app-survey-card with [survey].
+
+2026-10-25 | Survey display: participate in survey + real results
+- shared/services/survey-service.ts: new SurveyService (logic only): loadSurvey, loadVoteState, calculateResults, toggleSelection, isComplete, isExpired, submitVotes.
+- supabase-service.ts: added getSurveyWithQuestions(), getVotesByGroup(), insertVotes() (data access only); getUserId() is now public.
+- shared/interfaces/survey.ts: added SurveyDetailRow, VoteRow, SurveyDetail, QuestionDetail, AnswerDetail, Selections, AnswerResult, VoteState.
+- survey-answer: inputs answer/allowMultiple/name/checked/disabled, output selected; radio or checkbox input; spec updated.
+- results: inputs survey/results, rows rendered with @for, bar width bound to percent.
+- survey-display: loads survey via SurveyService, loading/error/voted/expired states, submit button; scss fixed (width, NerkoOne font, mobile column layout).
+- Requires Supabase: select policies on questions/answers/votes, insert policy on votes (user_id = auth.uid()), anonymous sign-ins.

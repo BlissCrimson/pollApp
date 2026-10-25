@@ -1,5 +1,5 @@
-import { Component, inject, output, signal } from '@angular/core';
-import { SurveyOutput } from '../../interfaces/survey';
+import { Component, input, output } from '@angular/core';
+import { AnswerDetail } from '../../interfaces/survey';
 
 @Component({
   imports: [],
@@ -8,7 +8,11 @@ import { SurveyOutput } from '../../interfaces/survey';
   templateUrl: './survey-answer.html',
 })
 export class SurveyAnswer {
+  answer = input.required<AnswerDetail>();
+  allowMultiple = input(false);
+  name = input.required<string>();
+  checked = input(false);
+  disabled = input(false);
 
-  answers = signal([])
-  survey = signal<SurveyOutput | null>(null);
+  selected = output<number>();
 }

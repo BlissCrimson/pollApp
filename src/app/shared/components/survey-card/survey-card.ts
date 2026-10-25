@@ -24,7 +24,7 @@ export class SurveyCard {
     return `Ends in ${days} ${days === 1 ? 'Day' : 'Days'}`;
   });
 
-  gotToSurvey() {
+  goToSurvey() {
     this.router.navigate(['/survey-display', this.survey().id]);
   }
 }

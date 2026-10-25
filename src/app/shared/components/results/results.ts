@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
+import { AnswerResult, SurveyDetail } from '../../interfaces/survey';
 
 @Component({
   imports: [],
@@ -6,4 +7,16 @@ import { Component } from '@angular/core';
   styleUrl: './results.scss',
   templateUrl: './results.html',
 })
-export class Results {}
+export class Results {
+  survey = input<SurveyDetail | null>(null);
+  results = input<AnswerResult[]>([]);
+
+  percentByAnswer = computed(
+    () => new Map(this.results().map((result) => [result.answerId, result.percent])),
+  );
+
+  // A, B, C, ...
+  getLetter(index: number) {
+    return String.fromCharCode(65 + index);
+  }
+}

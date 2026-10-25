@@ -1,27 +1,83 @@
 main {
-  width: 100vh;
+  width: 100%;
   margin: auto;
   background-color: white;
   color: #221227;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
+
+app-results {
+  background-color: var(--color-background);
+}
+
 .survey {
-  width: 60%;
-  border-radius: 0 160px 0 0;
+  padding: 24px 16px;
+  border-radius: 0 80px 0 0;
   background-color: #8e70991a;
   display: flex;
   flex-direction: column;
+  gap: 16px;
 
   &__head {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
   }
+
   &__title {
-    font-family: 'NekroOne';
-    font-size: 56px;
+    margin: 0;
+    font-family: 'NerkoOne', sans-serif;
+    font-size: 40px;
     font-weight: 400;
     color: #ee9236;
+  }
+
+  &__description {
+    margin: 0;
+  }
+
+  &__question {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__question-title {
+    padding: 0;
+    margin-bottom: 8px;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  &__message {
+    margin: 0;
+
+    &--error {
+      color: #c0392b;
+    }
+  }
+}
+
+@media (min-width: 769px) {
+  main {
+    flex-direction: row;
+  }
+
+  .survey {
+    width: 60%;
+    padding: 32px 24px;
+    border-radius: 0 160px 0 0;
+
+    &__title {
+      font-size: 56px;
+    }
+  }
+
+  app-results {
+    flex: 1;
   }
 }

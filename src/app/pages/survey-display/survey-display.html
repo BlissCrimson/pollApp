@@ -1,36 +1,49 @@
 <main>
   <section class="survey">
-    @if (survey(); as survey) {
-    <!-- {{survey.status}} -->
-    Published
-    <div class="survey__head">
-      {{survey.endDate}}
-      <!-- {{survey.category}} -->
-      category
-    </div>
-    <h1 class="survey__title">
-      {{survey.title}}
-    </h1>
-    <span>
-      <!-- {{survey.description}} -->
-      Beschreibung
-    </span>
-    <section>
-      @for (answer of answers; track answer.id) {
-      <app-survey-answer [answer]="answer" [allowMultiple]="question.allow_multiple"
-        [name]="'question-' + question.id" />
+    @if (isLoading()) {
+      <p class="survey__message">Loading survey...</p>
+    } @else if (survey(); as survey) {
+      <div class="survey__head">
+        <span>{{ survey.category }}</span>
+        <span>{{ survey.endDate }}</span>
+      </div>
+      <h1 class="survey__title">{{ survey.title }}</h1>
+      @if (survey.description) {
+        <p class="survey__description">{{ survey.description }}</p>
       }
 
-      <button class="btn">Complete survey</button>
-    </section>
+      @for (question of survey.questions; track question.id; let i = $index) {
+        <fieldset class="survey__question">
+          <legend class="survey__question-title">{{ i + 1 }}. {{ question.question }}</legend>
+          @for (answer of question.answers; track answer.id) {
+            <app-survey-answer
+              [answer]="answer"
+              [allowMultiple]="question.allowMultiple"
+              [name]="'question-' + question.id"
+              [checked]="isSelected(question, answer.id)"
+              [disabled]="hasVoted() || isExpired()"
+              (selected)="onSelect(question, $event)"
+            />
+          }
+        </fieldset>
+      }
+
+      @if (errorMessage()) {
+        <p class="survey__message survey__message--error">{{ errorMessage() }}</p>
+      }
+      @if (hasVoted()) {
+        <p class="survey__message">Thank you, your vote has been saved.</p>
+      } @else if (isExpired()) {
+        <p class="survey__message">This survey has ended.</p>
+      } @else {
+        <button class="btn__new-survey" [disabled]="!canSubmit()" (click)="submit()">
+          Complete survey
+        </button>
+      }
+    } @else {
+      <p class="survey__message survey__message--error">{{ errorMessage() }}</p>
     }
   </section>
 
-  <!-- @if (survey(); as survey) {
-
-  <app-survey-card [survey]="survey"></app-survey-card>
-
-  } -->
-  <app-results></app-results>
-
+  <app-results [survey]="survey()" [results]="results()"></app-results>
 </main>

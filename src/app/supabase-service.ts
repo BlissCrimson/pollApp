@@ -1,7 +1,13 @@
 import { Service } from '@angular/core';
 import { createClient } from '@supabase/supabase-js';
 import { environment } from '../environments/environment';
-import { QuestionInput, SurveyInput, SurveyOutput } from './shared/interfaces/survey';
+import {
+  QuestionInput,
+  SurveyDetailRow,
+  SurveyInput,
+  SurveyOutput,
+  VoteRow,
+} from './shared/interfaces/survey';
 
 @Service()
 export class SupabaseService {
@@ -41,6 +47,41 @@ export class SupabaseService {
     return this.mapSurveys([data])[0];
   }
 
+  // Loads a survey including its questions and answers
+  async getSurveyWithQuestions(id: number): Promise<SurveyDetailRow> {
+    const { data, error } = await this.supabase
+      .from('groups')
+      .select(
+        'id, title, category, end_date, description, questions(id, question, allow_multiple, answers(id, text, position))',
+      )
+      .eq('id', id)
+      .single();
+    if (error) throw error;
+    return data as SurveyDetailRow;
+  }
+
+  // Loads all votes of a survey
+  async getVotesByGroup(groupId: number): Promise<VoteRow[]> {
+    const { data, error } = await this.supabase
+      .from('votes')
+      .select('answer_id, user_id')
+      .eq('group_id', groupId);
+    if (error) throw error;
+    return data;
+  }
+
+  // Saves one vote per selected answer for the current user
+  async insertVotes(groupId: number, answerIds: number[]) {
+    const userId = await this.getUserId();
+    const rows = answerIds.map((answerId) => ({
+      group_id: groupId,
+      answer_id: answerId,
+      user_id: userId,
+    }));
+    const { error } = await this.supabase.from('votes').insert(rows);
+    if (error) throw error;
+  }
+
   private mapSurveys(
     rows: { id: number; title: string; category: string | null; end_date: string | null }[],
   ): SurveyOutput[] {
@@ -69,7 +110,7 @@ export class SupabaseService {
   }
 
   // Returns the current user id; signs in anonymously if there is no session yet
-  private async getUserId() {
+  async getUserId() {
     const { data: sessionData } = await this.supabase.auth.getSession();
     if (sessionData.session) return sessionData.session.user.id;
     const { data, error } = await this.supabase.auth.signInAnonymously();
