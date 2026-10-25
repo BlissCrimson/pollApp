@@ -1,0 +1,27 @@
+main {
+  width: 100vh;
+  margin: auto;
+  background-color: white;
+  color: #221227;
+  display: flex;
+  flex-direction: row;
+}
+.survey {
+  width: 60%;
+  border-radius: 0 160px 0 0;
+  background-color: #8e70991a;
+  display: flex;
+  flex-direction: column;
+
+  &__head {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  &__title {
+    font-family: 'NekroOne';
+    font-size: 56px;
+    font-weight: 400;
+    color: #ee9236;
+  }
+}

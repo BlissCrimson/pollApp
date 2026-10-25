@@ -4,9 +4,10 @@ import { Results } from '../../shared/components/results/results';
 import { SurveyCard } from '../../shared/components/survey-card/survey-card';
 import { SurveyOutput } from '../../shared/interfaces/survey';
 import { SupabaseService } from '../../supabase-service';
+import { SurveyAnswer } from '../../shared/components/survey-answer/survey-answer';
 
 @Component({
-  imports: [Results, SurveyCard],
+  imports: [Results, SurveyCard, SurveyAnswer],
   selector: 'app-survey-display',
   styleUrl: './survey-display.scss',
   templateUrl: './survey-display.html',

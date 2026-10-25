@@ -1,0 +1,11 @@
+.answer {
+  &__area--input {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  &__input {
+    border: 2px solid black;
+  }
+}

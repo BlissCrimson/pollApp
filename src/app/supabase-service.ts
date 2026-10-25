@@ -59,7 +59,10 @@ export class SupabaseService {
       const questionIds = await this.insertQuestions(surveyId, survey.questions);
       await this.insertAnswers(questionIds, survey.questions);
     } catch (error) {
-      await this.supabase.from('groups').delete().eq('id', surveyId);
+      await this.supabase
+      .from('groups')
+      .delete()
+      .eq('id', surveyId);
       throw error;
     }
     return surveyId;
@@ -97,16 +100,21 @@ export class SupabaseService {
       question: q.question,
       allow_multiple: q.allowMultiple,
     }));
-    const { data, error } = await this.supabase.from('questions').insert(rows).select('id');
+    const { data, error } = await this.supabase
+    .from('questions')
+    .insert(rows)
+    .select('id');
     if (error) throw error;
     return data.map((row) => row.id);
   }
 
   private async insertAnswers(questionIds: number[], questions: QuestionInput[]) {
     const rows = questions.flatMap((q, qi) =>
-      q.answers.map((text, position) => ({ group_id: questionIds[qi], position, text })),
+      q.answers.map((text, position) => ({ question_id: questionIds[qi], position, text })),
     );
-    const { error } = await this.supabase.from('answers').insert(rows);
+    const { error } = await this.supabase
+    .from('answers')
+    .insert(rows);
     if (error) throw error;
   }
 }

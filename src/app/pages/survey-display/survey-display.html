@@ -1,8 +1,36 @@
-<div>
-  @if (survey(); as survey) {
-    <div>
-      <app-survey-card [survey]="survey"></app-survey-card>
+<main>
+  <section class="survey">
+    @if (survey(); as survey) {
+    <!-- {{survey.status}} -->
+    Published
+    <div class="survey__head">
+      {{survey.endDate}}
+      <!-- {{survey.category}} -->
+      category
     </div>
-  }
+    <h1 class="survey__title">
+      {{survey.title}}
+    </h1>
+    <span>
+      <!-- {{survey.description}} -->
+      Beschreibung
+    </span>
+    <section>
+      @for (answer of answers; track answer.id) {
+      <app-survey-answer [answer]="answer" [allowMultiple]="question.allow_multiple"
+        [name]="'question-' + question.id" />
+      }
+
+      <button class="btn">Complete survey</button>
+    </section>
+    }
+  </section>
+
+  <!-- @if (survey(); as survey) {
+
+  <app-survey-card [survey]="survey"></app-survey-card>
+
+  } -->
   <app-results></app-results>
-</div>
+
+</main>
