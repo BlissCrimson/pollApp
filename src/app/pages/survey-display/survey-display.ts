@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { getCategoryLabel } from '../../shared/constants/categories';
 import { Results } from '../../shared/components/results/results';
@@ -20,6 +20,8 @@ import { SurveyService } from '../../shared/services/survey-service';
 export class SurveyDisplay implements OnInit {
   private route = inject(ActivatedRoute);
   private surveyService = inject(SurveyService);
+  private destroyRef = inject(DestroyRef);
+  private refreshTimer: ReturnType<typeof setTimeout> | undefined;
 
   getCategoryLabel = getCategoryLabel;
 
@@ -49,6 +51,7 @@ export class SurveyDisplay implements OnInit {
       const survey = await this.surveyService.loadSurvey(groupId);
       this.survey.set(survey);
       await this.refreshVotes(survey);
+      this.listenForVotes(survey);
     } catch (error) {
       console.error(error);
       this.errorMessage.set('The survey could not be loaded.');
@@ -81,6 +84,18 @@ export class SurveyDisplay implements OnInit {
     } finally {
       this.isSaving.set(false);
     }
+  }
+
+  // Live results: reloads the votes when anyone votes (debounced, one vote may insert several rows)
+  private listenForVotes(survey: SurveyDetail) {
+    const stopWatching = this.surveyService.watchVotes(survey, () => {
+      clearTimeout(this.refreshTimer);
+      this.refreshTimer = setTimeout(() => this.refreshVotes(survey).catch(console.error), 300);
+    });
+    this.destroyRef.onDestroy(() => {
+      clearTimeout(this.refreshTimer);
+      stopWatching();
+    });
   }
 
   private async refreshVotes(survey: SurveyDetail) {

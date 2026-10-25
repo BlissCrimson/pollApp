@@ -2,6 +2,7 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { SupabaseService } from '../../../supabase-service';
 import { SURVEY_CATEGORIES } from '../../constants/categories';
 import { SurveyOutput } from '../../interfaces/survey';
+import { SurveyService } from '../../services/survey-service';
 import { SurveyCard } from '../survey-card/survey-card';
 
 @Component({
@@ -12,10 +13,12 @@ import { SurveyCard } from '../survey-card/survey-card';
 })
 export class SurveyList implements OnInit {
   private supabaseService = inject(SupabaseService);
+  private surveyService = inject(SurveyService);
 
   surveys = signal<SurveyOutput[]>([]);
   errorMessage = signal('');
-  activeFilter = signal<'active' | 'past'>('active');
+  // null means no status filter (all surveys)
+  activeFilter = signal<'active' | 'past' | null>(null);
 
   categories = SURVEY_CATEGORIES;
   // Empty string means "All surveys"
@@ -23,17 +26,21 @@ export class SurveyList implements OnInit {
 
   filteredSurveys = computed(() => {
     const category = this.selectedCategory();
-    if (!category) return this.surveys();
-    return this.surveys().filter((survey) => survey.category === category);
+    const status = this.activeFilter();
+    return this.surveys().filter((survey) => {
+      if (category && survey.category !== category) return false;
+      if (!status) return true;
+      return this.surveyService.isExpired(survey.endDate) === (status === 'past');
+    });
   });
 
   setCategory(event: Event) {
     this.selectedCategory.set((event.target as HTMLSelectElement).value);
   }
 
-  // Only switches the visual state of the filter buttons for now
+  // Clicking the active filter again resets it and shows all surveys
   setFilter(filter: 'active' | 'past') {
-    this.activeFilter.set(filter);
+    this.activeFilter.set(this.activeFilter() === filter ? null : filter);
   }
 
   async ngOnInit() {

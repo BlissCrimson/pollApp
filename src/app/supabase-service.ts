@@ -70,6 +70,21 @@ export class SupabaseService {
     return data;
   }
 
+  // Calls onChange for every new vote of a survey; returns a function that stops listening
+  subscribeToVotes(groupId: number, onChange: () => void): () => void {
+    const channel = this.supabase
+      .channel(`votes-${groupId}`)
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'votes', filter: `group_id=eq.${groupId}` },
+        onChange,
+      )
+      .subscribe();
+    return () => {
+      this.supabase.removeChannel(channel);
+    };
+  }
+
   // Saves one vote per selected answer for the current user
   async insertVotes(groupId: number, answerIds: number[]) {
     const userId = await this.getUserId();
@@ -100,10 +115,7 @@ export class SupabaseService {
       const questionIds = await this.insertQuestions(surveyId, survey.questions);
       await this.insertAnswers(questionIds, survey.questions);
     } catch (error) {
-      await this.supabase
-      .from('groups')
-      .delete()
-      .eq('id', surveyId);
+      await this.supabase.from('groups').delete().eq('id', surveyId);
       throw error;
     }
     return surveyId;
@@ -141,10 +153,7 @@ export class SupabaseService {
       question: q.question,
       allow_multiple: q.allowMultiple,
     }));
-    const { data, error } = await this.supabase
-    .from('questions')
-    .insert(rows)
-    .select('id');
+    const { data, error } = await this.supabase.from('questions').insert(rows).select('id');
     if (error) throw error;
     return data.map((row) => row.id);
   }
@@ -153,9 +162,7 @@ export class SupabaseService {
     const rows = questions.flatMap((q, qi) =>
       q.answers.map((text, position) => ({ question_id: questionIds[qi], position, text })),
     );
-    const { error } = await this.supabase
-    .from('answers')
-    .insert(rows);
+    const { error } = await this.supabase.from('answers').insert(rows);
     if (error) throw error;
   }
 }

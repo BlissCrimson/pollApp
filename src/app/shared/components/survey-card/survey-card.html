@@ -1,4 +1,5 @@
-<article class="survey-card" [class.survey-card--light]="variant() === 'light'" (click)="goToSurvey()">
+<article class="survey-card" [class.survey-card--light]="variant() === 'light'" role="link" tabindex="0"
+  (click)="goToSurvey()" (keydown.enter)="goToSurvey()">
   <span class="survey-card__category">{{ categoryLabel() }}</span>
   <h3 class="survey-card__title">{{ survey().title }}</h3>
   @if (endLabel()) {

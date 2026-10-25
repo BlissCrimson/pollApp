@@ -45,6 +45,11 @@ export class SurveyService {
     };
   }
 
+  // Calls onChange when someone votes; returns a function that stops listening
+  watchVotes(survey: SurveyDetail, onChange: () => void): () => void {
+    return this.supabaseService.subscribeToVotes(survey.id, onChange);
+  }
+
   // Share of votes per answer, relative to all votes of the same question
   calculateResults(votes: VoteRow[], survey: SurveyDetail): AnswerResult[] {
     return survey.questions.flatMap((question) => {

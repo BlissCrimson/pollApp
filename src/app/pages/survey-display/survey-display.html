@@ -36,7 +36,7 @@
       } @else if (isExpired()) {
         <p class="survey__message">This survey has ended.</p>
       } @else {
-        <button class="btn__new-survey" [disabled]="!canSubmit()" (click)="submit()">
+        <button class="btn__new-survey" type="button" [disabled]="!canSubmit()" (click)="submit()">
           Complete survey
         </button>
       }

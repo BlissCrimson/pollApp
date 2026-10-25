@@ -90,3 +90,21 @@
 - create-survey.ts/.html: category options rendered from SURVEY_CATEGORIES (fixes duplicate value="other").
 - survey-list.ts/.html: dropdown uses SURVEY_CATEGORIES with "All surveys" as first option; added selectedCategory, filteredSurveys, setCategory().
 - survey-card, survey-display: show category label instead of raw value.
+
+2026-10-25 | Home: Active/Past survey filter
+- survey-list.ts: activeFilter is now nullable (null = all surveys, default); setFilter() toggles the filter off when the active button is clicked again.
+- filteredSurveys combines status filter (via SurveyService.isExpired) with the category filter; surveys without end date count as active.
+
+2026-10-25 | Code cleanup
+- app.ts/app.html: removed unused forms imports and commented-out template code.
+- home.html: removed commented-out old "New survey" button block.
+- create-survey.ts: removed unused Inject import; error messages are now meaningful English texts.
+- supabase-service.ts: unified formatting of the supabase query chains.
+- survey-display.html: submit button got type="button".
+- survey-card.html: card is keyboard accessible (role="link", tabindex, Enter key).
+
+2026-10-25 | Live results (realtime)
+- supabase-service.ts: added subscribeToVotes(groupId, onChange) (postgres_changes INSERT on votes, filtered by group_id), returns an unsubscribe function.
+- survey-service.ts: added watchVotes() wrapping the subscription.
+- survey-display.ts: listenForVotes() reloads votes on every new vote (300 ms debounce) and stops listening on destroy.
+- docs/checklists/Poll-App Checkliste.md: checked US2 tabs and category filter; reset the overlay item of US3 (still a route).

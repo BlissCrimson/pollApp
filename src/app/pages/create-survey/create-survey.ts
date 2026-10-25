@@ -1,4 +1,4 @@
-import { Component, Inject, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SupabaseService } from '../../supabase-service';
 import { Router } from '@angular/router';
@@ -89,7 +89,7 @@ export class CreateSurvey {
   async publish() {
     if (this.survey.invalid) {
       this.survey.markAllAsTouched();
-      this.errorMessage = 'failed';
+      this.errorMessage = 'Please fill in the survey name, every question and every answer.';
       return;
     }
     this.isSaving = true;
@@ -98,7 +98,7 @@ export class CreateSurvey {
       await this.supabaseService.createSurvey(this.buildSurveyInput());
       this.goToHome();
     } catch (error) {
-      this.errorMessage = 'speichern fehl';
+      this.errorMessage = 'The survey could not be saved. Please try again.';
       console.error(error);
     } finally {
       this.isSaving = false;
