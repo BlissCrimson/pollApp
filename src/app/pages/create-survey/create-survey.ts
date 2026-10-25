@@ -13,7 +13,7 @@ import { SURVEY_CATEGORIES } from '../../shared/constants/categories';
 })
 export class CreateSurvey {
   private supabaseService = inject(SupabaseService);
-  private router = Inject(Router);
+  private router = inject(Router);
 
   categories = SURVEY_CATEGORIES;
   isSaving = false;
