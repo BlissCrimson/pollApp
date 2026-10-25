@@ -14,11 +14,13 @@ export class EndingSurveys implements OnInit {
 
   surveys = signal<SurveyOutput[]>([]);
 
-  ngOnInit() {
+  /** Loads the surveys that end soon */
+  ngOnInit(): void {
     this.loadSurveys();
   }
 
-  async loadSurveys() {
+  /** Reloads the surveys that end soon */
+  async loadSurveys(): Promise<void> {
     try {
       this.surveys.set(await this.supabaseService.getEndingSoonSurveys());
     } catch (error) {

@@ -1,6 +1,8 @@
 import { Component, computed, input } from '@angular/core';
 import { AnswerResult, SurveyDetail } from '../../interfaces/survey';
 
+const FIRST_LETTER_CODE = 65;
+
 @Component({
   imports: [],
   selector: 'app-results',
@@ -15,8 +17,8 @@ export class Results {
     () => new Map(this.results().map((result) => [result.answerId, result.percent])),
   );
 
-  // A, B, C, ...
-  getLetter(index: number) {
-    return String.fromCharCode(65 + index);
+  /** Returns the answer letter: A, B, C, ... */
+  getLetter(index: number): string {
+    return String.fromCharCode(FIRST_LETTER_CODE + index);
   }
 }

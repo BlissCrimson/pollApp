@@ -21,7 +21,8 @@ export class Header {
     { initialValue: this.router.url.startsWith('/survey-display') },
   );
 
-  goToCreateSurvey() {
+  /** Navigates to the home page and asks it to open the create dialog */
+  goToCreateSurvey(): void {
     this.router.navigate(['/'], { queryParams: { create: 1 } });
   }
 }

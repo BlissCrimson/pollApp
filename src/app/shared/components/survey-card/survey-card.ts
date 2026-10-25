@@ -3,6 +3,8 @@ import { getCategoryLabel } from '../../constants/categories';
 import { SurveyOutput } from '../../interfaces/survey';
 import { Router } from '@angular/router';
 
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
 @Component({
   imports: [],
   selector: 'app-survey-card',
@@ -16,18 +18,18 @@ export class SurveyCard {
 
   categoryLabel = computed(() => getCategoryLabel(this.survey().category));
 
-  // Label like "Ends in 2 Days", "Ends today" or "Ended"
+  /** Label like "Ends in 2 Days", "Ends today" or "Ended" */
   endLabel = computed(() => {
     const endDate = this.survey().endDate;
     if (!endDate) return '';
-    const msPerDay = 24 * 60 * 60 * 1000;
-    const days = Math.ceil((new Date(endDate).getTime() - Date.now()) / msPerDay);
+    const days = Math.ceil((new Date(endDate).getTime() - Date.now()) / MS_PER_DAY);
     if (days < 0) return 'Ended';
     if (days === 0) return 'Ends today';
     return `Ends in ${days} ${days === 1 ? 'Day' : 'Days'}`;
   });
 
-  goToSurvey() {
+  /** Opens the detail page of this survey */
+  goToSurvey(): void {
     this.router.navigate(['/survey-display', this.survey().id]);
   }
 }

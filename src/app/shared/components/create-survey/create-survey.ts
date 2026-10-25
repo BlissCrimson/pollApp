@@ -11,6 +11,17 @@ import { SupabaseService } from '../../../supabase-service';
 import { SurveyInput } from '../../interfaces/survey';
 import { SURVEY_CATEGORIES } from '../../constants/categories';
 
+const FIRST_LETTER_CODE = 65;
+const MIN_QUESTIONS = 1;
+const MIN_ANSWERS = 2;
+
+type AnswerControl = FormControl<string>;
+type QuestionForm = FormGroup<{
+  question: FormControl<string>;
+  allowMultiple: FormControl<boolean | null>;
+  answers: FormArray<AnswerControl>;
+}>;
+
 @Component({
   imports: [ReactiveFormsModule],
   selector: 'app-create-survey',
@@ -35,57 +46,68 @@ export class CreateSurvey {
     questions: new FormArray([this.createQuestion()]),
   });
 
-  private createQuestion() {
+  /** Creates a question group with the minimum number of answers */
+  private createQuestion(): QuestionForm {
     return new FormGroup({
       question: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
       allowMultiple: new FormControl(false),
-      answers: new FormArray([this.createAnswer(), this.createAnswer()]),
+      answers: new FormArray(Array.from({ length: MIN_ANSWERS }, () => this.createAnswer())),
     });
   }
 
-  private createAnswer() {
+  /** Creates a required answer control */
+  private createAnswer(): AnswerControl {
     return new FormControl('', { nonNullable: true, validators: [Validators.required] });
   }
 
-  get questions() {
+  /** All question groups of the form */
+  get questions(): FormArray<QuestionForm> {
     return this.survey.controls.questions;
   }
 
-  answers(questionIndex: number) {
+  /** The answer controls of one question */
+  answers(questionIndex: number): FormArray<AnswerControl> {
     return this.questions.at(questionIndex).controls.answers;
   }
 
-  addQuestion() {
+  /** Appends an empty question */
+  addQuestion(): void {
     this.questions.push(this.createQuestion());
   }
 
-  addAnswer(questionIndex: number) {
+  /** Appends an empty answer to a question */
+  addAnswer(questionIndex: number): void {
     this.answers(questionIndex).push(this.createAnswer());
   }
 
-  removeQuestion(questionIndex: number) {
-    if (this.questions.length > 1) this.questions.removeAt(questionIndex);
+  /** Removes a question, but keeps at least one */
+  removeQuestion(questionIndex: number): void {
+    if (this.questions.length > MIN_QUESTIONS) this.questions.removeAt(questionIndex);
   }
 
-  removeAnswer(questionIndex: number, answerIndex: number) {
-    if (this.answers(questionIndex).length > 2) this.answers(questionIndex).removeAt(answerIndex);
+  /** Removes an answer, but keeps the minimum number of answers */
+  removeAnswer(questionIndex: number, answerIndex: number): void {
+    const answers = this.answers(questionIndex);
+    if (answers.length > MIN_ANSWERS) answers.removeAt(answerIndex);
   }
 
-  // Closes the dialog (also on Escape)
+  /** Closes the dialog (also on Escape) */
   @HostListener('document:keydown.escape')
-  close() {
+  close(): void {
     this.closed.emit();
   }
 
-  // True if a required control was touched and is still invalid
-  showError(control: AbstractControl) {
+  /** True if a required control was touched and is still invalid */
+  showError(control: AbstractControl): boolean {
     return control.invalid && control.touched;
   }
 
-  letter(index: number) {
-    return String.fromCharCode(65 + index);
+  /** Returns the answer letter: A, B, C, ... */
+  letter(index: number): string {
+    return String.fromCharCode(FIRST_LETTER_CODE + index);
   }
 
+  /** Maps the form value to the survey data that is saved */
   private buildSurveyInput(): SurveyInput {
     const value = this.survey.getRawValue();
     return {
@@ -101,14 +123,23 @@ export class CreateSurvey {
     };
   }
 
-  async publish() {
-    if (this.survey.invalid) {
-      this.survey.markAllAsTouched();
-      this.errorMessage = 'Please fill in all fields marked with *.';
-      return;
-    }
+  /** Validates the form and saves the survey */
+  async publish(): Promise<void> {
+    if (this.survey.invalid) return this.showInvalidForm();
     this.isSaving = true;
     this.errorMessage = '';
+    await this.saveSurvey();
+    this.isSaving = false;
+  }
+
+  /** Marks all fields as touched so their errors become visible */
+  private showInvalidForm(): void {
+    this.survey.markAllAsTouched();
+    this.errorMessage = 'Please fill in all fields marked with *.';
+  }
+
+  /** Saves the survey and closes the dialog; shows an error message if that fails */
+  private async saveSurvey(): Promise<void> {
     try {
       await this.supabaseService.createSurvey(this.buildSurveyInput());
       this.created.emit();
@@ -116,8 +147,6 @@ export class CreateSurvey {
     } catch (error) {
       this.errorMessage = 'The survey could not be saved. Please try again.';
       console.error(error);
-    } finally {
-      this.isSaving = false;
     }
   }
 }

@@ -9,7 +9,7 @@
       (change)="selected.emit(answer().id)"
     />
     @if (letter()) {
-      <b class="answer__letter">{{ letter() }}.</b>
+      <strong class="answer__letter">{{ letter() }}.</strong>
     }
     <span class="answer__text">{{ answer().text }}</span>
   </label>

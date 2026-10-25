@@ -34,20 +34,23 @@ export class SurveyList implements OnInit {
     });
   });
 
-  setCategory(event: Event) {
+  /** Sets the category filter from the select element */
+  setCategory(event: Event): void {
     this.selectedCategory.set((event.target as HTMLSelectElement).value);
   }
 
-  // Clicking the active filter again resets it and shows all surveys
-  setFilter(filter: 'active' | 'past') {
+  /** Sets the status filter; clicking the active filter again resets it */
+  setFilter(filter: 'active' | 'past'): void {
     this.activeFilter.set(this.activeFilter() === filter ? null : filter);
   }
 
-  ngOnInit() {
+  /** Loads all surveys */
+  ngOnInit(): void {
     this.loadSurveys();
   }
 
-  async loadSurveys() {
+  /** Loads all surveys and shows an error message if that fails */
+  async loadSurveys(): Promise<void> {
     try {
       this.surveys.set(await this.supabaseService.getSurveys());
     } catch (error) {

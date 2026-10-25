@@ -12,6 +12,8 @@ import {
 } from '../../shared/interfaces/survey';
 import { SurveyService } from '../../shared/services/survey-service';
 
+const REFRESH_DEBOUNCE_MS = 300;
+
 @Component({
   imports: [DatePipe, Results, SurveyAnswer],
   selector: 'app-survey-display',
@@ -47,7 +49,8 @@ export class SurveyDisplay implements OnInit {
     );
   });
 
-  async ngOnInit() {
+  /** Loads the survey and its votes, then listens for new votes */
+  async ngOnInit(): Promise<void> {
     const groupId = Number(this.route.snapshot.paramMap.get('groups_id'));
     try {
       const survey = await this.surveyService.loadSurvey(groupId);
@@ -62,37 +65,44 @@ export class SurveyDisplay implements OnInit {
     }
   }
 
-  isSelected(question: QuestionDetail, answerId: number) {
+  /** True if the answer is currently selected for the question */
+  isSelected(question: QuestionDetail, answerId: number): boolean {
     return (this.selections()[question.id] ?? []).includes(answerId);
   }
 
-  onSelect(question: QuestionDetail, answerId: number) {
+  /** Updates the selection when the user picks an answer */
+  onSelect(question: QuestionDetail, answerId: number): void {
     this.selections.update((current) =>
       this.surveyService.toggleSelection(current, question, answerId),
     );
   }
 
-  async submit() {
+  /** Saves the selected answers and shows the updated results */
+  async submit(): Promise<void> {
     const survey = this.survey();
     if (!survey || !this.canSubmit()) return;
     this.isSaving.set(true);
     this.errorMessage.set('');
+    await this.saveVotes(survey);
+    this.isSaving.set(false);
+  }
+
+  /** Submits the votes and reloads the results; shows an error message if that fails */
+  private async saveVotes(survey: SurveyDetail): Promise<void> {
     try {
       await this.surveyService.submitVotes(survey, this.selections());
       await this.refreshVotes(survey);
     } catch (error) {
       console.error(error);
       this.errorMessage.set(error instanceof Error ? error.message : 'Voting failed.');
-    } finally {
-      this.isSaving.set(false);
     }
   }
 
-  // Live results: reloads the votes when anyone votes (debounced, one vote may insert several rows)
-  private listenForVotes(survey: SurveyDetail) {
+  /** Live results: reloads the votes when anyone votes (debounced, one vote may insert several rows) */
+  private listenForVotes(survey: SurveyDetail): void {
     const stopWatching = this.surveyService.watchVotes(survey, () => {
       clearTimeout(this.refreshTimer);
-      this.refreshTimer = setTimeout(() => this.refreshVotes(survey).catch(console.error), 300);
+      this.refreshTimer = setTimeout(() => this.refreshVotes(survey).catch(console.error), REFRESH_DEBOUNCE_MS);
     });
     this.destroyRef.onDestroy(() => {
       clearTimeout(this.refreshTimer);
@@ -100,7 +110,8 @@ export class SurveyDisplay implements OnInit {
     });
   }
 
-  private async refreshVotes(survey: SurveyDetail) {
+  /** Reloads the votes and updates results and voted state */
+  private async refreshVotes(survey: SurveyDetail): Promise<void> {
     const state = await this.surveyService.loadVoteState(survey);
     this.results.set(state.results);
     this.hasVoted.set(state.hasVoted);

@@ -137,3 +137,15 @@
 - Created 4 English test surveys (team activities, health & wellness, gaming, technology) via the create dialog (Playwright script in scratchpad, no project files).
 - Still needed in Supabase: foreign keys questions.groups_id -> groups.id, answers.questions_id -> questions.id, votes.groups_id -> groups.id (else PGRST200 on the single survey page). answers.group_id column still has the old name.
 - Probe results: INSERT into answers is rejected by RLS (all variants), DELETE on groups affects 0 rows -> app cannot roll back. Test rows left behind: groups 7 ('T'), 12 ('__probe') plus surveys 8-11 without answers; needs SQL cleanup + RLS policy fix in Supabase.
+
+2026-10-25 | Checkliste US4/US5 geprüft
+- docs/checklists/Poll-App Checkliste.md: US4 and US5 checked against the code (detail view, live results via realtime, expired surveys disabled, results right of voting); code conventions left open (manual check).
+
+2026-10-25 | Code conventions (HTML + TypeScript)
+- All methods now have explicit return types and TSDoc comments (home, header, ending-surveys, survey-list, survey-card, results, create-survey, survey-display, survey-service, supabase-service, categories).
+- Functions over 14 lines split: CreateSurvey.publish() -> showInvalidForm()/saveSurvey(); SurveyService.loadSurvey() -> mapQuestion(); SurveyDisplay.submit() -> saveVotes().
+- Magic numbers replaced by constants: FIRST_LETTER_CODE, MIN_QUESTIONS, MIN_ANSWERS (create-survey), MS_PER_DAY (survey-card), REFRESH_DEBOUNCE_MS (survey-display), ISO_DATE_LENGTH (supabase-service).
+- supabase-service.ts: new exported todayIsoDate(), used by getEndingSoonSurveys() and SurveyService.isExpired() (removes duplicate logic).
+- create-survey.ts: typed form (QuestionForm, AnswerControl).
+- survey-answer.html: <b> -> <strong>.
+- Checkliste: both code convention items checked. ng build OK; ng test: app.spec (title) and home.spec (missing providers) were already failing before this change.
