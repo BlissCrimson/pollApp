@@ -149,3 +149,6 @@
 - create-survey.ts: typed form (QuestionForm, AnswerControl).
 - survey-answer.html: <b> -> <strong>.
 - Checkliste: both code convention items checked. ng build OK; ng test: app.spec (title) and home.spec (missing providers) were already failing before this change.
+
+2026-10-25 | Header logo links to home
+- header.html/.ts/.scss: logo is now an <a routerLink="/"> (RouterLink imported), display block so the header height stays the same.
