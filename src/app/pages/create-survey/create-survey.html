@@ -23,9 +23,9 @@
               <div class="survey__category">
                 <select class="survey__select" id="category" aria-label="Choose category" formControlName="category">
                   <option value="" disabled hidden>Choose category</option>
-                  <option value="events">Team events</option>
-                  <option value="culture">Workplace culture</option>
-                  <option value="other">Other</option>
+                  @for (category of categories; track category.value) {
+                    <option [value]="category.value">{{ category.label }}</option>
+                  }
                 </select>
               </div>
 

@@ -10,21 +10,21 @@
         Past survey
       </button>
     </div>
-    <select class="survey-list__select" aria-label="Sort by categories">
-      <option value="" selected>Sort by categories</option>
-      @for (category of categories(); track category) {
-        <option [value]="category">{{ category }}</option>
+    <select class="survey-list__select" aria-label="Filter by category" (change)="setCategory($event)">
+      <option value="" selected>All surveys</option>
+      @for (category of categories; track category.value) {
+        <option [value]="category.value">{{ category.label }}</option>
       }
     </select>
   </div>
 
   @if (errorMessage()) {
     <p class="survey-list__message">{{ errorMessage() }}</p>
-  } @else if (surveys().length === 0) {
+  } @else if (filteredSurveys().length === 0) {
     <p class="survey-list__message">No surveys yet.</p>
   } @else {
     <ul class="survey-list__list">
-      @for (survey of surveys(); track survey.id) {
+      @for (survey of filteredSurveys(); track survey.id) {
         <li class="survey-list__item">
           <app-survey-card [survey]="survey" variant="dark" />
         </li>

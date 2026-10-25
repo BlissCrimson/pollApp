@@ -36,6 +36,11 @@ export interface Vote {
   user_id: string;
 }
 
+export interface Category {
+  value: string;
+  label: string;
+}
+
 // ---- Insert types (to Supabase) ----
 
 // ---- Form data ----

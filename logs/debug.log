@@ -83,3 +83,10 @@
 - results: inputs survey/results, rows rendered with @for, bar width bound to percent.
 - survey-display: loads survey via SurveyService, loading/error/voted/expired states, submit button; scss fixed (width, NerkoOne font, mobile column layout).
 - Requires Supabase: select policies on questions/answers/votes, insert policy on votes (user_id = auth.uid()), anonymous sign-ins.
+
+2026-10-25 | Shared category list + "All surveys" filter
+- shared/constants/categories.ts: new SURVEY_CATEGORIES (unique values + labels) and getCategoryLabel() (falls back to stored value for older surveys).
+- shared/interfaces/survey.ts: added Category interface.
+- create-survey.ts/.html: category options rendered from SURVEY_CATEGORIES (fixes duplicate value="other").
+- survey-list.ts/.html: dropdown uses SURVEY_CATEGORIES with "All surveys" as first option; added selectedCategory, filteredSurveys, setCategory().
+- survey-card, survey-display: show category label instead of raw value.

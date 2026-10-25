@@ -1,5 +1,6 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { SupabaseService } from '../../../supabase-service';
+import { SURVEY_CATEGORIES } from '../../constants/categories';
 import { SurveyOutput } from '../../interfaces/survey';
 import { SurveyCard } from '../survey-card/survey-card';
 
@@ -16,10 +17,19 @@ export class SurveyList implements OnInit {
   errorMessage = signal('');
   activeFilter = signal<'active' | 'past'>('active');
 
-  // Unique, non-empty categories of the loaded surveys
-  categories = computed(() => [
-    ...new Set(this.surveys().map((survey) => survey.category).filter((category) => !!category)),
-  ]);
+  categories = SURVEY_CATEGORIES;
+  // Empty string means "All surveys"
+  selectedCategory = signal('');
+
+  filteredSurveys = computed(() => {
+    const category = this.selectedCategory();
+    if (!category) return this.surveys();
+    return this.surveys().filter((survey) => survey.category === category);
+  });
+
+  setCategory(event: Event) {
+    this.selectedCategory.set((event.target as HTMLSelectElement).value);
+  }
 
   // Only switches the visual state of the filter buttons for now
   setFilter(filter: 'active' | 'past') {

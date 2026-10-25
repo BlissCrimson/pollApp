@@ -1,5 +1,6 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { getCategoryLabel } from '../../shared/constants/categories';
 import { Results } from '../../shared/components/results/results';
 import { SurveyAnswer } from '../../shared/components/survey-answer/survey-answer';
 import {
@@ -19,6 +20,8 @@ import { SurveyService } from '../../shared/services/survey-service';
 export class SurveyDisplay implements OnInit {
   private route = inject(ActivatedRoute);
   private surveyService = inject(SurveyService);
+
+  getCategoryLabel = getCategoryLabel;
 
   survey = signal<SurveyDetail | null>(null);
   selections = signal<Selections>({});

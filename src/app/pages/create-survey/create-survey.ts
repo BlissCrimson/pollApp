@@ -3,6 +3,7 @@ import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } fr
 import { SupabaseService } from '../../supabase-service';
 import { Router } from '@angular/router';
 import { SurveyInput } from '../../shared/interfaces/survey';
+import { SURVEY_CATEGORIES } from '../../shared/constants/categories';
 
 @Component({
   imports: [ReactiveFormsModule],
@@ -14,6 +15,7 @@ export class CreateSurvey {
   private supabaseService = inject(SupabaseService);
   private router = Inject(Router);
 
+  categories = SURVEY_CATEGORIES;
   isSaving = false;
   errorMessage = '';
 

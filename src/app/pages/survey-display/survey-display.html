@@ -4,7 +4,7 @@
       <p class="survey__message">Loading survey...</p>
     } @else if (survey(); as survey) {
       <div class="survey__head">
-        <span>{{ survey.category }}</span>
+        <span>{{ getCategoryLabel(survey.category) }}</span>
         <span>{{ survey.endDate }}</span>
       </div>
       <h1 class="survey__title">{{ survey.title }}</h1>
