@@ -152,3 +152,13 @@
 
 2026-10-25 | Header logo links to home
 - header.html/.ts/.scss: logo is now an <a routerLink="/"> (RouterLink imported), display block so the header height stays the same.
+
+2026-10-25 | Home hero icons arranged like reference image
+- home.html: hero image and the four icons (check, question mark, star, typing bubble) wrapped in .home__hero--visual, each icon got a modifier class.
+- home.scss: .home__hero--visual is the positioned container (relative), icons are absolutely placed with percentage offsets/widths around the phone image; mobile rule moved from --image to --visual.
+
+2026-10-25 | Home hero: check icon behind phone
+- home.scss: check.svg (orange circle) moved to the right edge behind the phone image (z-index 0); phone image z-index 1; question, bubble and star z-index 2.
+
+2026-10-25 | Home hero icons matched to Figma design
+- home.scss: hero visual width 520px -> 420px; question mark, typing bubble, star and check positions/widths recalculated from the Figma screenshot (percentages relative to the phone image). Check circle now sits on the faded circle of the phone image, behind the phone.

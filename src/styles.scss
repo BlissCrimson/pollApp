@@ -31,6 +31,10 @@ body {
   color: var(--color-text);
 }
 
+.d-none {
+  display: none;
+}
+
 @font-face {
   font-family: 'Mulish';
   src: url('/assets/fonts/Mulish-VariableFont_wght.ttf');

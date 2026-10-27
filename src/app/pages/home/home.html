@@ -13,7 +13,10 @@
         </span>
       </button>
     </div>
-    <img class="home__hero--image" src="/assets/position 03@2x 1.svg" alt="">
+    <div class="home__hero--visual">
+      <img class="home__visual--image" src="/assets/visual/visual.svg" alt="">
+      <img class="home__visual--hover" src="/assets/visual/visual__hover.svg" alt="">
+    </div>
   </section>
 
   <section class="home__surveys">
@@ -23,6 +26,6 @@
   </section>
 
   @if (isCreateOpen()) {
-    <app-create-survey (closed)="closeCreateSurvey()" (created)="reloadSurveys()" />
+  <app-create-survey (closed)="closeCreateSurvey()" (created)="reloadSurveys()" />
   }
 </main>

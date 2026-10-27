@@ -31,10 +31,11 @@
       color: var(--color-text);
     }
 
-    &--image {
-      flex: 0 1 520px;
+    &--visual {
+      position: relative;
+      flex: 0 1 420px;
       width: 100%;
-      max-width: 520px;
+      max-width: 420px;
     }
   }
 
@@ -50,6 +51,36 @@
       font-weight: 400;
       text-align: center;
       color: var(--color-primary);
+    }
+  }
+
+  &__visual {
+    &--image,
+    &--hover {
+      display: block;
+      width: 100%;
+      transition: opacity 250ms ease-in-out;
+    }
+
+    &--image {
+      position: relative;
+      z-index: 1;
+    }
+
+    &--hover {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      opacity: 0;
+    }
+  }
+
+  &__hero--visual:hover {
+    .home__visual--image {
+      opacity: 0;
+    }
+    .home__visual--hover {
+      opacity: 1;
     }
   }
 }
@@ -73,7 +104,7 @@
         font-size: 48px;
       }
 
-      &--image {
+      &--visual {
         order: 2;
         max-width: 260px;
       }
