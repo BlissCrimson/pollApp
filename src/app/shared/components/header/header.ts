@@ -3,6 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { filter, map } from 'rxjs';
 
+/** Page header with logo and navigation */
 @Component({
   imports: [RouterLink],
   selector: 'app-header',

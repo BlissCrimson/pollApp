@@ -10,6 +10,7 @@ import {
   VoteState,
 } from '../interfaces/survey';
 
+/** Survey logic: mapping, vote results, selections and voting rules */
 @Service()
 export class SurveyService {
   private supabaseService = inject(SupabaseService);

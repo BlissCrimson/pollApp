@@ -1,5 +1,6 @@
 import { Category } from '../interfaces/survey';
 
+/** Categories a survey can be assigned to */
 export const SURVEY_CATEGORIES: Category[] = [
   { value: 'team-activities', label: 'Team Activities' },
   { value: 'health-wellness', label: 'Health & Wellness' },

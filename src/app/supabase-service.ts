@@ -10,12 +10,14 @@ import {
 } from './shared/interfaces/survey';
 
 const ISO_DATE_LENGTH = 10;
+const ENDING_SOON_LIMIT = 3;
 
 /** Today's date as ISO string (yyyy-mm-dd), used to compare with survey end dates */
 export function todayIsoDate(): string {
   return new Date().toISOString().slice(0, ISO_DATE_LENGTH);
 }
 
+/** Access to Supabase: surveys, votes, realtime and anonymous auth */
 @Service()
 export class SupabaseService {
   readonly supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
@@ -31,7 +33,7 @@ export class SupabaseService {
   }
 
   /** Loads the next surveys that have not ended yet, earliest end date first */
-  async getEndingSoonSurveys(limit = 3): Promise<SurveyOutput[]> {
+  async getEndingSoonSurveys(limit = ENDING_SOON_LIMIT): Promise<SurveyOutput[]> {
     const today = todayIsoDate();
     const { data, error } = await this.supabase
       .from('groups')

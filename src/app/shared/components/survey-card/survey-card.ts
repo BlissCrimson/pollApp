@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
+/** Card for one survey; opens the detail page on click */
 @Component({
   imports: [],
   selector: 'app-survey-card',
@@ -16,6 +17,7 @@ export class SurveyCard {
   survey = input.required<SurveyOutput>();
   variant = input<'light' | 'dark'>('dark');
 
+  /** Display label of the survey category */
   categoryLabel = computed(() => getCategoryLabel(this.survey().category));
 
   /** Label like "Ends in 2 Days", "Ends today" or "Ended" */

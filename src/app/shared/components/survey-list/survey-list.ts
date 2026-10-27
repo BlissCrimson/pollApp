@@ -5,6 +5,7 @@ import { SurveyOutput } from '../../interfaces/survey';
 import { SurveyService } from '../../services/survey-service';
 import { SurveyCard } from '../survey-card/survey-card';
 
+/** List of all surveys, filterable by status and category */
 @Component({
   imports: [SurveyCard],
   selector: 'app-survey-list',
@@ -24,6 +25,7 @@ export class SurveyList implements OnInit {
   // Empty string means "All surveys"
   selectedCategory = signal('');
 
+  /** Surveys matching the selected status and category */
   filteredSurveys = computed(() => {
     const category = this.selectedCategory();
     const status = this.activeFilter();

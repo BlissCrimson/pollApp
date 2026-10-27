@@ -176,3 +176,11 @@
 - survey-list.html: category reset option renamed "Sort by categories" -> "All categories".
 - Specs fixed: app.spec (provideRouter, title test replaced by header/footer test), header.spec (provideRouter), home.spec (provideRouter + SupabaseService mock). ng test: 15/15 pass.
 - README.md: added Setup and Extras sections.
+
+2026-10-27 | TSDoc for classes, interfaces, constants
+- Added one-line TSDoc above every component/service class, all interfaces and type Selections (survey.ts), appConfig, routes, SURVEY_CATEGORIES and computed fields (isExpired, canSubmit, categoryLabel, filteredSurveys). Replaced the old // comments in survey.ts.
+
+2026-10-27 | Code convention fixes (HTML + TypeScript PDFs)
+- supabase-service.ts: magic number 3 -> ENDING_SOON_LIMIT.
+- index.html: charset UTF-8, favicon type image/svg+xml.
+- Removed unused placeholder component highlight-cards (4 files) and the empty footer component (4 files); app.html/app.ts/app.spec.ts updated accordingly.

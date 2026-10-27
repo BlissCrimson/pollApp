@@ -1,4 +1,5 @@
 // ---- Table rows (from Supabase) ----
+/** Answer row as stored in Supabase */
 export interface Answer {
   id: number;
   created_at: string;
@@ -9,6 +10,7 @@ export interface Answer {
   questions_id: number;
 }
 
+/** Survey (group) row as stored in Supabase */
 export interface Groups {
   id: number;
   created_at: string;
@@ -19,6 +21,7 @@ export interface Groups {
   user_id: string;
 }
 
+/** Question row as stored in Supabase */
 export interface Question {
   id: number;
   created_at: string;
@@ -28,6 +31,7 @@ export interface Question {
   user_id: string;
 }
 
+/** Vote row as stored in Supabase */
 export interface Vote {
   id: number;
   created_at: string;
@@ -36,6 +40,7 @@ export interface Vote {
   user_id: string;
 }
 
+/** Selectable survey category */
 export interface Category {
   value: string;
   label: string;
@@ -44,6 +49,7 @@ export interface Category {
 // ---- Insert types (to Supabase) ----
 
 // ---- Form data ----
+/** Data of the create survey form */
 export interface SurveyInput {
   title: string;
   category: string | null;
@@ -52,6 +58,7 @@ export interface SurveyInput {
   questions: QuestionInput[];
 }
 
+/** Question with its answer texts from the create survey form */
 export interface QuestionInput {
   question: string;
   allowMultiple: boolean;
@@ -60,6 +67,7 @@ export interface QuestionInput {
 
 // ---- Joined data for display ----
 
+/** Survey as shown in lists and cards */
 export interface SurveyOutput {
   id: number;
   title: string;
@@ -67,7 +75,7 @@ export interface SurveyOutput {
   endDate: string | null;
 }
 
-// Survey with its questions and answers, as returned by Supabase (snake_case)
+/** Survey with questions and answers as returned by Supabase (snake_case) */
 export interface SurveyDetailRow {
   id: number;
   title: string;
@@ -82,12 +90,13 @@ export interface SurveyDetailRow {
   }[];
 }
 
+/** Minimal vote row used to calculate results */
 export interface VoteRow {
   answer_id: number;
   user_id: string;
 }
 
-// Survey with its questions and answers, mapped for display
+/** Survey with questions and answers, mapped for display */
 export interface SurveyDetail {
   id: number;
   title: string;
@@ -97,6 +106,7 @@ export interface SurveyDetail {
   questions: QuestionDetail[];
 }
 
+/** Question with its answers, mapped for display */
 export interface QuestionDetail {
   id: number;
   question: string;
@@ -104,21 +114,24 @@ export interface QuestionDetail {
   answers: AnswerDetail[];
 }
 
+/** Answer option of a question */
 export interface AnswerDetail {
   id: number;
   text: string;
   position: number;
 }
 
-// Selected answer ids per question id
+/** Selected answer ids per question id */
 export type Selections = Record<number, number[]>;
 
+/** Vote count and percentage of one answer */
 export interface AnswerResult {
   answerId: number;
   votes: number;
   percent: number;
 }
 
+/** Results of a survey plus whether the current user already voted */
 export interface VoteState {
   results: AnswerResult[];
   hasVoted: boolean;

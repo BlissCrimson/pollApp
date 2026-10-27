@@ -3,6 +3,7 @@ import { SupabaseService } from '../../../supabase-service';
 import { SurveyOutput } from '../../interfaces/survey';
 import { SurveyCard } from '../survey-card/survey-card';
 
+/** List of surveys that end soon, earliest end date first */
 @Component({
   imports: [SurveyCard],
   selector: 'app-ending-surveys',

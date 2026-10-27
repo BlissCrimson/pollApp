@@ -1,6 +1,7 @@
 import { Component, input, output } from '@angular/core';
 import { AnswerDetail } from '../../interfaces/survey';
 
+/** Single answer option (radio or checkbox) of a question */
 @Component({
   imports: [],
   selector: 'app-survey-answer',

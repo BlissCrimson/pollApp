@@ -14,6 +14,7 @@ import { SurveyService } from '../../shared/services/survey-service';
 
 const REFRESH_DEBOUNCE_MS = 300;
 
+/** Survey detail page: voting on the left, live results on the right */
 @Component({
   imports: [DatePipe, Results, SurveyAnswer],
   selector: 'app-survey-display',
@@ -37,7 +38,9 @@ export class SurveyDisplay implements OnInit {
   isSaving = signal(false);
   errorMessage = signal('');
 
+  /** True if the survey end date has passed */
   isExpired = computed(() => this.surveyService.isExpired(this.survey()?.endDate ?? null));
+  /** True if the user may submit: not voted, not expired, not saving and all questions answered */
   canSubmit = computed(() => {
     const survey = this.survey();
     return (

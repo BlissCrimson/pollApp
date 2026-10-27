@@ -4,6 +4,7 @@ import { CreateSurvey } from '../../shared/components/create-survey/create-surve
 import { EndingSurveys } from '../../shared/components/ending-surveys/ending-surveys';
 import { SurveyList } from '../../shared/components/survey-list/survey-list';
 
+/** Home page with hero, ending soon surveys, survey list and the create survey dialog */
 @Component({
   imports: [CreateSurvey, EndingSurveys, SurveyList],
   selector: 'app-home',

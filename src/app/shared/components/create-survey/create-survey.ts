@@ -22,6 +22,7 @@ type QuestionForm = FormGroup<{
   answers: FormArray<AnswerControl>;
 }>;
 
+/** Overlay dialog with the form to create a new survey */
 @Component({
   imports: [ReactiveFormsModule],
   selector: 'app-create-survey',
