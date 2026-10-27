@@ -162,3 +162,17 @@
 
 2026-10-25 | Home hero icons matched to Figma design
 - home.scss: hero visual width 520px -> 420px; question mark, typing bubble, star and check positions/widths recalculated from the Figma screenshot (percentages relative to the phone image). Check circle now sits on the faded circle of the phone image, behind the phone.
+
+
+2026-10-27 | Supabase check (read-only)
+- Checked via REST: foreign keys and RLS work (questions/answers embeds load, answers readable), test rows groups 7 and 12 are gone, realtime votes confirmed by user.
+- Still open in Supabase (needs SQL Editor, anon key cannot do it): drop answers.group_id (always null). Only survey 8 is expired (end 2026-10-26); optionally add more expired surveys for testing the Past filter.
+
+2026-10-27 | answers.group_id dropped
+- User dropped answers.group_id in Supabase; verified via REST that answers no longer returns it and the survey embeds still load.
+
+2026-10-27 | Filter, specs, README
+- survey-list.ts: activeFilter is now always "active" or "past" (default "active", no toggle back to null) so active and past surveys are never mixed.
+- survey-list.html: category reset option renamed "Sort by categories" -> "All categories".
+- Specs fixed: app.spec (provideRouter, title test replaced by header/footer test), header.spec (provideRouter), home.spec (provideRouter + SupabaseService mock). ng test: 15/15 pass.
+- README.md: added Setup and Extras sections.

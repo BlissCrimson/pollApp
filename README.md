@@ -1,5 +1,20 @@
 # PollApp
 
+PollApp is an Angular app to create, share and evaluate surveys in real time. Supabase is used for data and anonymous authentication.
+
+## Setup
+
+1. Copy `src/environments/environment.example.ts` to `src/environments/environment.ts` and enter your Supabase URL and anon key.
+2. Supabase needs the tables `groups`, `questions`, `answers` and `votes` (linked by foreign keys), RLS policies for them, and Realtime enabled for `votes`.
+3. Enable anonymous sign-ins in Supabase (Authentication settings); every visitor votes as an anonymous user.
+
+## Extras
+
+- Live results: the result view updates in real time via Supabase Realtime (debounced, because one vote can insert several rows).
+- Active and past surveys are separate views; past surveys can be opened but not voted on.
+- Creating a survey is rolled back if saving questions or answers fails.
+- Questions can allow single or multiple answers.
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.7.
 
 ## Development server

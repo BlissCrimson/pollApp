@@ -17,8 +17,8 @@ export class SurveyList implements OnInit {
 
   surveys = signal<SurveyOutput[]>([]);
   errorMessage = signal('');
-  // null means no status filter (all surveys)
-  activeFilter = signal<'active' | 'past' | null>(null);
+  // Active and past surveys are never shown together
+  activeFilter = signal<'active' | 'past'>('active');
 
   categories = SURVEY_CATEGORIES;
   // Empty string means "All surveys"
@@ -29,7 +29,6 @@ export class SurveyList implements OnInit {
     const status = this.activeFilter();
     return this.surveys().filter((survey) => {
       if (category && survey.category !== category) return false;
-      if (!status) return true;
       return this.surveyService.isExpired(survey.endDate) === (status === 'past');
     });
   });
@@ -39,9 +38,9 @@ export class SurveyList implements OnInit {
     this.selectedCategory.set((event.target as HTMLSelectElement).value);
   }
 
-  /** Sets the status filter; clicking the active filter again resets it */
+  /** Switches between active and past surveys */
   setFilter(filter: 'active' | 'past'): void {
-    this.activeFilter.set(this.activeFilter() === filter ? null : filter);
+    this.activeFilter.set(filter);
   }
 
   /** Loads all surveys */

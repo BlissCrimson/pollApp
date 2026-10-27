@@ -11,7 +11,7 @@
       </button>
     </div>
     <select class="survey-list__select" aria-label="Filter by category" (change)="setCategory($event)">
-      <option value="" selected>Sort by categories</option>
+      <option value="" selected>All categories</option>
       @for (category of categories; track category.value) {
         <option [value]="category.value">{{ category.label }}</option>
       }
