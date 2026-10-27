@@ -184,3 +184,7 @@
 - supabase-service.ts: magic number 3 -> ENDING_SOON_LIMIT.
 - index.html: charset UTF-8, favicon type image/svg+xml.
 - Removed unused placeholder component highlight-cards (4 files) and the empty footer component (4 files); app.html/app.ts/app.spec.ts updated accordingly.
+
+2026-10-27 | Remove playwright, adjust build budgets
+- package.json/pnpm-lock.yaml: removed unused dependency playwright (pnpm remove playwright).
+- angular.json: production budgets initial warning 500kB -> 600kB, anyComponentStyle warning 4kB -> 6kB (supabase-js is required in the initial bundle; create-survey.scss is 5.6kB). Error limits unchanged.
