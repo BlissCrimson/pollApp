@@ -195,11 +195,11 @@
     height: 32px;
     padding: 0;
     border: none;
-    background: url('/assets/icons/icon__trash.svg') center / contain no-repeat;
+    background: url('../../../../../public/assets/icons/icon__trash.svg') center / contain no-repeat;
     cursor: pointer;
 
     &:hover {
-      background-image: url('/assets/icons/icon__trash--hover.svg');
+      background-image: url('../../../../../public/assets/icons/icon__trash--hover.svg');
     }
   }
 

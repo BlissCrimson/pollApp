@@ -1,7 +1,7 @@
 <div class="overlay" (click)="close()">
   <section class="survey__card" role="dialog" aria-modal="true" aria-labelledby="survey-title" (click)="$event.stopPropagation()">
     <div class="survey__head">
-      <img class="survey__status" src="/assets/status/status__draft.svg" alt="Draft">
+      <img class="survey__status" src="assets/status/status__draft.svg" alt="Draft">
       <h1 class="survey__title" id="survey-title">Create new survey</h1>
       <button (click)="close()" class="survey__close" type="button">
         <span class="survey__close-text">Cancel</span>
@@ -93,14 +93,14 @@
               </div>
 
               <button class="survey__add-answer" type="button" (click)="addAnswer(qi)">
-                <img src="/assets/buttons/button__add-answer.svg" alt="Add answer">
+                <img src="assets/buttons/button__add-answer.svg" alt="Add answer">
               </button>
             </div>
           }
 
           <button class="survey__add-question" type="button" (click)="addQuestion()">
             Add next question
-            <img src="/assets/icons/add_circle.svg" alt="" aria-hidden="true">
+            <img src="assets/icons/add_circle.svg" alt="" aria-hidden="true">
           </button>
         </div>
       </div>

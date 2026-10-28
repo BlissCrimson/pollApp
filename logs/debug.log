@@ -188,3 +188,8 @@
 2026-10-27 | Remove playwright, adjust build budgets
 - package.json/pnpm-lock.yaml: removed unused dependency playwright (pnpm remove playwright).
 - angular.json: production budgets initial warning 500kB -> 600kB, anyComponentStyle warning 4kB -> 6kB (supabase-js is required in the initial bundle; create-survey.scss is 5.6kB). Error limits unchanged.
+
+2026-10-27 | Fix asset paths for subpath deployment (/angular-projects/pollApp/)
+- Templates (home, survey-display, create-survey, header): src="/assets/..." -> "assets/..." so base href applies.
+- styles.scss (fonts) and create-survey.scss (trash icons): absolute /assets/ urls -> relative paths to public/assets, so the builder bundles them (dist/media).
+- ng build ok; no absolute /assets/ left in dist.

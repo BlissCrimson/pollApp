@@ -3,7 +3,7 @@
     @if (isLoading()) {
       <p class="survey__message">Loading survey...</p>
     } @else if (survey(); as survey) {
-      <img class="survey__status" src="/assets/status/status__published.svg" alt="Published">
+      <img class="survey__status" src="assets/status/status__published.svg" alt="Published">
       <div class="survey__head">
         <span>@if (survey.endDate) { Ends on {{ survey.endDate | date: 'dd.MM.yyyy' }} }</span>
         <span>Category: {{ getCategoryLabel(survey.category) }}</span>

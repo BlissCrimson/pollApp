@@ -1,6 +1,6 @@
 <header class="header" [class.header--light]="isLight()">
   <a class="header__home" routerLink="/" aria-label="Home">
-    <img class="header__home--logo" [src]="isLight() ? '/assets/logo/logo__black.svg' : '/assets/logo/logo__orange.svg'" alt="">
+    <img class="header__home--logo" [src]="isLight() ? 'assets/logo/logo__black.svg' : 'assets/logo/logo__orange.svg'" alt="">
   </a>
   @if (isLight()) {
     <button class="btn btn__new-survey" type="button" (click)="goToCreateSurvey()">Create survey</button>
