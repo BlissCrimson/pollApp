@@ -19,10 +19,14 @@
               <label class="survey__label" for="name">
                 Survey name <span class="survey__required" aria-hidden="true">*</span>
               </label>
-              <input class="survey__input" id="name" type="text" formControlName="title" required aria-required="true" [class.survey__input--invalid]="showError(survey.controls.title)">
+              <input class="survey__input" id="name" type="text" formControlName="title" required aria-required="true" [attr.maxlength]="maxTitleLength" [class.survey__input--invalid]="showError(survey.controls.title)">
               <button class="survey__trash" type="button" aria-label="Delete survey name" (click)="survey.controls.title.reset()"></button>
               @if (showError(survey.controls.title)) {
-                <p class="survey__field-error">Please enter a survey name.</p>
+                @if (survey.controls.title.hasError('maxlength')) {
+                  <p class="survey__field-error">Maximum {{ maxTitleLength }} characters.</p>
+                } @else {
+                  <p class="survey__field-error">Please enter a survey name.</p>
+                }
               }
             </div>
 
@@ -65,10 +69,14 @@
                 <label class="survey__label" [for]="'question' + qi">
                   {{ qi + 1 }}. Question <span class="survey__required" aria-hidden="true">*</span>
                 </label>
-                <input class="survey__input" [id]="'question' + qi" type="text" formControlName="question" required aria-required="true" placeholder="Which date would work best for you?" [class.survey__input--invalid]="showError(question.controls.question)">
+                <input class="survey__input" [id]="'question' + qi" type="text" formControlName="question" required aria-required="true" [attr.maxlength]="maxQuestionLength" placeholder="Which date would work best for you?" [class.survey__input--invalid]="showError(question.controls.question)">
                 <button class="survey__trash" type="button" aria-label="Delete question" (click)="removeQuestion(qi)"></button>
                 @if (showError(question.controls.question)) {
-                  <p class="survey__field-error">Please enter a question.</p>
+                  @if (question.controls.question.hasError('maxlength')) {
+                    <p class="survey__field-error">Maximum {{ maxQuestionLength }} characters.</p>
+                  } @else {
+                    <p class="survey__field-error">Please enter a question.</p>
+                  }
                 }
               </div>
 
@@ -86,10 +94,14 @@
                 @for (answer of answers(qi).controls; track answer; let ai = $index) {
                   <div class="survey__answer">
                     <label class="survey__label survey__label--answer" [for]="'answer' + qi + ai">{{ letter(ai) }}.</label>
-                    <input class="survey__input" [id]="'answer' + qi + ai" type="text" [formControlName]="ai" required aria-required="true" [class.survey__input--invalid]="showError(answer)">
+                    <input class="survey__input" [id]="'answer' + qi + ai" type="text" [formControlName]="ai" required aria-required="true" [attr.maxlength]="maxAnswerLength" [class.survey__input--invalid]="showError(answer)">
                     <button class="survey__trash" type="button" [attr.aria-label]="'Delete answer ' + letter(ai)" (click)="removeAnswer(qi, ai)"></button>
                     @if (showError(answer)) {
-                      <p class="survey__field-error">Please enter an answer.</p>
+                      @if (answer.hasError('maxlength')) {
+                        <p class="survey__field-error">Maximum {{ maxAnswerLength }} characters.</p>
+                      } @else {
+                        <p class="survey__field-error">Please enter an answer.</p>
+                      }
                     }
                   </div>
                 }

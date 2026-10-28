@@ -201,3 +201,26 @@
 
 2026-10-28 | Show hover visual without hover on mobile/touch
 - home.scss: @media (max-width: 768px), (hover: none) swaps opacity of .home__visual--image/--hover so the hover image is always visible.
+
+2026-10-28 | Add feedback checklist
+- docs/checklists/Feedback-Checkliste.md: new checklist derived from the mentor review (responsive, cursor/disabled states, live preview, validation, trash icon behavior).
+
+2026-10-28 | Max length for title, questions, answers
+- create-survey.ts: constants MAX_TITLE_LENGTH (80), MAX_QUESTION_LENGTH (150), MAX_ANSWER_LENGTH (80); Validators.maxLength on title, question, answer controls.
+- create-survey.html: maxlength attribute on the three inputs plus "Maximum N characters." error message.
+- Feedback-Checkliste.md: item checked off.
+
+2026-10-28 | Block whitespace-only input in create-survey
+- create-survey.ts: new notBlank validator (error 'blank') on title, question and answer controls, so values consisting only of spaces are invalid and no empty survey can be saved.
+- Feedback-Checkliste.md: items "no survey without data" and "whitespace only" checked off.
+
+2026-10-28 | Trash icon on answers: clear text first
+- create-survey.ts: removeAnswer() now clears an answer that contains text (reset + markAsUntouched); only an already empty answer is removed, still respecting MIN_ANSWERS.
+- Feedback-Checkliste.md: item "trash on answer with text" checked off.
+
+2026-10-28 | Trash icon on questions: clear text first
+- create-survey.ts: removeQuestion() now clears the question text if present (reset + markAsUntouched); only an already empty question is removed, still keeping at least MIN_QUESTIONS.
+- Feedback-Checkliste.md: item "same behavior for questions" checked off.
+
+2026-10-28 | Feedback checklist status check
+- Feedback-Checkliste.md: checked off "trash on empty answer removes row" and "question does not vanish while it has text" (both covered by removeAnswer/removeQuestion changes).

@@ -15,6 +15,9 @@ import { SURVEY_CATEGORIES } from '../../constants/categories';
 const FIRST_LETTER_CODE = 65;
 const MIN_QUESTIONS = 1;
 const MIN_ANSWERS = 2;
+const MAX_TITLE_LENGTH = 80;
+const MAX_QUESTION_LENGTH = 150;
+const MAX_ANSWER_LENGTH = 80;
 
 /** Returns today's date as YYYY-MM-DD in local time */
 function todayString(): string {
@@ -29,7 +32,13 @@ function notInPast(control: AbstractControl): ValidationErrors | null {
   return control.value && control.value < todayString() ? { pastDate: true } : null;
 }
 
-type AnswerControl = FormControl<string>;
+/** Fails if a non-empty value consists only of whitespace */
+function notBlank(control: AbstractControl): ValidationErrors | null {
+  const value = control.value;
+  return typeof value === 'string' && value.length > 0 && !value.trim() ? { blank: true } : null;
+}
+
+type AnswerControl =FormControl<string>;
 type QuestionForm = FormGroup<{
   question: FormControl<string>;
   allowMultiple: FormControl<boolean | null>;
@@ -50,14 +59,20 @@ export class CreateSurvey {
   created = output<void>();
 
   categories = SURVEY_CATEGORIES;
+  maxTitleLength = MAX_TITLE_LENGTH;
+  maxQuestionLength = MAX_QUESTION_LENGTH;
+  maxAnswerLength = MAX_ANSWER_LENGTH;
   minDate = todayString();
   isSaving = false;
   errorMessage = '';
 
   survey = new FormGroup({
-    title: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    category: new FormControl(''),
-    endDate: new FormControl('', { validators: [notInPast] }),
+    title: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, notBlank, Validators.maxLength(MAX_TITLE_LENGTH)],
+    }),
+    category: new FormControl('', { validators: [Validators.required] }),
+    endDate: new FormControl('', { validators: [notInPast, Validators.required] }),
     description: new FormControl(''),
     questions: new FormArray([this.createQuestion()]),
   });
@@ -65,15 +80,21 @@ export class CreateSurvey {
   /** Creates a question group with the minimum number of answers */
   private createQuestion(): QuestionForm {
     return new FormGroup({
-      question: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
+      question: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required, notBlank, Validators.maxLength(MAX_QUESTION_LENGTH)],
+      }),
       allowMultiple: new FormControl(false),
       answers: new FormArray(Array.from({ length: MIN_ANSWERS }, () => this.createAnswer())),
     });
   }
 
-  /** Creates a required answer control */
+  /** Creates a required answer control with a maximum length */
   private createAnswer(): AnswerControl {
-    return new FormControl('', { nonNullable: true, validators: [Validators.required] });
+    return new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, notBlank, Validators.maxLength(MAX_ANSWER_LENGTH)],
+    });
   }
 
   /** All question groups of the form */
@@ -96,15 +117,27 @@ export class CreateSurvey {
     this.answers(questionIndex).push(this.createAnswer());
   }
 
-  /** Removes a question, but keeps at least one */
+  /** Clears a question that has text; removes an empty one, but keeps at least one question */
   removeQuestion(questionIndex: number): void {
-    if (this.questions.length > MIN_QUESTIONS) this.questions.removeAt(questionIndex);
+    const question = this.questions.at(questionIndex).controls.question;
+    if (question.value) {
+      question.reset();
+      question.markAsUntouched();
+    } else if (this.questions.length > MIN_QUESTIONS) {
+      this.questions.removeAt(questionIndex);
+    }
   }
 
-  /** Removes an answer, but keeps the minimum number of answers */
+  /** Clears an answer that has text; removes an empty one, but keeps the minimum number of answers */
   removeAnswer(questionIndex: number, answerIndex: number): void {
     const answers = this.answers(questionIndex);
-    if (answers.length > MIN_ANSWERS) answers.removeAt(answerIndex);
+    const answer = answers.at(answerIndex);
+    if (answer.value) {
+      answer.reset();
+      answer.markAsUntouched();
+    } else if (answers.length > MIN_ANSWERS) {
+      answers.removeAt(answerIndex);
+    }
   }
 
   /** Closes the dialog (also on Escape) */
