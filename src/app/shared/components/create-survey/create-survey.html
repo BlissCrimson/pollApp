@@ -40,8 +40,11 @@
                 <label class="survey__label" for="endDate">
                   Set end date <span class="survey__optional">(optional)</span>
                 </label>
-                <input class="survey__input" id="endDate" type="date" formControlName="endDate">
+                <input class="survey__input" id="endDate" type="date" formControlName="endDate" [min]="minDate" [class.survey__input--invalid]="survey.controls.endDate.invalid">
                 <button class="survey__trash" type="button" aria-label="Delete end date" (click)="survey.controls.endDate.reset()"></button>
+                @if (survey.controls.endDate.hasError('pastDate')) {
+                  <p class="survey__field-error">The end date must not be in the past.</p>
+                }
               </div>
             </div>
           </div>

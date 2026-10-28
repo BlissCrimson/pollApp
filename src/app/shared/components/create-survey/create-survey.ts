@@ -5,6 +5,7 @@ import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { SupabaseService } from '../../../supabase-service';
@@ -14,6 +15,19 @@ import { SURVEY_CATEGORIES } from '../../constants/categories';
 const FIRST_LETTER_CODE = 65;
 const MIN_QUESTIONS = 1;
 const MIN_ANSWERS = 2;
+
+/** Returns today's date as YYYY-MM-DD in local time */
+function todayString(): string {
+  const now = new Date();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${now.getFullYear()}-${month}-${day}`;
+}
+
+/** Fails if the selected date lies in the past (ISO dates compare as strings) */
+function notInPast(control: AbstractControl): ValidationErrors | null {
+  return control.value && control.value < todayString() ? { pastDate: true } : null;
+}
 
 type AnswerControl = FormControl<string>;
 type QuestionForm = FormGroup<{
@@ -36,13 +50,14 @@ export class CreateSurvey {
   created = output<void>();
 
   categories = SURVEY_CATEGORIES;
+  minDate = todayString();
   isSaving = false;
   errorMessage = '';
 
   survey = new FormGroup({
     title: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     category: new FormControl(''),
-    endDate: new FormControl(''),
+    endDate: new FormControl('', { validators: [notInPast] }),
     description: new FormControl(''),
     questions: new FormArray([this.createQuestion()]),
   });
