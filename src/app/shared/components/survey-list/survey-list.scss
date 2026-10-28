@@ -14,6 +14,7 @@
 
   &__filters {
     display: flex;
+    flex-wrap: wrap;
     gap: 16px;
   }
 
@@ -33,6 +34,7 @@
   }
 
   &__select {
+    max-width: 100%;
     min-width: 120px;
     padding: 8px 28px 8px 0;
     border: none;

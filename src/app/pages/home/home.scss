@@ -1,7 +1,5 @@
 .home {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 var(--content-inset);
 
   &__hero {
     display: flex;
@@ -85,10 +83,21 @@
   }
 }
 
+// No hover on touch devices: always show the hover visual
+@media (max-width: 768px), (hover: none) {
+  .home__visual {
+    &--image {
+      opacity: 0;
+    }
+
+    &--hover {
+      opacity: 1;
+    }
+  }
+}
+
 @media (max-width: 768px) {
   .home {
-    padding: 0 16px;
-
     &__hero {
       flex-direction: column;
       gap: 24px;
@@ -101,7 +110,7 @@
       &--title {
         order: 1;
         margin: 0;
-        font-size: 48px;
+        font-size: clamp(36px, 12vw, 48px);
       }
 
       &--visual {
@@ -122,7 +131,7 @@
     }
 
     &__surveys--title {
-      font-size: 40px;
+      font-size: clamp(32px, 11vw, 40px);
     }
   }
 }

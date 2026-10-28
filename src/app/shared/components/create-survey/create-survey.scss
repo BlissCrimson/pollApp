@@ -68,9 +68,10 @@
     grid-area: title;
     margin: 16px 0 32px;
     font-family: 'NerkoOne', sans-serif;
-    font-size: 56px;
+    font-size: clamp(36px, 12vw, 56px);
     font-weight: 400;
     line-height: 1;
+    overflow-wrap: anywhere;
     color: var(--color-primary);
   }
 
@@ -226,6 +227,7 @@
 
   &__answers-head {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
@@ -287,12 +289,43 @@
     background-color: var(--color-primary);
     color: var(--color-background);
     font-family: inherit;
-    font-size: 22px;
+    font-size: clamp(18px, 5.5vw, 22px);
     font-weight: 700;
     cursor: pointer;
 
     &:hover {
       background-color: var(--color-primary-light);
+    }
+  }
+}
+
+@media (max-width: 375px) {
+  .overlay {
+    padding: 8px;
+  }
+
+  .survey {
+    &__card {
+      padding: 24px 12px 32px;
+      border-radius: 0 64px 0 0;
+    }
+
+    &__panel {
+      padding: 20px 8px 24px;
+      border-radius: 0 56px 0 0;
+    }
+
+    &__label,
+    &__label--answers {
+      font-size: 18px;
+    }
+
+    &__input {
+      font-size: 16px;
+    }
+
+    &__add-answer {
+      margin-left: 0;
     }
   }
 }

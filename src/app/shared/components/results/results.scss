@@ -5,7 +5,7 @@
   &__title {
     margin: 0 0 24px;
     font-family: 'NerkoOne', sans-serif;
-    font-size: 40px;
+    font-size: clamp(32px, 10.5vw, 40px);
     font-weight: 400;
     line-height: 1;
   }
@@ -29,9 +29,9 @@
 
   &__answer {
     display: grid;
-    grid-template-columns: 20px 1fr 48px;
+    grid-template-columns: 20px minmax(0, 1fr) 44px;
     align-items: center;
-    column-gap: 12px;
+    column-gap: 8px;
   }
 
   &__letter {

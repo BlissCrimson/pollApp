@@ -193,3 +193,11 @@
 - Templates (home, survey-display, create-survey, header): src="/assets/..." -> "assets/..." so base href applies.
 - styles.scss (fonts) and create-survey.scss (trash icons): absolute /assets/ urls -> relative paths to public/assets, so the builder bundles them (dist/media).
 - ng build ok; no absolute /assets/ left in dist.
+
+2026-10-28 | Limit content width to 1440px, responsive down to 320px
+- styles.scss: new :root vars --content-max-width (1440px), --content-gutter, --content-inset; body min-width 320px + overflow-x hidden; img max-width 100%.
+- header, home, survey-display: horizontal padding now uses --content-inset (content centered, backgrounds stay full width; survey page main no longer uses 7% padding).
+- ending-surveys, survey-card, survey-list, results, create-survey, survey-display, home: clamp() font sizes, wrapping filters/answers-head, smaller paddings/radii at <=375px so layout holds at 320px.
+
+2026-10-28 | Show hover visual without hover on mobile/touch
+- home.scss: @media (max-width: 768px), (hover: none) swaps opacity of .home__visual--image/--hover so the hover image is always visible.

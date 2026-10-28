@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 24px 16px;
+  padding: 24px var(--content-inset);
 
   &--light {
     background-color: var(--color-white);
@@ -21,6 +21,7 @@
 
 @media (min-width: 769px) {
   .header {
-    padding: 32px max(40px, calc((100vw - 1200px) / 2 + 24px));
+    padding-top: 32px;
+    padding-bottom: 32px;
   }
 }
