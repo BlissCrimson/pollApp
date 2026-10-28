@@ -224,3 +224,9 @@
 
 2026-10-28 | Feedback checklist status check
 - Feedback-Checkliste.md: checked off "trash on empty answer removes row" and "question does not vanish while it has text" (both covered by removeAnswer/removeQuestion changes).
+
+2026-10-28 | Cursor and disabled states
+- survey-card.scss: cursor: pointer on the clickable card.
+- survey-answer.html/.scss: class answer--disabled bound to disabled() (survey ended or already voted); only then answers are dimmed and show cursor: not-allowed.
+- _buttons.scss, create-survey.scss: :disabled style (opacity 0.5, not-allowed) for .btn__new-survey ("Complete survey") and .survey__publish; applies only while the disabled attribute is set.
+- Feedback-Checkliste.md: section 2 items checked off.

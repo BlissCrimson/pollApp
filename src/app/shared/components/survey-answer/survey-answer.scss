@@ -21,4 +21,14 @@
   &__text {
     font-size: 16px;
   }
+
+  // Only set while the survey has ended or the user already voted
+  &--disabled {
+    opacity: 0.6;
+
+    .answer__area--input,
+    .answer__input {
+      cursor: not-allowed;
+    }
+  }
 }

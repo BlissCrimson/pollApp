@@ -296,6 +296,11 @@
     &:hover {
       background-color: var(--color-primary-light);
     }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
   }
 }
 
