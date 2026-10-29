@@ -3,7 +3,12 @@
     @if (isLoading()) {
       <p class="survey__message">Loading survey...</p>
     } @else if (survey(); as survey) {
-      <img class="survey__status" src="assets/status/status__published.svg" alt="Published">
+      <div class="survey__top">
+        <img class="survey__status" src="assets/status/status__published.svg" alt="Published">
+        <a class="survey__close" routerLink="/" aria-label="Close survey">
+          <span aria-hidden="true">&times;</span>
+        </a>
+      </div>
       <div class="survey__head">
         <span>@if (survey.endDate) { Ends on {{ survey.endDate | date: 'dd.MM.yyyy' }} }</span>
         <span>Category: {{ getCategoryLabel(survey.category) }}</span>
@@ -16,7 +21,7 @@
       <div class="survey__questions">
       @for (question of survey.questions; track question.id; let i = $index) {
         <fieldset class="survey__question">
-          <legend class="survey__question-title">{{ i + 1 }}. {{ question.question }}</legend>
+          <legend class="survey__question-title"><span class="survey__question-number">{{ i + 1 }}.</span>{{ question.question }}</legend>
           @if (question.allowMultiple) {
             <p class="survey__hint">More than one answers are possible.</p>
           }
@@ -44,7 +49,10 @@
         <p class="survey__message">This survey has ended.</p>
       } @else {
         <button class="btn__new-survey survey__submit" type="button" [disabled]="!canSubmit()" (click)="submit()">
-          Complete survey
+          <span>Complete<span class="survey__submit-long"> survey</span></span>
+          <span class="btn__icon" aria-hidden="true">
+            <img class="btn__new-survey--circle" src="assets/icons/check.svg" alt="">
+          </span>
         </button>
       }
     } @else {
@@ -52,5 +60,10 @@
     }
   </section>
 
-  <app-results [survey]="survey()" [results]="results()"></app-results>
+  <button class="results-toggle" type="button" [attr.aria-expanded]="resultsOpen()" (click)="toggleResults()">
+    {{ resultsOpen() ? 'Close results' : 'Open results' }}
+    <span class="results-toggle__arrow" [class.results-toggle__arrow--closed]="!resultsOpen()" aria-hidden="true"></span>
+  </button>
+
+  <app-results [class.results--collapsed]="!resultsOpen()" [survey]="survey()" [results]="results()"></app-results>
 </main>

@@ -230,3 +230,32 @@
 - survey-answer.html/.scss: class answer--disabled bound to disabled() (survey ended or already voted); only then answers are dimmed and show cursor: not-allowed.
 - _buttons.scss, create-survey.scss: :disabled style (opacity 0.5, not-allowed) for .btn__new-survey ("Complete survey") and .survey__publish; applies only while the disabled attribute is set.
 - Feedback-Checkliste.md: section 2 items checked off.
+
+2026-10-29 | Layout fixes (Feedback item 1)
+- create-survey.scss: grid columns use minmax(0, 1fr), select is width 100%, nowrap removed from the end-date label (horizontal overflow in New Survey). Field errors are now absolutely positioned (no layout shift) and bolder; .survey__error always reserves its height (create-survey.html renders it without @if).
+- styles.scss: scrollbar-gutter: stable on html; --content-inset uses 100% instead of 100vw.
+- survey-card, survey-answer, results, survey-display (.scss): overflow-wrap: anywhere, min-width: 0 / min-inline-size: 0 on flex/grid children and fieldset so long texts wrap.
+
+2026-10-29 | Feedback checklist update
+- Feedback-Checkliste.md: section 1 items "New Survey horizontal scrollbar", "long texts wrap" and "no layout shifts in forms" checked off (code changes done, manual browser test still pending in section 6).
+
+2026-10-29 | Wider create-survey dialog
+- create-survey.scss: .survey__card max-width 1050px -> 1166px to match the desktop design (Create Survey.png: card ~1166px, panel ~1052px).
+
+2026-10-29 | Feedback checklist: trash cursor
+- Feedback-Checkliste.md: section 5 item "trash has cursor: pointer everywhere" checked off (all 5 .survey__trash buttons in create-survey share the cursor: pointer rule).
+
+2026-10-29 | survey-display aligned with design
+- survey-display.html/.ts/.scss: card padding 40px (desktop) / 12px (mobile), title 48px, hanging indent for question titles and hint, answer indent and spacing, row gap 56px; close button (X, mobile only, routerLink to home); results toggle "Close/Open results" (mobile only, resultsOpen signal); Complete button shows "Complete" + check icon on mobile, "Complete survey" on desktop.
+- survey-answer.scss: custom checkbox/radio (dark outline, rounded, filled with primary when selected).
+- results.html/.scss: hanging indent for question titles, bars 14px high, desktop without left inset (max-width 380px), title 40px.
+
+2026-10-29 | Survey page background and empty results
+- styles.scss: body:has(app-survey-display) is white, so the white no longer ends where the survey card ends.
+- results.ts/.html/.scss: hasVotes computed; without any vote the results show "Results will be shown here after participants complete the survey." and "There are no answers yet." instead of empty bars.
+
+2026-10-29 | Feedback checklist review
+- Feedback-Checkliste.md: section 4 item "visible hint when required fields are missing" checked off (publish() marks all fields touched and sets errorMessage; per-field errors shown). Remaining items need browser checks or are not implemented (live preview).
+
+2026-10-29 | Category select accessibility
+- create-survey.html: category select aria-label no longer says "(optional)" and gets required/aria-required, matching the required validator.

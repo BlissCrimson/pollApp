@@ -32,7 +32,7 @@
 
             <div class="survey__meta">
               <div class="survey__category">
-                <select class="survey__select" id="category" aria-label="Choose category (optional)" formControlName="category">
+                <select class="survey__select" id="category" aria-label="Choose category" required aria-required="true" formControlName="category">
                   <option value="" disabled hidden>Choose category</option>
                   @for (category of categories; track category.value) {
                     <option [value]="category.value">{{ category.label }}</option>
@@ -120,9 +120,7 @@
         </div>
       </div>
 
-      @if (errorMessage) {
-        <p class="survey__error" role="alert">{{ errorMessage }}</p>
-      }
+      <p class="survey__error" role="alert">{{ errorMessage }}</p>
 
       <button class="survey__publish" type="submit" [disabled]="isSaving">
         Publish

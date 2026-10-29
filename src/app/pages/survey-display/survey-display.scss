@@ -11,7 +11,7 @@ main {
 
 
 .survey {
-  padding: 24px 16px;
+  padding: 24px 12px;
   border-radius: 0 80px 0 0;
   background-color: var(--color-surface-tint);
   display: flex;
@@ -36,12 +36,31 @@ main {
     color: var(--color-accent);
   }
 
-  &__status {
-    align-self: flex-start;
+  // status badge on the left, close button on the right (mobile only)
+  &__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  &__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background-color: var(--color-close);
+    color: var(--color-text);
+    font-size: 32px;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
   }
 
   &__hint {
     margin: 0;
+    padding-left: 24px;
     font-size: 14px;
   }
 
@@ -49,30 +68,52 @@ main {
     align-self: flex-end;
   }
 
+  // mobile shows "Complete", desktop "Complete survey"
+  &__submit-long {
+    display: none;
+  }
+
   &__description {
     margin: 0;
+    overflow-wrap: anywhere;
   }
 
   &__questions {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 24px;
   }
 
   &__question {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
     border: none;
     padding: 0;
     margin: 0;
+    // fieldsets default to min-content width, which lets long words overflow
+    min-inline-size: 0;
   }
 
   &__question-title {
-    padding: 0;
-    margin-bottom: 8px;
+    // hanging indent: the number sits left of the wrapped text
+    padding: 0 0 0 24px;
+    text-indent: -24px;
+    margin-bottom: 4px;
     font-size: 20px;
     font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+
+  &__question-number {
+    display: inline-block;
+    width: 24px;
+    text-indent: 0;
+  }
+
+  // answers sit slightly indented below the question
+  app-survey-answer {
+    padding-left: 10px;
   }
 
   &__message {
@@ -84,6 +125,40 @@ main {
   }
 }
 
+// mobile only: collapses the results below the survey
+.results-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  margin: 24px 0 0 16px;
+  padding: 8px 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: 18px;
+  cursor: pointer;
+
+  &__arrow {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 8px solid currentColor;
+
+    &--closed {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  app-results.results--collapsed {
+    display: none;
+  }
+}
+
 @media (min-width: 769px) {
   main {
     flex-direction: row;
@@ -92,24 +167,39 @@ main {
 
   .survey {
     flex: 3;
+    min-width: 0;
     width: auto;
     box-sizing: border-box;
-    padding: 32px 24px 48px;
+    padding: 40px;
     border-radius: 0 160px 0 0;
 
     &__title {
-      font-size: 56px;
+      font-size: 48px;
+      line-height: 1;
+    }
+
+    &__close {
+      display: none;
+    }
+
+    &__submit-long {
+      display: inline;
     }
 
     &__questions {
-      grid-template-columns: 1fr 1fr;
-      gap: 32px 48px;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 56px 48px;
       align-items: start;
     }
   }
 
+  .results-toggle {
+    display: none;
+  }
+
   app-results {
     flex: 2;
+    min-width: 0;
     padding-top: 80px;
   }
 }

@@ -3,10 +3,13 @@
     Survey results <span class="results__live">LIVE</span>
   </h2>
 
-  @if (survey(); as survey) {
+  @if (!hasVotes()) {
+    <p class="results__empty">Results will be shown here after participants complete the survey.</p>
+    <p class="results__empty results__empty--none">There are no answers yet.</p>
+  } @else if (survey(); as survey) {
     @for (question of survey.questions; track question.id; let i = $index) {
       <div class="results__question">
-        <h3 class="results__question-title">{{ i + 1 }}. {{ question.question }}</h3>
+        <h3 class="results__question-title"><span class="results__question-number">{{ i + 1 }}.</span>{{ question.question }}</h3>
 
         @for (answer of question.answers; track answer.id; let j = $index) {
           <div class="results__answer">

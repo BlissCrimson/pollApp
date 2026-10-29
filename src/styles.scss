@@ -25,15 +25,21 @@
 
   // Content is limited to --content-max-width and centered on wide screens;
   // --content-inset is the horizontal padding that achieves this for full-width backgrounds.
+  // Only use it in padding: the percentage refers to the width of the containing block (no 100vw, so no scrollbar offset).
   --content-max-width: 1440px;
   --content-gutter: 16px;
-  --content-inset: max(var(--content-gutter), calc((100vw - var(--content-max-width)) / 2 + var(--content-gutter)));
+  --content-inset: max(var(--content-gutter), calc((100% - var(--content-max-width)) / 2 + var(--content-gutter)));
 }
 
 @media (min-width: 769px) {
   :root {
     --content-gutter: clamp(24px, 7.5vw, 110px);
   }
+}
+
+html {
+  // keeps the layout from jumping sideways when a scrollbar appears
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -43,6 +49,11 @@ body {
   font-family: 'Mulish', sans-serif;
   background-color: var(--color-background);
   color: var(--color-text);
+}
+
+// the survey page is white all the way down, not only behind its content
+body:has(app-survey-display) {
+  background-color: var(--color-white);
 }
 
 img {

@@ -3,15 +3,36 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
     cursor: pointer;
   }
 
+  // design: empty rounded box with a dark outline, filled with the primary color when selected
   &__input {
-    accent-color: var(--color-primary);
-    width: 18px;
-    height: 18px;
+    appearance: none;
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    border: 2px solid var(--color-text-btn);
+    border-radius: 4px;
+    background-color: transparent;
     cursor: pointer;
+
+    &[type='radio'] {
+      border-radius: 50%;
+    }
+
+    &:checked {
+      border-color: var(--color-primary);
+      background-color: var(--color-primary);
+      box-shadow: inset 0 0 0 3px var(--color-surface-tint);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
   }
 
   &__letter {
@@ -19,7 +40,9 @@
   }
 
   &__text {
+    min-width: 0;
     font-size: 16px;
+    overflow-wrap: anywhere;
   }
 
   // Only set while the survey has ended or the user already voted

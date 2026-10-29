@@ -15,7 +15,7 @@
   &__card {
     box-sizing: border-box;
     width: 100%;
-    max-width: 1050px;
+    max-width: 1166px;
     margin: auto;
     padding: 32px 16px 40px;
     border-radius: 0 96px 0 0;
@@ -99,6 +99,9 @@
       'input input';
     align-items: center;
     row-gap: 8px;
+    // anchor for the out-of-flow error message
+    position: relative;
+    min-width: 0;
 
     .survey__label {
       grid-area: label;
@@ -142,10 +145,16 @@
     font-size: 16px;
   }
 
+  // out of flow, so showing it never shifts the layout (it sits in the gap below the field)
   &__field-error {
-    grid-column: 1 / -1;
+    position: absolute;
+    top: calc(100% + 1px);
+    left: 0;
+    right: 0;
     margin: 0;
     font-size: 14px;
+    font-weight: 600;
+    line-height: 14px;
     color: var(--color-primary);
   }
 
@@ -174,8 +183,8 @@
   }
 
   &__select {
-    width: auto;
-    min-width: 120px;
+    width: 100%;
+    min-width: 0;
     padding: 8px 28px 8px 0;
     border-radius: 0;
     appearance: none;
@@ -219,9 +228,13 @@
     gap: 16px;
   }
 
+  // space is always reserved, so the publish button does not jump when a message appears
   &__error {
-    margin: 24px 0 0;
+    min-height: 24px;
+    margin: 16px 0 0;
     text-align: center;
+    font-weight: 600;
+    overflow-wrap: anywhere;
     color: var(--color-primary);
   }
 
@@ -282,7 +295,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    margin: 40px auto 0;
+    margin: 24px auto 0;
     padding: 14px 28px;
     border: none;
     border-radius: 12px;
@@ -372,13 +385,13 @@
     }
 
     &__details {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       column-gap: 60px;
       align-items: start;
     }
 
     &__meta {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       column-gap: 24px;
       align-items: end;
     }
@@ -389,7 +402,7 @@
 
     // input + trash side by side, label above
     &__field {
-      grid-template-columns: 1fr auto;
+      grid-template-columns: minmax(0, 1fr) auto;
       grid-template-areas:
         'label .'
         'input trash';
@@ -407,13 +420,13 @@
     }
 
     &__answer {
-      grid-template-columns: 24px 1fr auto;
+      grid-template-columns: 24px minmax(0, 1fr) auto;
       grid-template-areas: 'label input trash';
       column-gap: 8px;
     }
 
     &__questions {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       column-gap: 60px;
       align-items: start;
     }
@@ -423,16 +436,12 @@
       margin-top: 8px;
     }
 
-    &__field--date .survey__label {
-      white-space: nowrap;
-    }
-
     &__field--description .survey__input--textarea {
       min-height: 180px;
     }
 
     &__publish {
-      margin: 32px 0 0 auto;
+      margin: 16px 0 0 auto;
       background-color: var(--color-primary-light);
       font-size: 20px;
     }

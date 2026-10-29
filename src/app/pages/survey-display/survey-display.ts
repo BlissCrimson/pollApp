@@ -1,6 +1,6 @@
 import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { getCategoryLabel } from '../../shared/constants/categories';
 import { Results } from '../../shared/components/results/results';
 import { SurveyAnswer } from '../../shared/components/survey-answer/survey-answer';
@@ -16,7 +16,7 @@ const REFRESH_DEBOUNCE_MS = 300;
 
 /** Survey detail page: voting on the left, live results on the right */
 @Component({
-  imports: [DatePipe, Results, SurveyAnswer],
+  imports: [DatePipe, Results, RouterLink, SurveyAnswer],
   selector: 'app-survey-display',
   styleUrl: './survey-display.scss',
   templateUrl: './survey-display.html',
@@ -37,6 +37,8 @@ export class SurveyDisplay implements OnInit {
   isLoading = signal(true);
   isSaving = signal(false);
   errorMessage = signal('');
+  /** Mobile only: the results can be collapsed below the survey */
+  resultsOpen = signal(true);
 
   /** True if the survey end date has passed */
   isExpired = computed(() => this.surveyService.isExpired(this.survey()?.endDate ?? null));
@@ -78,6 +80,11 @@ export class SurveyDisplay implements OnInit {
     this.selections.update((current) =>
       this.surveyService.toggleSelection(current, question, answerId),
     );
+  }
+
+  /** Shows or hides the results (mobile) */
+  toggleResults(): void {
+    this.resultsOpen.update((open) => !open);
   }
 
   /** Saves the selected answers and shows the updated results */
