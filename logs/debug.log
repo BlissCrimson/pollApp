@@ -272,3 +272,13 @@
 
 2026-10-29 | Playwright design comparison (no code changes)
 - Compared Home, Create dialog and survey-display (desktop 1440 / mobile 375) against docs/Poll App Design using Playwright screenshots (Supabase mocked) and DOM measurements; scripts and images only in the scratchpad. Deviations were reported to the user.
+
+2026-10-29 | Feedback checklist: Past Surveys spacing
+- Checked the Past survey view with Playwright at 320/375/414/600/768/900/1024px (Supabase mocked, expired surveys, a long unbroken title): toolbar, list and cards keep 16px (mobile) / 68-77px (desktop) side spacing, no horizontal overflow, long words wrap. No code change needed; checklist item section 1 no. 3 checked off.
+
+2026-10-29 | Publish confirmation overlay
+- create-survey.ts: created output now emits the new survey id.
+- home.ts/.html/.scss: after publishing, a fixed overlay "Your survey is now published" slides in from the right (bottom left, design shape: 357px wide, radius 8/48/8/8). It can only be closed with the X, which navigates to /survey-display/<id>.
+
+2026-10-29 | End date is a required field
+- create-survey.html: end date label shows the required asterisk instead of "(optional)", input gets required/aria-required, invalid outline only after touch (or for a past date) instead of immediately, new message "Please choose an end date." (the validator is already Validators.required).

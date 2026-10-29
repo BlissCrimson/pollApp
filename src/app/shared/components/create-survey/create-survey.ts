@@ -56,7 +56,8 @@ export class CreateSurvey {
   private supabaseService = inject(SupabaseService);
 
   closed = output<void>();
-  created = output<void>();
+  /** Emits the id of the newly created survey */
+  created = output<number>();
 
   categories = SURVEY_CATEGORIES;
   maxTitleLength = MAX_TITLE_LENGTH;
@@ -190,8 +191,8 @@ export class CreateSurvey {
   /** Saves the survey and closes the dialog; shows an error message if that fails */
   private async saveSurvey(): Promise<void> {
     try {
-      await this.supabaseService.createSurvey(this.buildSurveyInput());
-      this.created.emit();
+      const surveyId = await this.supabaseService.createSurvey(this.buildSurveyInput());
+      this.created.emit(surveyId);
       this.close();
     } catch (error) {
       this.errorMessage = 'The survey could not be saved. Please try again.';

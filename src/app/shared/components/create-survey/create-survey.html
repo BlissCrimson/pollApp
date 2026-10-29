@@ -42,12 +42,14 @@
 
               <div class="survey__field survey__field--date">
                 <label class="survey__label" for="endDate">
-                  Set end date <span class="survey__optional">(optional)</span>
+                  Set end date <span class="survey__required" aria-hidden="true">*</span>
                 </label>
-                <input class="survey__input" id="endDate" type="date" formControlName="endDate" [min]="minDate" [class.survey__input--invalid]="survey.controls.endDate.invalid">
+                <input class="survey__input" id="endDate" type="date" formControlName="endDate" required aria-required="true" [min]="minDate" [class.survey__input--invalid]="showError(survey.controls.endDate) || survey.controls.endDate.hasError('pastDate')">
                 <button class="survey__trash" type="button" aria-label="Delete end date" (click)="survey.controls.endDate.reset()"></button>
                 @if (survey.controls.endDate.hasError('pastDate')) {
                   <p class="survey__field-error">The end date must not be in the past.</p>
+                } @else if (showError(survey.controls.endDate)) {
+                  <p class="survey__field-error">Please choose an end date.</p>
                 }
               </div>
             </div>
