@@ -259,3 +259,16 @@
 
 2026-10-29 | Category select accessibility
 - create-survey.html: category select aria-label no longer says "(optional)" and gets required/aria-required, matching the required validator.
+
+2026-10-29 | Complete button color and spacing
+- survey-display.scss: Complete button uses primary orange on mobile (larger padding, 18px, 16px top margin) and primary-light on desktop; card bottom padding 40px and question gap 40px on mobile (measured from the mobile design).
+
+2026-10-29 | Close buttons aligned with design
+- survey-display.html/.scss: X button is light peach (primary-light) with dark X, 39x32px, radius 10px, centered with the status badge, 13px extra inset; X drawn with CSS bars instead of a text glyph.
+- create-survey.html/.scss: close button 39x32px (mobile) / 111x40px "Cancel X" (desktop, padding 0 16px 0 12px, gap 16px), radius 8px, same CSS X; header gets 8px side padding on mobile (design inset), aligned to the top of the Draft badge.
+
+2026-10-29 | Create survey close button spacing (mobile)
+- create-survey.scss: .survey__head side padding 9px (13px at <=375px) so the close button and badge sit 25px from the card edge as in the design (was 24px / 20px).
+
+2026-10-29 | Playwright design comparison (no code changes)
+- Compared Home, Create dialog and survey-display (desktop 1440 / mobile 375) against docs/Poll App Design using Playwright screenshots (Supabase mocked) and DOM measurements; scripts and images only in the scratchpad. Deviations were reported to the user.

@@ -1,4 +1,3 @@
-// Full-screen backdrop; scrolls if the dialog is taller than the viewport
 .overlay {
   position: fixed;
   inset: 0;
@@ -29,6 +28,7 @@
       'status close'
       'title title';
     align-items: center;
+    padding: 0 9px;
   }
 
   &__status {
@@ -38,15 +38,16 @@
 
   &__close {
     grid-area: close;
+    align-self: start;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    width: 44px;
-    height: 44px;
+    gap: 16px;
+    width: 39px;
+    height: 32px;
     padding: 0;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     background-color: var(--color-close);
     color: var(--color-text);
     font-family: inherit;
@@ -60,8 +61,26 @@
   }
 
   &__close-icon {
-    font-size: 32px;
-    line-height: 1;
+    position: relative;
+    width: 14px;
+    height: 14px;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      height: 1.5px;
+      border-radius: 1px;
+      background-color: currentColor;
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    &::after {
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
   }
 
   &__title {
@@ -89,7 +108,6 @@
     gap: 16px;
   }
 
-  // label + input + trash: on mobile the trash sits in the label row
   &__field,
   &__answer {
     display: grid;
@@ -99,7 +117,6 @@
       'input input';
     align-items: center;
     row-gap: 8px;
-    // anchor for the out-of-flow error message
     position: relative;
     min-width: 0;
 
@@ -145,7 +162,6 @@
     font-size: 16px;
   }
 
-  // out of flow, so showing it never shifts the layout (it sits in the gap below the field)
   &__field-error {
     position: absolute;
     top: calc(100% + 1px);
@@ -188,7 +204,9 @@
     padding: 8px 28px 8px 0;
     border-radius: 0;
     appearance: none;
-    background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='10' viewBox='0 0 16 10'%3E%3Cpath d='M0 0h16L8 10z' fill='%23fff'/%3E%3C/svg%3E") right center / 16px 10px no-repeat;
+    background: transparent
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='10' viewBox='0 0 16 10'%3E%3Cpath d='M0 0h16L8 10z' fill='%23fff'/%3E%3C/svg%3E")
+      right center / 16px 10px no-repeat;
     color: var(--color-text);
     font-size: 20px;
     font-weight: 600;
@@ -228,7 +246,6 @@
     gap: 16px;
   }
 
-  // space is always reserved, so the publish button does not jump when a message appears
   &__error {
     min-height: 24px;
     margin: 16px 0 0;
@@ -328,6 +345,10 @@
       border-radius: 0 64px 0 0;
     }
 
+    &__head {
+      padding: 0 13px;
+    }
+
     &__panel {
       padding: 20px 8px 24px;
       border-radius: 0 56px 0 0;
@@ -360,19 +381,20 @@
         'title close';
     }
 
+    &__head {
+      padding: 0;
+    }
+
     &__close {
+      align-self: center;
       width: auto;
-      height: auto;
-      padding: 10px 12px;
+      height: 40px;
+      padding: 0 16px 0 12px;
       border-radius: 8px;
     }
 
     &__close-text {
       display: inline;
-    }
-
-    &__close-icon {
-      font-size: 24px;
     }
 
     &__title {
@@ -400,7 +422,6 @@
       order: 2;
     }
 
-    // input + trash side by side, label above
     &__field {
       grid-template-columns: minmax(0, 1fr) auto;
       grid-template-areas:
