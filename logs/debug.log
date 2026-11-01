@@ -286,3 +286,6 @@
 2026-10-29 | Publish overlay moved into the create dialog
 - create-survey.ts/.html/.scss: after publishing the dialog stays open (inert, darkened by a 25% scrim) and the overlay "Your survey is now published" slides in from the right to the bottom right of the dialog. It can only be closed with the X (Escape, backdrop and form are locked); the X navigates to /survey-display/<id> and closes the dialog. Spec covers the flow.
 - home.ts/.html/.scss/.spec.ts: overlay and Router removed again; (created) only reloads the lists.
+
+2026-11-01 | Show all surveys in the list
+- survey-list.ts: activeFilter now has a third state "all"; clicking the already selected chip (Active/Past) removes the status filter, clicking a chip from "all" selects it. No chip is highlighted while all surveys are shown; category filter still combines.
