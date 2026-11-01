@@ -1,5 +1,5 @@
 <div class="overlay" (click)="close()">
-  <section class="survey__card" role="dialog" aria-modal="true" aria-labelledby="survey-title" (click)="$event.stopPropagation()">
+  <section class="survey__card" role="dialog" aria-modal="true" aria-labelledby="survey-title" [attr.inert]="publishedSurveyId() !== null ? '' : null" (click)="$event.stopPropagation()">
     <div class="survey__head">
       <img class="survey__status" src="assets/status/status__draft.svg" alt="Draft">
       <h1 class="survey__title" id="survey-title">Create new survey</h1>
@@ -130,4 +130,14 @@
       </button>
     </form>
   </section>
+
+  @if (publishedSurveyId() !== null) {
+    <div class="overlay__scrim"></div>
+    <div class="toast" role="status" (click)="$event.stopPropagation()">
+      <p class="toast__text">Your survey is now published</p>
+      <button class="toast__close" type="button" aria-label="Close and open the new survey" (click)="openPublishedSurvey()">
+        <span class="toast__close-icon" aria-hidden="true"></span>
+      </button>
+    </div>
+  }
 </div>

@@ -282,3 +282,7 @@
 
 2026-10-29 | End date is a required field
 - create-survey.html: end date label shows the required asterisk instead of "(optional)", input gets required/aria-required, invalid outline only after touch (or for a past date) instead of immediately, new message "Please choose an end date." (the validator is already Validators.required).
+
+2026-10-29 | Publish overlay moved into the create dialog
+- create-survey.ts/.html/.scss: after publishing the dialog stays open (inert, darkened by a 25% scrim) and the overlay "Your survey is now published" slides in from the right to the bottom right of the dialog. It can only be closed with the X (Escape, backdrop and form are locked); the X navigates to /survey-display/<id> and closes the dialog. Spec covers the flow.
+- home.ts/.html/.scss/.spec.ts: overlay and Router removed again; (created) only reloads the lists.

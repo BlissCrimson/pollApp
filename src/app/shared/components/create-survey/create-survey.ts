@@ -1,4 +1,5 @@
-import { Component, HostListener, inject, output } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, output, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   AbstractControl,
   FormArray,
@@ -54,10 +55,15 @@ type QuestionForm = FormGroup<{
 })
 export class CreateSurvey {
   private supabaseService = inject(SupabaseService);
+  private router = inject(Router);
+  private host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   closed = output<void>();
   /** Emits the id of the newly created survey */
   created = output<number>();
+
+  /** Id of the published survey; while set, the confirmation overlay locks the dialog */
+  publishedSurveyId = signal<number | null>(null);
 
   categories = SURVEY_CATEGORIES;
   maxTitleLength = MAX_TITLE_LENGTH;
@@ -141,9 +147,18 @@ export class CreateSurvey {
     }
   }
 
-  /** Closes the dialog (also on Escape) */
+  /** Closes the dialog (also on Escape); not possible while the confirmation overlay is open */
   @HostListener('document:keydown.escape')
   close(): void {
+    if (this.publishedSurveyId() !== null) return;
+    this.closed.emit();
+  }
+
+  /** Closes the confirmation overlay and the dialog, then shows the new survey */
+  openPublishedSurvey(): void {
+    const surveyId = this.publishedSurveyId();
+    if (surveyId === null) return;
+    this.router.navigate(['/survey-display', surveyId]);
     this.closed.emit();
   }
 
@@ -182,18 +197,24 @@ export class CreateSurvey {
     this.isSaving = false;
   }
 
+  /** Moves the keyboard focus to the overlay's close button once it is rendered */
+  private focusOverlayClose(): void {
+    setTimeout(() => this.host.nativeElement.querySelector<HTMLElement>('.toast__close')?.focus());
+  }
+
   /** Marks all fields as touched so their errors become visible */
   private showInvalidForm(): void {
     this.survey.markAllAsTouched();
     this.errorMessage = 'Please fill in all fields marked with *.';
   }
 
-  /** Saves the survey and closes the dialog; shows an error message if that fails */
+  /** Saves the survey and shows the confirmation overlay; shows an error message if that fails */
   private async saveSurvey(): Promise<void> {
     try {
       const surveyId = await this.supabaseService.createSurvey(this.buildSurveyInput());
       this.created.emit(surveyId);
-      this.close();
+      this.publishedSurveyId.set(surveyId);
+      this.focusOverlayClose();
     } catch (error) {
       this.errorMessage = 'The survey could not be saved. Please try again.';
       console.error(error);

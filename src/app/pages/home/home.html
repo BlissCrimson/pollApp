@@ -26,15 +26,6 @@
   </section>
 
   @if (isCreateOpen()) {
-  <app-create-survey (closed)="closeCreateSurvey()" (created)="onSurveyCreated($event)" />
-  }
-
-  @if (createdSurveyId() !== null) {
-  <div class="toast" role="status">
-    <p class="toast__text">Your survey is now published</p>
-    <button class="toast__close" type="button" aria-label="Close and open the new survey" (click)="openCreatedSurvey()">
-      <span class="toast__close-icon" aria-hidden="true"></span>
-    </button>
-  </div>
+  <app-create-survey (closed)="closeCreateSurvey()" (created)="reloadSurveys()" />
   }
 </main>

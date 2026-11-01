@@ -7,7 +7,106 @@
   align-items: flex-start;
   padding: 16px;
   overflow-y: auto;
+  // the confirmation overlay slides in from the right; this keeps it from adding a scrollbar
+  overflow-x: hidden;
   background-color: var(--color-backdrop);
+}
+
+// darkens the dialog while the confirmation overlay is open (design: ~25% black)
+.overlay__scrim {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+// Confirmation overlay: slides in from the right, bottom right of the dialog, closed only via the X
+.toast {
+  position: fixed;
+  right: calc(max(16px, (100% - 1166px) / 2) + 84px);
+  bottom: 56px;
+  z-index: 1;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 357px;
+  min-height: 87px;
+  padding: 16px 24px;
+  border-radius: 8px 48px 8px 8px;
+  background-color: #ffe9d6;
+  color: var(--color-background);
+  animation: toast-in 300ms ease-out;
+
+  &__text {
+    margin: 0;
+    font-family: 'NerkoOne', sans-serif;
+    font-size: 22px;
+    line-height: 1.3;
+  }
+
+  &__close {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: none;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  // X drawn with two bars, same as the other close buttons
+  &__close-icon {
+    position: relative;
+    width: 14px;
+    height: 14px;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      height: 1.5px;
+      border-radius: 1px;
+      background-color: currentColor;
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    &::after {
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
+  }
+}
+
+@keyframes toast-in {
+  from {
+    transform: translateX(calc(100vw + 100%));
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .toast {
+    right: 24px;
+    left: 24px;
+    bottom: 24px;
+    width: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    animation: none;
+  }
 }
 
 .survey {
