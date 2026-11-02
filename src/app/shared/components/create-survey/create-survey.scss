@@ -521,6 +521,10 @@
       order: 2;
     }
 
+    &__field--date .survey__label {
+      white-space: nowrap;
+    }
+
     &__field {
       grid-template-columns: minmax(0, 1fr) auto;
       grid-template-areas:
@@ -551,13 +555,16 @@
       align-items: start;
     }
 
+    // design: sits beside the first question, with two questions it wraps below the left one
     &__add-question {
+      grid-column: auto;
       justify-self: start;
-      margin-top: 8px;
+      align-self: start;
+      margin-top: 0;
     }
 
     &__field--description .survey__input--textarea {
-      min-height: 180px;
+      min-height: 108px;
     }
 
     &__publish {

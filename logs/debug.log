@@ -289,3 +289,20 @@
 
 2026-11-01 | Show all surveys in the list
 - survey-list.ts: activeFilter now has a third state "all"; clicking the already selected chip (Active/Past) removes the status filter, clicking a chip from "all" selects it. No chip is highlighted while all surveys are shown; category filter still combines.
+
+2026-11-02 | Live preview of the selection in the survey detail view
+- survey-display.html: app-results now gets displayedResults() (current selection included until the user has voted) instead of results(), so the bars and percentages react to the selection without saving.
+- results.scss: .results__fill animates its width (300ms), disabled for prefers-reduced-motion.
+- survey-display.spec.ts: new tests for the preview (selection changes the displayed percent, nothing is saved) and for saving exactly once on submit.
+
+2026-11-02 | Clicking a selected answer again clears the selection
+- survey-answer.html: the input emits on (click) instead of (change), because an already checked radio fires no change event.
+- survey-service.ts: toggleSelection clears the answer for single choice when it is already selected (multiple choice toggled before).
+- survey-answer.spec.ts / survey-display.spec.ts: tests adjusted and added for the deselect.
+
+2026-11-02 | Design comparison fixes (checklist 6.2)
+- logo__black.svg: now contains the "Poll App" text like logo__orange.svg (119x50, colors #35273A / #FFCFA1), so the light header matches the design.
+- survey-display.scss: desktop title 56px / line-height 0.9; card takes 60% of the row (flex-basis calc((100% - 48px) * 0.6)); question titles 18px / 1.3 with 12px below; answer gap 9px; row gap 24px; results padding-top 60px.
+- survey-answer.scss: checkbox 16px, radios also square (design), text gap 18px.
+- results.scss: desktop title 32px, question titles 18px, letters/percent 14px, column max-width 320px.
+- create-survey.scss: "Add next question" sits beside question 1 on desktop (wraps below the left column with two questions), textarea min-height 108px, end date label does not wrap.

@@ -26,10 +26,10 @@ describe('SurveyAnswer', () => {
     expect(input.type).toBe('radio');
   });
 
-  it('should emit the answer id on change', () => {
+  it('should emit the answer id on click', () => {
     let emitted: number | undefined;
     component.selected.subscribe((id) => (emitted = id));
-    fixture.nativeElement.querySelector('input').dispatchEvent(new Event('change'));
+    fixture.nativeElement.querySelector('input').click();
     expect(emitted).toBe(1);
   });
 });

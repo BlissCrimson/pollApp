@@ -112,7 +112,10 @@ export class SurveyDisplay implements OnInit {
   private listenForVotes(survey: SurveyDetail): void {
     const stopWatching = this.surveyService.watchVotes(survey, () => {
       clearTimeout(this.refreshTimer);
-      this.refreshTimer = setTimeout(() => this.refreshVotes(survey).catch(console.error), REFRESH_DEBOUNCE_MS);
+      this.refreshTimer = setTimeout(
+        () => this.refreshVotes(survey).catch(console.error),
+        REFRESH_DEBOUNCE_MS,
+      );
     });
     this.destroyRef.onDestroy(() => {
       clearTimeout(this.refreshTimer);
@@ -126,4 +129,11 @@ export class SurveyDisplay implements OnInit {
     this.results.set(state.results);
     this.hasVoted.set(state.hasVoted);
   }
+
+  /** Results shown on the page: with the current selection included until the user has voted */
+  displayedResults = computed(() => {
+    const survey = this.survey();
+    if (!survey || this.hasVoted() || this.isExpired()) return this.results();
+    return this.surveyService.previewResults(this.results(), survey, this.selections());
+  });
 }

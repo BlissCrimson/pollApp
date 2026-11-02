@@ -76,10 +76,12 @@ export class SurveyService {
     return endDate < todayIsoDate();
   }
 
-  /** Returns new selections: single choice replaces the answer, multiple choice toggles it */
+  /** Returns new selections: single choice replaces the answer, clicking it again clears it; multiple choice toggles */
   toggleSelection(selections: Selections, question: QuestionDetail, answerId: number): Selections {
     const current = selections[question.id] ?? [];
-    if (!question.allowMultiple) return { ...selections, [question.id]: [answerId] };
+    if (!question.allowMultiple) {
+      return { ...selections, [question.id]: current.includes(answerId) ? [] : [answerId] };
+    }
     const next = current.includes(answerId)
       ? current.filter((id) => id !== answerId)
       : [...current, answerId];
@@ -97,5 +99,27 @@ export class SurveyService {
     if (!this.isComplete(survey, selections)) throw new Error('Please answer every question.');
     const answerIds = survey.questions.flatMap((question) => selections[question.id]);
     await this.supabaseService.insertVotes(survey.id, answerIds);
+  }
+
+  /** Results as they would look after the current selections are submitted */
+  previewResults(
+    results: AnswerResult[],
+    survey: SurveyDetail,
+    selections: Selections,
+  ): AnswerResult[] {
+    const selectedIds = new Set(Object.values(selections).flat());
+    return survey.questions.flatMap((question) => {
+      const rows = question.answers.map((answer) => ({
+        answerId: answer.id,
+        votes:
+          (results.find((result) => result.answerId === answer.id)?.votes ?? 0) +
+          (selectedIds.has(answer.id) ? 1 : 0),
+      }));
+      const total = rows.reduce((sum, row) => sum + row.votes, 0);
+      return rows.map((row) => ({
+        ...row,
+        percent: total ? Math.round((row.votes / total) * 100) : 0,
+      }));
+    });
   }
 }

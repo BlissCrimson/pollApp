@@ -6,7 +6,7 @@
       [name]="name()"
       [checked]="checked()"
       [disabled]="disabled()"
-      (change)="selected.emit(answer().id)"
+      (click)="selected.emit(answer().id)"
     />
     @if (letter()) {
       <strong class="answer__letter">{{ letter() }}.</strong>
