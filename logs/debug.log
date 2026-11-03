@@ -319,3 +319,6 @@
 2026-11-03 | Results always visible (checklist 2)
 - results.html/.ts/.scss: the placeholder texts and hasVotes are removed; questions and bars are always rendered (0% without votes), so the bar elements already exist when the first vote arrives and the width transition also runs for the first answer.
 - results.spec.ts: tests for empty bars without votes and for keeping the same bar elements when the first vote arrives.
+
+2026-11-03 | Feedback-3 checklist
+- docs/checklists/Feedback-3-Checkliste.md: added checklist from the third mentor review (responsive/overflow, dialog scrolling, validation feedback, code structure, documentation, final test).
