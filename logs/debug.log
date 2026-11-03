@@ -306,3 +306,16 @@
 - survey-answer.scss: checkbox 16px, radios also square (design), text gap 18px.
 - results.scss: desktop title 32px, question titles 18px, letters/percent 14px, column max-width 320px.
 - create-survey.scss: "Add next question" sits beside question 1 on desktop (wraps below the left column with two questions), textarea min-height 108px, end date label does not wrap.
+
+2026-11-02 | New survey validation (checklist 4/5)
+- create-survey.html: category is marked as required (asterisk in the placeholder, invalid outline and message "Please choose a category." after touch); end date input is no longer required/aria-required and is only highlighted for a past date.
+- create-survey.ts: error message is now "Please fill in all fields." (only shown when a required field is missing).
+- create-survey.scss: category asterisk/invalid styles; description textarea gets the same rounded corner (0 28px 0 0) as the other inputs.
+- create-survey.spec.ts: tests for publishing without end date/description and for the missing category.
+
+2026-11-02 | Questions wrap below 1070px
+- survey-display.scss: the two question columns in the survey card now only apply from 1071px; at 1070px and below (desktop layout from 769px) the questions are stacked in one column so the answers stay readable.
+
+2026-11-03 | Results always visible (checklist 2)
+- results.html/.ts/.scss: the placeholder texts and hasVotes are removed; questions and bars are always rendered (0% without votes), so the bar elements already exist when the first vote arrives and the width transition also runs for the first answer.
+- results.spec.ts: tests for empty bars without votes and for keeping the same bar elements when the first vote arrives.

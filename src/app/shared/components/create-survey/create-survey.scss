@@ -256,6 +256,10 @@
     font-weight: 700;
   }
 
+  &__category {
+    position: relative;
+  }
+
   &__legend {
     margin: 0 0 16px;
     font-size: 16px;
@@ -292,7 +296,7 @@
 
     &--textarea {
       min-height: 120px;
-      border-radius: 0;
+      border-radius: 0 28px 0 0;
       resize: vertical;
     }
   }
@@ -555,7 +559,6 @@
       align-items: start;
     }
 
-    // design: sits beside the first question, with two questions it wraps below the left one
     &__add-question {
       grid-column: auto;
       justify-self: start;

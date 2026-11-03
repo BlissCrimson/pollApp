@@ -1,5 +1,6 @@
 <div class="overlay" (click)="close()">
-  <section class="survey__card" role="dialog" aria-modal="true" aria-labelledby="survey-title" [attr.inert]="publishedSurveyId() !== null ? '' : null" (click)="$event.stopPropagation()">
+  <section class="survey__card" role="dialog" aria-modal="true" aria-labelledby="survey-title"
+    [attr.inert]="publishedSurveyId() !== null ? '' : null" (click)="$event.stopPropagation()">
     <div class="survey__head">
       <img class="survey__status" src="assets/status/status__draft.svg" alt="Draft">
       <h1 class="survey__title" id="survey-title">Create new survey</h1>
@@ -19,37 +20,44 @@
               <label class="survey__label" for="name">
                 Survey name <span class="survey__required" aria-hidden="true">*</span>
               </label>
-              <input class="survey__input" id="name" type="text" formControlName="title" required aria-required="true" [attr.maxlength]="maxTitleLength" [class.survey__input--invalid]="showError(survey.controls.title)">
-              <button class="survey__trash" type="button" aria-label="Delete survey name" (click)="survey.controls.title.reset()"></button>
+              <input class="survey__input" id="name" type="text" formControlName="title" required aria-required="true"
+                [attr.maxlength]="maxTitleLength" [class.survey__input--invalid]="showError(survey.controls.title)">
+              <button class="survey__trash" type="button" aria-label="Delete survey name"
+                (click)="survey.controls.title.reset()"></button>
               @if (showError(survey.controls.title)) {
-                @if (survey.controls.title.hasError('maxlength')) {
-                  <p class="survey__field-error">Maximum {{ maxTitleLength }} characters.</p>
-                } @else {
-                  <p class="survey__field-error">Please enter a survey name.</p>
-                }
+              @if (survey.controls.title.hasError('maxlength')) {
+              <p class="survey__field-error">Maximum {{ maxTitleLength }} characters.</p>
+              } @else {
+              <p class="survey__field-error">Please enter a survey name.</p>
+              }
               }
             </div>
 
             <div class="survey__meta">
               <div class="survey__category">
-                <select class="survey__select" id="category" aria-label="Choose category" required aria-required="true" formControlName="category">
-                  <option value="" disabled hidden>Choose category</option>
+                <select class="survey__select" id="category"
+                  [class.survey__select--invalid]="showError(survey.controls.category)" aria-label="Choose category (required)" required
+                  aria-required="true" formControlName="category">
+                  <option value="" disabled hidden>Choose category *</option>
                   @for (category of categories; track category.value) {
-                    <option [value]="category.value">{{ category.label }}</option>
+                  <option [value]="category.value">{{ category.label }}</option>
                   }
                 </select>
+                @if (showError(survey.controls.category)) {
+                <p class="survey__field-error">Please choose a category.</p>
+                }
               </div>
 
               <div class="survey__field survey__field--date">
                 <label class="survey__label" for="endDate">
-                  Set end date <span class="survey__required" aria-hidden="true">*</span>
+                  Set end date
                 </label>
-                <input class="survey__input" id="endDate" type="date" formControlName="endDate" required aria-required="true" [min]="minDate" [class.survey__input--invalid]="showError(survey.controls.endDate) || survey.controls.endDate.hasError('pastDate')">
-                <button class="survey__trash" type="button" aria-label="Delete end date" (click)="survey.controls.endDate.reset()"></button>
+                <input class="survey__input" id="endDate" type="date" formControlName="endDate" [min]="minDate"
+                  [class.survey__input--invalid]="survey.controls.endDate.hasError('pastDate')">
+                <button class="survey__trash" type="button" aria-label="Delete end date"
+                  (click)="survey.controls.endDate.reset()"></button>
                 @if (survey.controls.endDate.hasError('pastDate')) {
-                  <p class="survey__field-error">The end date must not be in the past.</p>
-                } @else if (showError(survey.controls.endDate)) {
-                  <p class="survey__field-error">Please choose an end date.</p>
+                <p class="survey__field-error">The end date must not be in the past.</p>
                 }
               </div>
             </div>
@@ -59,60 +67,69 @@
             <label class="survey__label" for="description">
               Describing text <span class="survey__optional">(optional)</span>
             </label>
-            <textarea class="survey__input survey__input--textarea" id="description" formControlName="description"></textarea>
-            <button class="survey__trash" type="button" aria-label="Delete description" (click)="survey.controls.description.reset()"></button>
+            <textarea class="survey__input survey__input--textarea" id="description"
+              formControlName="description"></textarea>
+            <button class="survey__trash" type="button" aria-label="Delete description"
+              (click)="survey.controls.description.reset()"></button>
           </div>
         </div>
 
         <div class="survey__questions" formArrayName="questions">
           @for (question of questions.controls; track question; let qi = $index) {
-            <div class="survey__question" [formGroupName]="qi">
-              <div class="survey__field survey__field--question">
-                <label class="survey__label" [for]="'question' + qi">
-                  {{ qi + 1 }}. Question <span class="survey__required" aria-hidden="true">*</span>
-                </label>
-                <input class="survey__input" [id]="'question' + qi" type="text" formControlName="question" required aria-required="true" [attr.maxlength]="maxQuestionLength" placeholder="Which date would work best for you?" [class.survey__input--invalid]="showError(question.controls.question)">
-                <button class="survey__trash" type="button" aria-label="Delete question" (click)="removeQuestion(qi)"></button>
-                @if (showError(question.controls.question)) {
-                  @if (question.controls.question.hasError('maxlength')) {
-                    <p class="survey__field-error">Maximum {{ maxQuestionLength }} characters.</p>
-                  } @else {
-                    <p class="survey__field-error">Please enter a question.</p>
-                  }
-                }
-              </div>
-
-              <div class="survey__answers-head">
-                <h2 class="survey__label survey__label--answers">
-                  Answers <span class="survey__required" aria-hidden="true">*</span>
-                </h2>
-                <label class="survey__multiple">
-                  <input type="checkbox" formControlName="allowMultiple">
-                  Allow multiple answers.
-                </label>
-              </div>
-
-              <div formArrayName="answers" class="survey__answer-list">
-                @for (answer of answers(qi).controls; track answer; let ai = $index) {
-                  <div class="survey__answer">
-                    <label class="survey__label survey__label--answer" [for]="'answer' + qi + ai">{{ letter(ai) }}.</label>
-                    <input class="survey__input" [id]="'answer' + qi + ai" type="text" [formControlName]="ai" required aria-required="true" [attr.maxlength]="maxAnswerLength" [class.survey__input--invalid]="showError(answer)">
-                    <button class="survey__trash" type="button" [attr.aria-label]="'Delete answer ' + letter(ai)" (click)="removeAnswer(qi, ai)"></button>
-                    @if (showError(answer)) {
-                      @if (answer.hasError('maxlength')) {
-                        <p class="survey__field-error">Maximum {{ maxAnswerLength }} characters.</p>
-                      } @else {
-                        <p class="survey__field-error">Please enter an answer.</p>
-                      }
-                    }
-                  </div>
-                }
-              </div>
-
-              <button class="survey__add-answer" type="button" (click)="addAnswer(qi)">
-                <img src="assets/buttons/button__add-answer.svg" alt="Add answer">
-              </button>
+          <div class="survey__question" [formGroupName]="qi">
+            <div class="survey__field survey__field--question">
+              <label class="survey__label" [for]="'question' + qi">
+                {{ qi + 1 }}. Question <span class="survey__required" aria-hidden="true">*</span>
+              </label>
+              <input class="survey__input" [id]="'question' + qi" type="text" formControlName="question" required
+                aria-required="true" [attr.maxlength]="maxQuestionLength"
+                placeholder="Which date would work best for you?"
+                [class.survey__input--invalid]="showError(question.controls.question)">
+              <button class="survey__trash" type="button" aria-label="Delete question"
+                (click)="removeQuestion(qi)"></button>
+              @if (showError(question.controls.question)) {
+              @if (question.controls.question.hasError('maxlength')) {
+              <p class="survey__field-error">Maximum {{ maxQuestionLength }} characters.</p>
+              } @else {
+              <p class="survey__field-error">Please enter a question.</p>
+              }
+              }
             </div>
+
+            <div class="survey__answers-head">
+              <h2 class="survey__label survey__label--answers">
+                Answers <span class="survey__required" aria-hidden="true">*</span>
+              </h2>
+              <label class="survey__multiple">
+                <input type="checkbox" formControlName="allowMultiple">
+                Allow multiple answers.
+              </label>
+            </div>
+
+            <div formArrayName="answers" class="survey__answer-list">
+              @for (answer of answers(qi).controls; track answer; let ai = $index) {
+              <div class="survey__answer">
+                <label class="survey__label survey__label--answer" [for]="'answer' + qi + ai">{{ letter(ai) }}.</label>
+                <input class="survey__input" [id]="'answer' + qi + ai" type="text" [formControlName]="ai" required
+                  aria-required="true" [attr.maxlength]="maxAnswerLength"
+                  [class.survey__input--invalid]="showError(answer)">
+                <button class="survey__trash" type="button" [attr.aria-label]="'Delete answer ' + letter(ai)"
+                  (click)="removeAnswer(qi, ai)"></button>
+                @if (showError(answer)) {
+                @if (answer.hasError('maxlength')) {
+                <p class="survey__field-error">Maximum {{ maxAnswerLength }} characters.</p>
+                } @else {
+                <p class="survey__field-error">Please enter an answer.</p>
+                }
+                }
+              </div>
+              }
+            </div>
+
+            <button class="survey__add-answer" type="button" (click)="addAnswer(qi)">
+              <img src="assets/buttons/button__add-answer.svg" alt="Add answer">
+            </button>
+          </div>
           }
 
           <button class="survey__add-question" type="button" (click)="addQuestion()">
@@ -132,12 +149,13 @@
   </section>
 
   @if (publishedSurveyId() !== null) {
-    <div class="overlay__scrim"></div>
-    <div class="toast" role="status" (click)="$event.stopPropagation()">
-      <p class="toast__text">Your survey is now published</p>
-      <button class="toast__close" type="button" aria-label="Close and open the new survey" (click)="openPublishedSurvey()">
-        <span class="toast__close-icon" aria-hidden="true"></span>
-      </button>
-    </div>
+  <div class="overlay__scrim"></div>
+  <div class="toast" role="status" (click)="$event.stopPropagation()">
+    <p class="toast__text">Your survey is now published</p>
+    <button class="toast__close" type="button" aria-label="Close and open the new survey"
+      (click)="openPublishedSurvey()">
+      <span class="toast__close-icon" aria-hidden="true"></span>
+    </button>
+  </div>
   }
 </div>

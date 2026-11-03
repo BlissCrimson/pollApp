@@ -40,6 +40,34 @@ describe('CreateSurvey', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should publish without end date and description', async () => {
+    const createSurvey = vi.fn(async () => CREATED_SURVEY_ID);
+    TestBed.inject(SupabaseService).createSurvey = createSurvey;
+    component.survey.patchValue({
+      title: 'Team event',
+      category: 'work',
+      questions: [{ question: 'Which date?', answers: ['Friday', 'Saturday'] }],
+    });
+    await component.publish();
+    expect(createSurvey).toHaveBeenCalledWith(
+      expect.objectContaining({ endDate: null, description: null }),
+    );
+  });
+
+  it('should not publish without category and show the error', async () => {
+    const createSurvey = vi.fn(async () => CREATED_SURVEY_ID);
+    TestBed.inject(SupabaseService).createSurvey = createSurvey;
+    component.survey.patchValue({
+      title: 'Team event',
+      questions: [{ question: 'Which date?', answers: ['Friday', 'Saturday'] }],
+    });
+    await component.publish();
+    fixture.detectChanges();
+    expect(createSurvey).not.toHaveBeenCalled();
+    expect(component.errorMessage).toBe('Please fill in all fields.');
+    expect(fixture.nativeElement.querySelector('.survey__category .survey__field-error')).toBeTruthy();
+  });
+
   it('should show the confirmation overlay and keep the dialog open after publishing', async () => {
     const closed = vi.fn();
     component.closed.subscribe(closed);

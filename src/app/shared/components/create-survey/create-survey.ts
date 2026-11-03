@@ -39,7 +39,7 @@ function notBlank(control: AbstractControl): ValidationErrors | null {
   return typeof value === 'string' && value.length > 0 && !value.trim() ? { blank: true } : null;
 }
 
-type AnswerControl =FormControl<string>;
+type AnswerControl = FormControl<string>;
 type QuestionForm = FormGroup<{
   question: FormControl<string>;
   allowMultiple: FormControl<boolean | null>;
@@ -79,7 +79,7 @@ export class CreateSurvey {
       validators: [Validators.required, notBlank, Validators.maxLength(MAX_TITLE_LENGTH)],
     }),
     category: new FormControl('', { validators: [Validators.required] }),
-    endDate: new FormControl('', { validators: [notInPast, Validators.required] }),
+    endDate: new FormControl('', { validators: [notInPast] }),
     description: new FormControl(''),
     questions: new FormArray([this.createQuestion()]),
   });
@@ -205,7 +205,7 @@ export class CreateSurvey {
   /** Marks all fields as touched so their errors become visible */
   private showInvalidForm(): void {
     this.survey.markAllAsTouched();
-    this.errorMessage = 'Please fill in all fields marked with *.';
+    this.errorMessage = 'Please fill in all fields.';
   }
 
   /** Saves the survey and shows the confirmation overlay; shows an error message if that fails */

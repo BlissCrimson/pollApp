@@ -223,11 +223,6 @@ main {
       background-color: var(--color-primary-light);
     }
 
-    &__questions {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 24px 48px;
-      align-items: start;
-    }
   }
 
   .results-toggle {
@@ -238,5 +233,14 @@ main {
     flex: 1;
     min-width: 0;
     padding-top: 60px;
+  }
+}
+
+// two question columns only when there is enough room for the answers
+@media (min-width: 1071px) {
+  .survey__questions {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 24px 48px;
+    align-items: start;
   }
 }
