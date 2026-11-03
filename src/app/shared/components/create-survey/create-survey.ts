@@ -6,45 +6,15 @@ import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
-  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { SupabaseService } from '../../../supabase-service';
 import { SurveyInput } from '../../interfaces/survey';
 import { SURVEY_CATEGORIES } from '../../constants/categories';
-
-const FIRST_LETTER_CODE = 65;
-const MIN_QUESTIONS = 1;
-const MIN_ANSWERS = 2;
-const MAX_TITLE_LENGTH = 80;
-const MAX_QUESTION_LENGTH = 150;
-const MAX_ANSWER_LENGTH = 80;
-
-/** Returns today's date as YYYY-MM-DD in local time */
-function todayString(): string {
-  const now = new Date();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  return `${now.getFullYear()}-${month}-${day}`;
-}
-
-/** Fails if the selected date lies in the past (ISO dates compare as strings) */
-function notInPast(control: AbstractControl): ValidationErrors | null {
-  return control.value && control.value < todayString() ? { pastDate: true } : null;
-}
-
-/** Fails if a non-empty value consists only of whitespace */
-function notBlank(control: AbstractControl): ValidationErrors | null {
-  const value = control.value;
-  return typeof value === 'string' && value.length > 0 && !value.trim() ? { blank: true } : null;
-}
-
-type AnswerControl = FormControl<string>;
-type QuestionForm = FormGroup<{
-  question: FormControl<string>;
-  allowMultiple: FormControl<boolean | null>;
-  answers: FormArray<AnswerControl>;
-}>;
+import { Variables } from '../../services/variables';
+import { todayString } from '../../utils/date';
+import { notBlank, notInPast } from '../../utils/survey-validators';
+import { AnswerControl, QuestionForm } from '../../interfaces/survey-forms';
 
 /** Overlay dialog with the form to create a new survey */
 @Component({
@@ -66,9 +36,9 @@ export class CreateSurvey {
   publishedSurveyId = signal<number | null>(null);
 
   categories = SURVEY_CATEGORIES;
-  maxTitleLength = MAX_TITLE_LENGTH;
-  maxQuestionLength = MAX_QUESTION_LENGTH;
-  maxAnswerLength = MAX_ANSWER_LENGTH;
+  maxTitleLength = Variables.MAX_TITLE_LENGTH;
+  maxQuestionLength = Variables.MAX_QUESTION_LENGTH;
+  maxAnswerLength = Variables.MAX_ANSWER_LENGTH;
   minDate = todayString();
   isSaving = false;
   errorMessage = '';
@@ -76,7 +46,7 @@ export class CreateSurvey {
   survey = new FormGroup({
     title: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, notBlank, Validators.maxLength(MAX_TITLE_LENGTH)],
+      validators: [Validators.required, notBlank, Validators.maxLength(Variables.MAX_TITLE_LENGTH)],
     }),
     category: new FormControl('', { validators: [Validators.required] }),
     endDate: new FormControl('', { validators: [notInPast] }),
@@ -89,10 +59,16 @@ export class CreateSurvey {
     return new FormGroup({
       question: new FormControl('', {
         nonNullable: true,
-        validators: [Validators.required, notBlank, Validators.maxLength(MAX_QUESTION_LENGTH)],
+        validators: [
+          Validators.required,
+          notBlank,
+          Validators.maxLength(Variables.MAX_QUESTION_LENGTH),
+        ],
       }),
       allowMultiple: new FormControl(false),
-      answers: new FormArray(Array.from({ length: MIN_ANSWERS }, () => this.createAnswer())),
+      answers: new FormArray(
+        Array.from({ length: Variables.MIN_ANSWERS }, () => this.createAnswer()),
+      ),
     });
   }
 
@@ -100,7 +76,11 @@ export class CreateSurvey {
   private createAnswer(): AnswerControl {
     return new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, notBlank, Validators.maxLength(MAX_ANSWER_LENGTH)],
+      validators: [
+        Validators.required,
+        notBlank,
+        Validators.maxLength(Variables.MAX_ANSWER_LENGTH),
+      ],
     });
   }
 
@@ -130,7 +110,7 @@ export class CreateSurvey {
     if (question.value) {
       question.reset();
       question.markAsUntouched();
-    } else if (this.questions.length > MIN_QUESTIONS) {
+    } else if (this.questions.length > Variables.MIN_QUESTIONS) {
       this.questions.removeAt(questionIndex);
     }
   }
@@ -142,7 +122,7 @@ export class CreateSurvey {
     if (answer.value) {
       answer.reset();
       answer.markAsUntouched();
-    } else if (answers.length > MIN_ANSWERS) {
+    } else if (answers.length > Variables.MIN_ANSWERS) {
       answers.removeAt(answerIndex);
     }
   }
@@ -169,7 +149,7 @@ export class CreateSurvey {
 
   /** Returns the answer letter: A, B, C, ... */
   letter(index: number): string {
-    return String.fromCharCode(FIRST_LETTER_CODE + index);
+    return String.fromCharCode(Variables.FIRST_LETTER_CODE + index);
   }
 
   /** Maps the form value to the survey data that is saved */
