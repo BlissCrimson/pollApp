@@ -2,8 +2,7 @@ import { Component, computed, inject, input } from '@angular/core';
 import { getCategoryLabel } from '../../constants/categories';
 import { SurveyOutput } from '../../interfaces/survey';
 import { Router } from '@angular/router';
-
-const MS_PER_DAY = 24 * 60 * 60 * 1000;
+import { MS_PER_DAY } from '../../services/variables';
 
 /** Card for one survey; opens the detail page on click */
 @Component({

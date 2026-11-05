@@ -322,3 +322,15 @@
 
 2026-11-03 | Feedback-3 checklist
 - docs/checklists/Feedback-3-Checkliste.md: added checklist from the third mentor review (responsive/overflow, dialog scrolling, validation feedback, code structure, documentation, final test).
+
+2026-11-03 | Feedback-3 checklist check against the code
+- docs/checklists/Feedback-3-Checkliste.md: compared with the code; ticked validation feedback and documentation, un-ticked service/UPPERCASE constants/component logic (still open), added notes for open items (body overflow-x hidden, missing scroll lock for the dialog).
+
+2026-11-05 | Central constants file (Feedback-3, section 4)
+- services/variables.ts: removed the unused @Service class; now plain `export const` values (FIRST_LETTER_CODE, MIN/MAX limits) plus REFRESH_DEBOUNCE_MS, MS_PER_DAY, ISO_DATE_LENGTH, ENDING_SOON_LIMIT.
+- create-survey.ts, results.ts, survey-card.ts, survey-display.ts, supabase-service.ts: local UPPERCASE constants removed (incl. duplicate FIRST_LETTER_CODE), imported from variables.ts.
+- variables.spec.ts: deleted (it only tested injecting the removed service).
+- Feedback-3-Checkliste.md: service, UPPERCASE constants and component logic items checked off.
+
+2026-11-05 | Restore survey-service.ts
+- shared/services/survey-service.ts: restored from 7081166^ (it was deleted in 7081166 but is still used by survey-display and survey-list); fixes the 13 build errors (missing module, unknown/implicit any).

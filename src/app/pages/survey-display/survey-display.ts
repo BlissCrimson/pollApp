@@ -11,8 +11,7 @@ import {
   SurveyDetail,
 } from '../../shared/interfaces/survey';
 import { SurveyService } from '../../shared/services/survey-service';
-
-const REFRESH_DEBOUNCE_MS = 300;
+import { REFRESH_DEBOUNCE_MS } from '../../shared/services/variables';
 
 /** Survey detail page: voting on the left, live results on the right */
 @Component({

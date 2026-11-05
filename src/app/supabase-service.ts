@@ -8,9 +8,7 @@ import {
   SurveyOutput,
   VoteRow,
 } from './shared/interfaces/survey';
-
-const ISO_DATE_LENGTH = 10;
-const ENDING_SOON_LIMIT = 3;
+import { ENDING_SOON_LIMIT, ISO_DATE_LENGTH } from './shared/services/variables';
 
 /** Today's date as ISO string (yyyy-mm-dd), used to compare with survey end dates */
 export function todayIsoDate(): string {

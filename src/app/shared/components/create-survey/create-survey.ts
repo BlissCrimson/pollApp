@@ -11,7 +11,14 @@ import {
 import { SupabaseService } from '../../../supabase-service';
 import { SurveyInput } from '../../interfaces/survey';
 import { SURVEY_CATEGORIES } from '../../constants/categories';
-import { Variables } from '../../services/variables';
+import {
+  FIRST_LETTER_CODE,
+  MAX_ANSWER_LENGTH,
+  MAX_QUESTION_LENGTH,
+  MAX_TITLE_LENGTH,
+  MIN_ANSWERS,
+  MIN_QUESTIONS,
+} from '../../services/variables';
 import { todayString } from '../../utils/date';
 import { notBlank, notInPast } from '../../utils/survey-validators';
 import { AnswerControl, QuestionForm } from '../../interfaces/survey-forms';
@@ -36,9 +43,9 @@ export class CreateSurvey {
   publishedSurveyId = signal<number | null>(null);
 
   categories = SURVEY_CATEGORIES;
-  maxTitleLength = Variables.MAX_TITLE_LENGTH;
-  maxQuestionLength = Variables.MAX_QUESTION_LENGTH;
-  maxAnswerLength = Variables.MAX_ANSWER_LENGTH;
+  maxTitleLength = MAX_TITLE_LENGTH;
+  maxQuestionLength = MAX_QUESTION_LENGTH;
+  maxAnswerLength = MAX_ANSWER_LENGTH;
   minDate = todayString();
   isSaving = false;
   errorMessage = '';
@@ -46,7 +53,7 @@ export class CreateSurvey {
   survey = new FormGroup({
     title: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, notBlank, Validators.maxLength(Variables.MAX_TITLE_LENGTH)],
+      validators: [Validators.required, notBlank, Validators.maxLength(MAX_TITLE_LENGTH)],
     }),
     category: new FormControl('', { validators: [Validators.required] }),
     endDate: new FormControl('', { validators: [notInPast] }),
@@ -62,12 +69,12 @@ export class CreateSurvey {
         validators: [
           Validators.required,
           notBlank,
-          Validators.maxLength(Variables.MAX_QUESTION_LENGTH),
+          Validators.maxLength(MAX_QUESTION_LENGTH),
         ],
       }),
       allowMultiple: new FormControl(false),
       answers: new FormArray(
-        Array.from({ length: Variables.MIN_ANSWERS }, () => this.createAnswer()),
+        Array.from({ length: MIN_ANSWERS }, () => this.createAnswer()),
       ),
     });
   }
@@ -79,7 +86,7 @@ export class CreateSurvey {
       validators: [
         Validators.required,
         notBlank,
-        Validators.maxLength(Variables.MAX_ANSWER_LENGTH),
+        Validators.maxLength(MAX_ANSWER_LENGTH),
       ],
     });
   }
@@ -110,7 +117,7 @@ export class CreateSurvey {
     if (question.value) {
       question.reset();
       question.markAsUntouched();
-    } else if (this.questions.length > Variables.MIN_QUESTIONS) {
+    } else if (this.questions.length > MIN_QUESTIONS) {
       this.questions.removeAt(questionIndex);
     }
   }
@@ -122,7 +129,7 @@ export class CreateSurvey {
     if (answer.value) {
       answer.reset();
       answer.markAsUntouched();
-    } else if (answers.length > Variables.MIN_ANSWERS) {
+    } else if (answers.length > MIN_ANSWERS) {
       answers.removeAt(answerIndex);
     }
   }
@@ -149,7 +156,7 @@ export class CreateSurvey {
 
   /** Returns the answer letter: A, B, C, ... */
   letter(index: number): string {
-    return String.fromCharCode(Variables.FIRST_LETTER_CODE + index);
+    return String.fromCharCode(FIRST_LETTER_CODE + index);
   }
 
   /** Maps the form value to the survey data that is saved */

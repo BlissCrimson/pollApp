@@ -1,7 +1,6 @@
 import { Component, computed, input } from '@angular/core';
 import { AnswerResult, SurveyDetail } from '../../interfaces/survey';
-
-const FIRST_LETTER_CODE = 65;
+import { FIRST_LETTER_CODE } from '../../services/variables';
 
 /** Live results of a survey as bars per answer */
 @Component({
