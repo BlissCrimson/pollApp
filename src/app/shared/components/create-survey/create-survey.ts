@@ -18,7 +18,7 @@ import {
   MAX_TITLE_LENGTH,
   MIN_ANSWERS,
   MIN_QUESTIONS,
-} from '../../services/variables';
+} from '../../constants/variables';
 import { todayString } from '../../utils/date';
 import { notBlank, notInPast } from '../../utils/survey-validators';
 import { AnswerControl, QuestionForm } from '../../interfaces/survey-forms';

@@ -334,3 +334,26 @@
 
 2026-11-05 | Restore survey-service.ts
 - shared/services/survey-service.ts: restored from 7081166^ (it was deleted in 7081166 but is still used by survey-display and survey-list); fixes the 13 build errors (missing module, unknown/implicit any).
+
+2026-11-05 | Feedback-3 checklist: error message visibility
+- Checked the create-survey error message ("Please fill in all fields.") with Playwright (Supabase mocked) at 320/375/768/1440px with the dialog open, empty and partially filled form: visible, not covered, no horizontal overflow. No code change; checklist item section 3 checked off.
+
+2026-11-05 | Feedback-3 checklist: responsive/layout check
+- Checked Home, create dialog and survey-display with Playwright (Supabase mocked, long texts) at 280-1440px, also shrinking without reload. No code change.
+- Finding: body { min-width: 320px } makes body wider than html (scrollbar gutter) below ~335px; body overflow-x: hidden hides it. Without min-width there is no overflow at 280-1440px. Fix still open.
+- Feedback-3-Checkliste.md: items on wrapping, collisions and viewport widths checked off; notes added for the two open overflow items.
+
+2026-11-05 | Scroll lock for the create dialog, no global overflow hidden
+- styles.scss: removed body { min-width: 320px; overflow-x: hidden } (min-width made body wider than html below ~335px, overflow-x hid it).
+- styles.scss: body:has(app-create-survey) { overflow: hidden } and html:has(app-create-survey) { scrollbar-gutter: auto } lock page scrolling only while the dialog is open and remove the scrollbar track.
+- Checked with Playwright at 280-1440px: no overflow, page does not scroll behind the dialog, scrollbar gutter returns after closing. (overscroll-behavior on .overlay was tried but exceeded the 8 kB component style budget and is not needed.)
+- Feedback-3-Checkliste.md: section 1 (overflow hidden, 320px) and section 2 checked off.
+
+2026-11-07 | Feedback-4 checklist created
+- docs/checklists/Feedback-4-Checkliste.md: new checklist from the fourth mentor review (category area cut off on narrow widths, merge variables/constants folders, TSDoc with @param/@returns). All items open.
+
+2026-11-07 | Feedback-4: merge variables and categories into shared/constants
+- Moved shared/services/variables.ts to shared/constants/variables.ts (git mv, content unchanged).
+- Updated imports in supabase-service.ts, survey-display.ts, survey-card.ts, results.ts, create-survey.ts.
+- ng build passes; no remaining references to services/variables.
+- Feedback-4-Checkliste.md: section 2 checked off.

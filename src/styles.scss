@@ -40,13 +40,20 @@ html {
   scrollbar-gutter: stable;
 }
 
+// lock page scrolling while the create dialog is open (the overlay scrolls itself)
+html:has(app-create-survey) {
+  scrollbar-gutter: auto;
+}
+
 body {
   margin: 0;
-  min-width: 320px;
-  overflow-x: hidden;
   font-family: 'Mulish', sans-serif;
   background-color: var(--color-background);
   color: var(--color-text);
+}
+
+body:has(app-create-survey) {
+  overflow: hidden;
 }
 
 body:has(app-survey-display) {
