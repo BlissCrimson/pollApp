@@ -17,7 +17,12 @@ export class Results {
     () => new Map(this.results().map((result) => [result.answerId, result.percent])),
   );
 
-  /** Returns the answer letter: A, B, C, ... */
+  /**
+   * Returns the answer letter: A, B, C, ...
+   *
+   * @param index - Zero-based index of the answer.
+   * @returns The letter for the answer.
+   */
   getLetter(index: number): string {
     return String.fromCharCode(FIRST_LETTER_CODE + index);
   }

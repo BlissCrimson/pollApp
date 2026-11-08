@@ -357,3 +357,9 @@
 - Updated imports in supabase-service.ts, survey-display.ts, survey-card.ts, results.ts, create-survey.ts.
 - ng build passes; no remaining references to services/variables.
 - Feedback-4-Checkliste.md: section 2 checked off.
+
+2026-11-08 | Feedback-4: TSDoc @param/@returns in src/app
+- Added multi-line TSDoc blocks with @param (description) and @returns to all functions, methods and getters in supabase-service.ts, survey-service.ts, date.ts, survey-validators.ts, categories.ts, create-survey.ts, survey-list.ts, results.ts.
+- home.ts: replaced "@returns {void}" on void methods with plain descriptions; survey-display.ts was already complete.
+- Comments only, no logic changes.
+- Feedback-4-Checkliste.md: sections 3 and 4 checked off (only resubmission to mentor remains open).

@@ -36,12 +36,20 @@ export class SurveyList implements OnInit {
     });
   });
 
-  /** Sets the category filter from the select element */
+  /**
+   * Sets the category filter from the select element.
+   *
+   * @param event - The change event of the category select.
+   */
   setCategory(event: Event): void {
     this.selectedCategory.set((event.target as HTMLSelectElement).value);
   }
 
-  /** Switches between active and past surveys; clicking the selected chip again shows all */
+  /**
+   * Switches between active and past surveys; clicking the selected chip again shows all.
+   *
+   * @param filter - The status filter that was clicked.
+   */
   setFilter(filter: 'active' | 'past'): void {
     this.activeFilter.update((current) => (current === filter ? 'all' : filter));
   }

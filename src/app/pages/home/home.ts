@@ -18,34 +18,22 @@ export class Home implements OnInit {
   private endingSurveys = viewChild.required(EndingSurveys);
   private surveyList = viewChild.required(SurveyList);
 
-  /** Opens the dialog when the header button links here with ?create=1
-   *
-   *  @returns {void}
-   */
+  /** Opens the dialog when the header button links here with ?create=1. */
   ngOnInit(): void {
     if (this.route.snapshot.queryParamMap.has('create')) this.openCreateSurvey();
   }
 
-  /** Opens the create survey dialog (overlay, no route)
-   *
-   * @returns {void}
-   */
+  /** Opens the create survey dialog (overlay, no route). */
   openCreateSurvey(): void {
     this.isCreateOpen.set(true);
   }
 
-  /** Closes the create survey dialog
-   *
-   * @returns {void}
-   */
+  /** Closes the create survey dialog. */
   closeCreateSurvey(): void {
     this.isCreateOpen.set(false);
   }
 
-  /** Reloads both lists so the new survey shows up
-   *
-   *  @returns {void}
-   */
+  /** Reloads both lists so the new survey shows up. */
   reloadSurveys(): void {
     this.endingSurveys().loadSurveys();
     this.surveyList().loadSurveys();

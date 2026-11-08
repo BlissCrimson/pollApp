@@ -1,4 +1,8 @@
-/** Returns today's date as YYYY-MM-DD in local time */
+/**
+ * Returns today's date as YYYY-MM-DD in local time.
+ *
+ * @returns Today's local date as `YYYY-MM-DD`.
+ */
 export function todayString(): string {
   const now = new Date();
   const month = String(now.getMonth() + 1).padStart(2, '0');

@@ -10,7 +10,11 @@ import {
 } from './shared/interfaces/survey';
 import { ENDING_SOON_LIMIT, ISO_DATE_LENGTH } from './shared/constants/variables';
 
-/** Today's date as ISO string (yyyy-mm-dd), used to compare with survey end dates */
+/**
+ * Today's date as ISO string (yyyy-mm-dd), used to compare with survey end dates.
+ *
+ * @returns Today's date in UTC as `yyyy-mm-dd`.
+ */
 export function todayIsoDate(): string {
   return new Date().toISOString().slice(0, ISO_DATE_LENGTH);
 }
@@ -20,7 +24,11 @@ export function todayIsoDate(): string {
 export class SupabaseService {
   readonly supabase = createClient(environment.supabaseUrl, environment.supabaseKey);
 
-  /** Loads all surveys, sorted by end date */
+  /**
+   * Loads all surveys, sorted by end date.
+   *
+   * @returns All surveys, earliest end date first.
+   */
   async getSurveys(): Promise<SurveyOutput[]> {
     const { data, error } = await this.supabase
       .from('groups')
@@ -30,7 +38,12 @@ export class SupabaseService {
     return this.mapSurveys(data);
   }
 
-  /** Loads the next surveys that have not ended yet, earliest end date first */
+  /**
+   * Loads the next surveys that have not ended yet, earliest end date first.
+   *
+   * @param limit - Maximum number of surveys to load.
+   * @returns The surveys ending soonest.
+   */
   async getEndingSoonSurveys(limit = ENDING_SOON_LIMIT): Promise<SurveyOutput[]> {
     const today = todayIsoDate();
     const { data, error } = await this.supabase
@@ -43,7 +56,12 @@ export class SupabaseService {
     return this.mapSurveys(data);
   }
 
-  /** Loads a single survey (group) by its id */
+  /**
+   * Loads a single survey (group) by its id.
+   *
+   * @param id - ID of the survey.
+   * @returns The survey with the given id.
+   */
   async getSurveyById(id: number): Promise<SurveyOutput> {
     const { data, error } = await this.supabase
       .from('groups')
@@ -54,7 +72,12 @@ export class SupabaseService {
     return this.mapSurveys([data])[0];
   }
 
-  /** Loads a survey including its questions and answers */
+  /**
+   * Loads a survey including its questions and answers.
+   *
+   * @param id - ID of the survey.
+   * @returns The survey row with nested questions and answers.
+   */
   async getSurveyWithQuestions(id: number): Promise<SurveyDetailRow> {
     const { data, error } = await this.supabase
       .from('groups')
@@ -67,7 +90,12 @@ export class SupabaseService {
     return data as SurveyDetailRow;
   }
 
-  /** Loads all votes of a survey */
+  /**
+   * Loads all votes of a survey.
+   *
+   * @param groupId - ID of the survey.
+   * @returns All vote rows of the survey.
+   */
   async getVotesByGroup(groupId: number): Promise<VoteRow[]> {
     const { data, error } = await this.supabase
       .from('votes')
@@ -77,7 +105,13 @@ export class SupabaseService {
     return data;
   }
 
-  /** Calls onChange for every new vote of a survey; returns a function that stops listening */
+  /**
+   * Calls onChange for every new vote of a survey.
+   *
+   * @param groupId - ID of the survey to watch.
+   * @param onChange - Callback invoked for every inserted vote.
+   * @returns A function that stops listening.
+   */
   subscribeToVotes(groupId: number, onChange: () => void): () => void {
     const channel = this.supabase
       .channel(`votes-${groupId}`)
@@ -92,7 +126,12 @@ export class SupabaseService {
     };
   }
 
-  /** Saves one vote per selected answer for the current user */
+  /**
+   * Saves one vote per selected answer for the current user.
+   *
+   * @param groupId - ID of the survey.
+   * @param answerIds - IDs of the selected answers.
+   */
   async insertVotes(groupId: number, answerIds: number[]): Promise<void> {
     const userId = await this.getUserId();
     const rows = answerIds.map((answerId) => ({
@@ -104,7 +143,12 @@ export class SupabaseService {
     if (error) throw error;
   }
 
-  /** Maps database rows to the survey model */
+  /**
+   * Maps database rows to the survey model.
+   *
+   * @param rows - Rows as returned by the `groups` table.
+   * @returns The rows as survey models.
+   */
   private mapSurveys(
     rows: { id: number; title: string; category: string | null; end_date: string | null }[],
   ): SurveyOutput[] {
@@ -116,7 +160,12 @@ export class SupabaseService {
     }));
   }
 
-  /** Saves survey, questions and answers; removes the survey again if a later step fails */
+  /**
+   * Saves survey, questions and answers; removes the survey again if a later step fails.
+   *
+   * @param survey - The survey to save.
+   * @returns The id of the new survey.
+   */
   async createSurvey(survey: SurveyInput): Promise<number> {
     const surveyId = await this.insertSurvey(survey);
     try {
@@ -129,7 +178,11 @@ export class SupabaseService {
     return surveyId;
   }
 
-  /** Returns the current user id; signs in anonymously if there is no session yet */
+  /**
+   * Returns the current user id; signs in anonymously if there is no session yet.
+   *
+   * @returns The id of the current user.
+   */
   async getUserId(): Promise<string> {
     const { data: sessionData } = await this.supabase.auth.getSession();
     if (sessionData.session) return sessionData.session.user.id;
@@ -138,7 +191,12 @@ export class SupabaseService {
     return data.user.id;
   }
 
-  /** Inserts the survey row and returns its id */
+  /**
+   * Inserts the survey row.
+   *
+   * @param survey - The survey to insert.
+   * @returns The id of the inserted survey.
+   */
   private async insertSurvey(survey: SurveyInput): Promise<number> {
     const userId = await this.getUserId();
     const { data, error } = await this.supabase
@@ -156,7 +214,13 @@ export class SupabaseService {
     return data.id;
   }
 
-  /** Inserts the question rows and returns their ids in input order */
+  /**
+   * Inserts the question rows.
+   *
+   * @param surveyId - ID of the survey the questions belong to.
+   * @param questions - The questions to insert.
+   * @returns The ids of the inserted questions in input order.
+   */
   private async insertQuestions(surveyId: number, questions: QuestionInput[]): Promise<number[]> {
     const rows = questions.map((q) => ({
       groups_id: surveyId,
@@ -168,7 +232,12 @@ export class SupabaseService {
     return data.map((row) => row.id);
   }
 
-  /** Inserts the answer rows of all questions */
+  /**
+   * Inserts the answer rows of all questions.
+   *
+   * @param questionIds - IDs of the inserted questions, in the same order as `questions`.
+   * @param questions - The questions whose answers are inserted.
+   */
   private async insertAnswers(questionIds: number[], questions: QuestionInput[]): Promise<void> {
     const rows = questions.flatMap((q, qi) =>
       q.answers.map((text, position) => ({ questions_id: questionIds[qi], position, text })),

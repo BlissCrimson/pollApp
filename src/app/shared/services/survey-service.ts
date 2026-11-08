@@ -15,7 +15,12 @@ import {
 export class SurveyService {
   private supabaseService = inject(SupabaseService);
 
-  /** Loads a survey and maps it for display; answers are sorted by position */
+  /**
+   * Loads a survey and maps it for display; answers are sorted by position.
+   *
+   * @param groupId - ID of the survey.
+   * @returns The survey with its questions and answers.
+   */
   async loadSurvey(groupId: number): Promise<SurveyDetail> {
     const row = await this.supabaseService.getSurveyWithQuestions(groupId);
     return {
@@ -28,7 +33,12 @@ export class SurveyService {
     };
   }
 
-  /** Maps a question row for display; answers are sorted by position */
+  /**
+   * Maps a question row for display; answers are sorted by position.
+   *
+   * @param question - The question row as loaded from the database.
+   * @returns The question model for display.
+   */
   private mapQuestion(question: SurveyDetailRow['questions'][number]): QuestionDetail {
     return {
       id: question.id,
@@ -38,7 +48,12 @@ export class SurveyService {
     };
   }
 
-  /** Loads the votes and returns the results plus whether the current user already voted */
+  /**
+   * Loads the votes and returns the results plus whether the current user already voted.
+   *
+   * @param survey - The survey to load the votes for.
+   * @returns The results and the voted flag of the current user.
+   */
   async loadVoteState(survey: SurveyDetail): Promise<VoteState> {
     const [votes, userId] = await Promise.all([
       this.supabaseService.getVotesByGroup(survey.id),
@@ -50,12 +65,24 @@ export class SurveyService {
     };
   }
 
-  /** Calls onChange when someone votes; returns a function that stops listening */
+  /**
+   * Calls onChange when someone votes.
+   *
+   * @param survey - The survey to watch.
+   * @param onChange - Callback invoked when a vote arrives.
+   * @returns A function that stops listening.
+   */
   watchVotes(survey: SurveyDetail, onChange: () => void): () => void {
     return this.supabaseService.subscribeToVotes(survey.id, onChange);
   }
 
-  /** Share of votes per answer, relative to all votes of the same question */
+  /**
+   * Share of votes per answer, relative to all votes of the same question.
+   *
+   * @param votes - All votes of the survey.
+   * @param survey - The survey the votes belong to.
+   * @returns Vote count and percentage for every answer.
+   */
   calculateResults(votes: VoteRow[], survey: SurveyDetail): AnswerResult[] {
     return survey.questions.flatMap((question) => {
       const counts = question.answers.map(
@@ -70,13 +97,25 @@ export class SurveyService {
     });
   }
 
-  /** True if the end date lies before today; surveys without end date never expire */
+  /**
+   * Checks whether the end date lies before today; surveys without end date never expire.
+   *
+   * @param endDate - End date as ISO string, or `null` if there is none.
+   * @returns `true` if the survey has ended.
+   */
   isExpired(endDate: string | null): boolean {
     if (!endDate) return false;
     return endDate < todayIsoDate();
   }
 
-  /** Returns new selections: single choice replaces the answer, clicking it again clears it; multiple choice toggles */
+  /**
+   * Returns new selections: single choice replaces the answer, clicking it again clears it; multiple choice toggles.
+   *
+   * @param selections - The current selections, keyed by question ID.
+   * @param question - The question the answer belongs to.
+   * @param answerId - ID of the clicked answer.
+   * @returns The updated selections (the input is not mutated).
+   */
   toggleSelection(selections: Selections, question: QuestionDetail, answerId: number): Selections {
     const current = selections[question.id] ?? [];
     if (!question.allowMultiple) {
@@ -88,12 +127,23 @@ export class SurveyService {
     return { ...selections, [question.id]: next };
   }
 
-  /** True if every question has at least one selected answer */
+  /**
+   * Checks whether every question has at least one selected answer.
+   *
+   * @param survey - The survey to check.
+   * @param selections - The current selections, keyed by question ID.
+   * @returns `true` if all questions are answered.
+   */
   isComplete(survey: SurveyDetail, selections: Selections): boolean {
     return survey.questions.every((question) => (selections[question.id] ?? []).length > 0);
   }
 
-  /** Saves the selected answers as votes; throws if the survey ended or is incomplete */
+  /**
+   * Saves the selected answers as votes; throws if the survey ended or is incomplete.
+   *
+   * @param survey - The survey being voted on.
+   * @param selections - The selected answers, keyed by question ID.
+   */
   async submitVotes(survey: SurveyDetail, selections: Selections): Promise<void> {
     if (this.isExpired(survey.endDate)) throw new Error('This survey has ended.');
     if (!this.isComplete(survey, selections)) throw new Error('Please answer every question.');
@@ -101,7 +151,14 @@ export class SurveyService {
     await this.supabaseService.insertVotes(survey.id, answerIds);
   }
 
-  /** Results as they would look after the current selections are submitted */
+  /**
+   * Results as they would look after the current selections are submitted.
+   *
+   * @param results - The results as currently loaded.
+   * @param survey - The survey the results belong to.
+   * @param selections - The current, not yet submitted selections.
+   * @returns The previewed results including the selections.
+   */
   previewResults(
     results: AnswerResult[],
     survey: SurveyDetail,

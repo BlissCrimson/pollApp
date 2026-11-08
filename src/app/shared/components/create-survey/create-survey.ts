@@ -61,7 +61,11 @@ export class CreateSurvey {
     questions: new FormArray([this.createQuestion()]),
   });
 
-  /** Creates a question group with the minimum number of answers */
+  /**
+   * Creates a question group with the minimum number of answers.
+   *
+   * @returns A new question form group.
+   */
   private createQuestion(): QuestionForm {
     return new FormGroup({
       question: new FormControl('', {
@@ -73,7 +77,11 @@ export class CreateSurvey {
     });
   }
 
-  /** Creates a required answer control with a maximum length */
+  /**
+   * Creates a required answer control with a maximum length.
+   *
+   * @returns A new answer form control.
+   */
   private createAnswer(): AnswerControl {
     return new FormControl('', {
       nonNullable: true,
@@ -81,12 +89,21 @@ export class CreateSurvey {
     });
   }
 
-  /** All question groups of the form */
+  /**
+   * All question groups of the form.
+   *
+   * @returns The form array of question groups.
+   */
   get questions(): FormArray<QuestionForm> {
     return this.survey.controls.questions;
   }
 
-  /** The answer controls of one question */
+  /**
+   * The answer controls of one question.
+   *
+   * @param questionIndex - Index of the question.
+   * @returns The form array of answer controls.
+   */
   answers(questionIndex: number): FormArray<AnswerControl> {
     return this.questions.at(questionIndex).controls.answers;
   }
@@ -96,12 +113,20 @@ export class CreateSurvey {
     this.questions.push(this.createQuestion());
   }
 
-  /** Appends an empty answer to a question */
+  /**
+   * Appends an empty answer to a question.
+   *
+   * @param questionIndex - Index of the question.
+   */
   addAnswer(questionIndex: number): void {
     this.answers(questionIndex).push(this.createAnswer());
   }
 
-  /** Clears a question that has text; removes an empty one, but keeps at least one question */
+  /**
+   * Clears a question that has text; removes an empty one, but keeps at least one question.
+   *
+   * @param questionIndex - Index of the question.
+   */
   removeQuestion(questionIndex: number): void {
     const question = this.questions.at(questionIndex).controls.question;
     if (question.value) {
@@ -112,11 +137,11 @@ export class CreateSurvey {
     }
   }
 
-  /** Clears an answer that has text; removes an empty one, but keeps the minimum number of answers
+  /**
+   * Clears an answer that has text; removes an empty one, but keeps the minimum number of answers.
    *
-   * @param questionIndex: number -
-   * @param answerIndex
-   *
+   * @param questionIndex - Index of the question.
+   * @param answerIndex - Index of the answer within the question.
    */
   removeAnswer(questionIndex: number, answerIndex: number): void {
     const answers = this.answers(questionIndex);
@@ -144,17 +169,31 @@ export class CreateSurvey {
     this.closed.emit();
   }
 
-  /** True if a required control was touched and is still invalid */
+  /**
+   * Checks whether a control was touched and is still invalid.
+   *
+   * @param control - The form control to check.
+   * @returns `true` if an error should be shown.
+   */
   showError(control: AbstractControl): boolean {
     return control.invalid && control.touched;
   }
 
-  /** Returns the answer letter: A, B, C, ... */
+  /**
+   * Returns the answer letter: A, B, C, ...
+   *
+   * @param index - Zero-based index of the answer.
+   * @returns The letter for the answer.
+   */
   letter(index: number): string {
     return String.fromCharCode(FIRST_LETTER_CODE + index);
   }
 
-  /** Maps the form value to the survey data that is saved */
+  /**
+   * Maps the form value to the survey data that is saved.
+   *
+   * @returns The trimmed survey data ready to be saved.
+   */
   private buildSurveyInput(): SurveyInput {
     const value = this.survey.getRawValue();
     return {
