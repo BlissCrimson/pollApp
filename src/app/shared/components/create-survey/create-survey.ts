@@ -66,16 +66,10 @@ export class CreateSurvey {
     return new FormGroup({
       question: new FormControl('', {
         nonNullable: true,
-        validators: [
-          Validators.required,
-          notBlank,
-          Validators.maxLength(MAX_QUESTION_LENGTH),
-        ],
+        validators: [Validators.required, notBlank, Validators.maxLength(MAX_QUESTION_LENGTH)],
       }),
       allowMultiple: new FormControl(false),
-      answers: new FormArray(
-        Array.from({ length: MIN_ANSWERS }, () => this.createAnswer()),
-      ),
+      answers: new FormArray(Array.from({ length: MIN_ANSWERS }, () => this.createAnswer())),
     });
   }
 
@@ -83,11 +77,7 @@ export class CreateSurvey {
   private createAnswer(): AnswerControl {
     return new FormControl('', {
       nonNullable: true,
-      validators: [
-        Validators.required,
-        notBlank,
-        Validators.maxLength(MAX_ANSWER_LENGTH),
-      ],
+      validators: [Validators.required, notBlank, Validators.maxLength(MAX_ANSWER_LENGTH)],
     });
   }
 
@@ -122,7 +112,12 @@ export class CreateSurvey {
     }
   }
 
-  /** Clears an answer that has text; removes an empty one, but keeps the minimum number of answers */
+  /** Clears an answer that has text; removes an empty one, but keeps the minimum number of answers
+   *
+   * @param questionIndex: number -
+   * @param answerIndex
+   *
+   */
   removeAnswer(questionIndex: number, answerIndex: number): void {
     const answers = this.answers(questionIndex);
     const answer = answers.at(answerIndex);

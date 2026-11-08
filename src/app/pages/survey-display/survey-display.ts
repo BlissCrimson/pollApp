@@ -13,7 +13,15 @@ import {
 import { SurveyService } from '../../shared/services/survey-service';
 import { REFRESH_DEBOUNCE_MS } from '../../shared/constants/variables';
 
-/** Survey detail page: voting on the left, live results on the right */
+/**
+ * Survey detail page: voting on the left, live results on the right.
+ *
+ * @remarks
+ * The survey is identified by the `groups_id` route parameter. After loading,
+ * the component subscribes to vote changes and refreshes the results
+ * automatically. Until the user has voted, the current selection is previewed
+ * in the displayed results.
+ */
 @Component({
   imports: [DatePipe, Results, RouterLink, SurveyAnswer],
   selector: 'app-survey-display',
@@ -24,24 +32,49 @@ export class SurveyDisplay implements OnInit {
   private route = inject(ActivatedRoute);
   private surveyService = inject(SurveyService);
   private destroyRef = inject(DestroyRef);
+  /** Pending timer for the debounced results refresh. */
   private refreshTimer: ReturnType<typeof setTimeout> | undefined;
 
+  /** Template helper: maps a category key to its display label. */
   getCategoryLabel = getCategoryLabel;
+
+  /** Letters A-Z used to label the answer options in the template. */
   letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
+  /** The loaded survey, or `null` while loading or if loading failed. */
   survey = signal<SurveyDetail | null>(null);
+
+  /** Answer IDs currently selected by the user, keyed by question ID. */
   selections = signal<Selections>({});
+
+  /** Vote results as last loaded from the backend. */
   results = signal<AnswerResult[]>([]);
+
+  /** Whether the current user has already voted in this survey. */
   hasVoted = signal(false);
+
+  /** `true` while the survey is being loaded. */
   isLoading = signal(true);
+
+  /** `true` while votes are being submitted. */
   isSaving = signal(false);
+
+  /** Error message to display; empty string if there is no error. */
   errorMessage = signal('');
-  /** Mobile only: the results can be collapsed below the survey */
+
+  /** Whether the results panel is expanded (relevant on mobile). */
   resultsOpen = signal(true);
 
-  /** True if the survey end date has passed */
+  /** Whether the survey's end date has passed. */
   isExpired = computed(() => this.surveyService.isExpired(this.survey()?.endDate ?? null));
-  /** True if the user may submit: not voted, not expired, not saving and all questions answered */
+
+  /**
+   * Whether the vote can be submitted.
+   *
+   * @remarks
+   * Requires a loaded survey, no previous vote, a non-expired survey, no
+   * running save and a complete selection.
+   */
   canSubmit = computed(() => {
     const survey = this.survey();
     return (
@@ -53,7 +86,12 @@ export class SurveyDisplay implements OnInit {
     );
   });
 
-  /** Loads the survey and its votes, then listens for new votes */
+  /**
+   * Loads the survey and its votes, then listens for new votes.
+   *
+   * @remarks
+   * On failure an error message is set. The loading flag is always reset.
+   */
   async ngOnInit(): Promise<void> {
     const groupId = Number(this.route.snapshot.paramMap.get('groups_id'));
     try {
@@ -69,24 +107,40 @@ export class SurveyDisplay implements OnInit {
     }
   }
 
-  /** True if the answer is currently selected for the question */
+  /**
+   * Checks whether an answer is currently selected for a question.
+   *
+   * @param question - The question the answer belongs to.
+   * @param answerId - ID of the answer to check.
+   * @returns `true` if the answer is selected.
+   */
   isSelected(question: QuestionDetail, answerId: number): boolean {
     return (this.selections()[question.id] ?? []).includes(answerId);
   }
 
-  /** Updates the selection when the user picks an answer */
+  /**
+   * Updates the selection when the user picks an answer.
+   *
+   * @param question - The question the answer belongs to.
+   * @param answerId - ID of the picked answer.
+   */
   onSelect(question: QuestionDetail, answerId: number): void {
     this.selections.update((current) =>
       this.surveyService.toggleSelection(current, question, answerId),
     );
   }
 
-  /** Shows or hides the results (mobile) */
+  /** Shows or hides the results (mobile). */
   toggleResults(): void {
     this.resultsOpen.update((open) => !open);
   }
 
-  /** Saves the selected answers and shows the updated results */
+  /**
+   * Saves the selected answers and shows the updated results.
+   *
+   * @remarks
+   * Does nothing if there is no survey or {@link SurveyDisplay.canSubmit} is `false`.
+   */
   async submit(): Promise<void> {
     const survey = this.survey();
     if (!survey || !this.canSubmit()) return;
@@ -96,7 +150,11 @@ export class SurveyDisplay implements OnInit {
     this.isSaving.set(false);
   }
 
-  /** Submits the votes and reloads the results; shows an error message if that fails */
+  /**
+   * Submits the votes and reloads the results; shows an error message if that fails.
+   *
+   * @param survey - The survey the votes belong to.
+   */
   private async saveVotes(survey: SurveyDetail): Promise<void> {
     try {
       await this.surveyService.submitVotes(survey, this.selections());
@@ -107,7 +165,16 @@ export class SurveyDisplay implements OnInit {
     }
   }
 
-  /** Live results: reloads the votes when anyone votes (debounced, one vote may insert several rows) */
+  /**
+   * Live results: reloads the votes when anyone votes.
+   *
+   * @remarks
+   * Refreshes are debounced by `REFRESH_DEBOUNCE_MS`, because one vote may
+   * insert several rows. The subscription and pending timer are cleaned up
+   * when the component is destroyed.
+   *
+   * @param survey - The survey to watch.
+   */
   private listenForVotes(survey: SurveyDetail): void {
     const stopWatching = this.surveyService.watchVotes(survey, () => {
       clearTimeout(this.refreshTimer);
@@ -122,14 +189,25 @@ export class SurveyDisplay implements OnInit {
     });
   }
 
-  /** Reloads the votes and updates results and voted state */
+  /**
+   * Reloads the votes and updates results and voted state.
+   *
+   * @param survey - The survey to load the votes for.
+   */
   private async refreshVotes(survey: SurveyDetail): Promise<void> {
     const state = await this.surveyService.loadVoteState(survey);
     this.results.set(state.results);
     this.hasVoted.set(state.hasVoted);
   }
 
-  /** Results shown on the page: with the current selection included until the user has voted */
+  /**
+   * Results shown on the page.
+   *
+   * @remarks
+   * Until the user has voted (and while the survey is not expired), the
+   * current selection is included as a preview. Otherwise the loaded results
+   * are shown unchanged.
+   */
   displayedResults = computed(() => {
     const survey = this.survey();
     if (!survey || this.hasVoted() || this.isExpired()) return this.results();
